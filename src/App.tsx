@@ -16,10 +16,11 @@ const onRender = (scene: any) => {
   //gridObject.getMouseGroundLocation();
 };
 
-export default () => {
+export default function App() {
   return (
     <div>
       <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
     </div>
   );
 }
+

@@ -5,11 +5,6 @@ import { GridObject } from "../Objects/GridObject";
 import { MouseHandler } from "./MouseHandler";
 import { createCamera } from "./ObjectCreator";
 
-export enum ObjectTypes {
-  BOX, 
-  SPHERE,
-}
-
 export class SceneHelper {
   private sceneObjects: Clickable[] = [];
 

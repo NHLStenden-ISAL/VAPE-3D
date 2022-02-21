@@ -1,49 +1,51 @@
-import { Mesh, Scene, Vector3 } from "@babylonjs/core";
+import { Color3, HighlightLayer, Mesh, Nullable, Scene, Vector3 } from "@babylonjs/core";
 import { Clickable } from "../Compositions/Clickable";
 import { Transformable } from "../Compositions/Transformable"
-import { createBox, createSphere } from "../Helpers/ObjectCreator";
-import { ObjectTypes } from "../Helpers/SceneHelper";
+import { createBox } from "../Helpers/ObjectCreator";
 
 export class BoxObject {
   private transformable: Transformable;
   private clickable: Clickable;
 
   private mesh: Mesh;
+  private highlight: HighlightLayer;
 
   constructor(scene: Scene, position: Vector3, objectList: Clickable[]) {
-    //this.mesh = createBox(scene);
-    this.mesh = createSphere(scene);
+    this.mesh = createBox(scene);
+    this.highlight = new HighlightLayer('highlight', scene);
 
-    
     this.transformable = new Transformable(this.mesh);
-    this.clickable = new Clickable(ObjectTypes.BOX, this.mesh, this.onClick, this.onDrag, this.onRelease);
+    this.clickable = new Clickable(this.mesh, () => { this.onClick() }, (location: Vector3) => { this.onDrag(location) }, () => { this.onRelease() });
+
     objectList.push(this.clickable);
-
-    this.moveBox(position);
+    this.move(position);
   }
 
+  //Clickable
   onClick() {
-    console.log("clicked something");
+    this.highlight.addMesh(this.mesh, Color3.Purple());
   }
 
-  onDrag() {
-    console.log("Drag race!!!");
+  onDrag(location: Vector3) {
+    this.move(location);
   }
 
   onRelease() {
-    console.log("time to release everyting");
+    this.highlight.removeMesh(this.mesh);
   }
 
-  getClickable(): Clickable{
+  getClickable(): Clickable {
     return this.clickable;
   }
 
-  moveBox(position: Vector3) {
-    this.mesh.position = this.transformable.move(position);
+  //Transformable
+  move(position: Nullable<Vector3>) {
+    if (position !== null) {
+      this.mesh.position = this.transformable.move(position);
+    }
   }
 
-  rotateBox() {
+  rotate() {
     this.mesh.rotation = this.transformable.rotate();
   }
-
 }

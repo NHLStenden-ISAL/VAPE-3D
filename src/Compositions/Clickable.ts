@@ -1,19 +1,16 @@
-import { AbstractMesh, Mesh, Nullable } from "@babylonjs/core";
-import { ObjectTypes } from "../Helpers/SceneHelper";
+import { AbstractMesh, Vector3 } from "@babylonjs/core";
 
 type Callback = () => void;
+type LocationCallback = (location: Vector3) => void;
 
 export class Clickable {
-
-  private objectType: ObjectTypes;
   private abstractMesh: AbstractMesh;
 
   private onClick: Callback;
-  private onDrag: Callback;
+  private onDrag: LocationCallback;
   private onRelease: Callback;
 
-  constructor(objType: ObjectTypes, mesh: AbstractMesh, onClick: Callback, onDrag: Callback, onRelease: Callback) {
-    this.objectType = objType;
+  constructor(mesh: AbstractMesh, onClick: Callback, onDrag: LocationCallback, onRelease: Callback) {
     this.abstractMesh = mesh;
 
     this.onClick = onClick;
@@ -21,16 +18,13 @@ export class Clickable {
     this.onRelease = onRelease;
   }
 
-  getObjectType(): ObjectTypes {
-    return this.objectType;
-  }
-
   onClickExecute() {
     this.onClick();
+
   }
 
-  onDragExecute() {
-    this.onDrag();
+  onDragExecute(location: Vector3) {
+    this.onDrag(location);
   }
 
   onReleaseExecute() {

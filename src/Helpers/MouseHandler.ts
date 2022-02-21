@@ -2,24 +2,26 @@ import { AbstractMesh, Nullable, PointerEventTypes, PointerInfo, Scene, Vector3 
 import { Clickable } from "../Compositions/Clickable";
 import { BoxObject } from "../Objects/BoxObject";
 import { GridObject } from "../Objects/GridObject";
-import { ObjectTypes, SceneHelper } from "./SceneHelper";
+import { SceneHelper } from "./SceneHelper";
+import { EditorState } from "./StateHelper";
 
 export class MouseHandler {
   private scene: Scene;
   private sceneHelper: SceneHelper;
-  
+
   private mouseStartpoint: Nullable<Vector3>;
   private clickableObject: Nullable<Clickable>;
-  private objectClicked: Nullable<BoxObject>;
 
+  private editorState: EditorState;
 
   constructor(scene: Scene, sceneHelper: SceneHelper) {
     this.scene = scene;
     this.sceneHelper = sceneHelper;
 
+    this.editorState = { state: 'move' };
+
     this.mouseStartpoint = null;
     this.clickableObject = null;
-    this.objectClicked = null;
   }
 
   public onMouseInteraction() {
@@ -39,7 +41,7 @@ export class MouseHandler {
   }
 
   private onPointerDown(pointerInfo: PointerInfo) {
-    if (pointerInfo.pickInfo?.hit == true) {
+    if (pointerInfo.pickInfo?.hit == true && this.editorState.state === 'move') {
       this.mouseStartpoint = this.getMouseWorldLocation();
 
       this.clickableObject = this.sceneHelper.getObjectByMesh(pointerInfo.pickInfo.pickedMesh);
@@ -51,25 +53,23 @@ export class MouseHandler {
     }
   }
 
+  private onPointerMove() {
+    if (this.mouseStartpoint == null || this.clickableObject == null) { return; }
+
+    if (this.editorState.state === 'move') {
+      let location = this.getMouseWorldLocation();
+
+      if (location !== null) {
+        this.clickableObject.onDragExecute(location);
+      }
+    }
+  }
+
   private onPointerUp() {
     this.sceneHelper.enableCameraControl();
     this.clickableObject?.onReleaseExecute();
 
     this.resetClick();
-  }
-
-  private onPointerMove() {
-    if (this.mouseStartpoint == null || this.clickableObject == null) {
-      return;
-    }
-
-    let current = this.getMouseWorldLocation();
-    if (current !== null) {
-
-      this.clickableObject.onDragExecute();
-
-    }
-
   }
 
   public getMouseWorldLocation(): Nullable<Vector3> {
@@ -81,6 +81,28 @@ export class MouseHandler {
   private resetClick() {
     this.clickableObject = null;
     this.mouseStartpoint = null;
-    this.objectClicked = null;
+  }
+
+  private changeState(state: EditorState["state"]) {
+    switch (state) {
+      case 'wait':
+        this.editorState = {
+          state: 'wait',
+        }
+        break;
+      case 'move':
+        this.editorState = {
+          state: 'move'
+        }
+        break;
+      case 'delete':
+        this.editorState = {
+          state: 'delete'
+        }
+        break;
+      default:
+        break;
+    }
+
   }
 }
