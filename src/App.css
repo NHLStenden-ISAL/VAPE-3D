@@ -7,6 +7,12 @@
   pointer-events: none;
 }
 
+#my-canvas {
+  height: 100vh;
+  width: 100vw;
+  display: block;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
