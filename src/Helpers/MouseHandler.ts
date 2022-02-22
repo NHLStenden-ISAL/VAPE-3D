@@ -1,34 +1,40 @@
-import { AbstractMesh, Nullable, PointerEventTypes, PointerInfo, Scene, Vector3 } from "@babylonjs/core";
-import { Clickable } from "../Compositions/Clickable";
-import { BoxObject } from "../Objects/BoxObject";
-import { GridObject } from "../Objects/GridObject";
+import { Nullable, PointerEventTypes, Scene, Vector3 } from "@babylonjs/core";
+import { IObject } from "../Objects/IObject";
 import { SceneHelper } from "./SceneHelper";
-import { EditorState } from "./StateHelper";
+import { StateManager } from "./StateManager";
 
 export class MouseHandler {
   private scene: Scene;
   private sceneHelper: SceneHelper;
+  private stateManager: StateManager;
 
   private mouseStartpoint: Nullable<Vector3>;
-  private clickableObject: Nullable<Clickable>;
+  private clickedIObject: Nullable<IObject>;
 
-  private editorState: EditorState;
-
-  constructor(scene: Scene, sceneHelper: SceneHelper) {
+  constructor(scene: Scene, sceneHelper: SceneHelper, stateManager: StateManager) {
     this.scene = scene;
     this.sceneHelper = sceneHelper;
-
-    this.editorState = { state: 'move' };
+    this.stateManager = stateManager;
 
     this.mouseStartpoint = null;
-    this.clickableObject = null;
+    this.clickedIObject = null;
   }
 
   public onMouseInteraction() {
     this.scene.onPointerObservable.add((pointerInfo) => {
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERDOWN:
-          this.onPointerDown(pointerInfo);
+          //Check if you've hit something clickable
+          if (pointerInfo.pickInfo?.hit === true) {
+            this.clickedIObject = this.sceneHelper.getIObject(pointerInfo.pickInfo.pickedMesh);
+          }
+
+          //Check which mouse button it was (0 == left mouse button, 2 == right mouse button)
+          if (pointerInfo.event.button === 0) {
+            this.onLeftPointerDown();
+          } else if (pointerInfo.event.button === 2) {
+            this.onRightPointerDown();
+          }
           break;
         case PointerEventTypes.POINTERUP:
           this.onPointerUp();
@@ -36,73 +42,75 @@ export class MouseHandler {
         case PointerEventTypes.POINTERMOVE:
           this.onPointerMove();
           break;
+        case PointerEventTypes.POINTERTAP:
+          if (this.stateManager.getEditor().state === 'delete') {
+            this.clickedIObject?.delete();
+            console.log("remove object");
+          }
+          break;
       }
     });
   }
 
-  private onPointerDown(pointerInfo: PointerInfo) {
-    if (pointerInfo.pickInfo?.hit == true && this.editorState.state === 'move') {
-      this.mouseStartpoint = this.getMouseWorldLocation();
+  private onLeftPointerDown() {
+    this.mouseStartpoint = this.getMouseGridPosition();
 
-      this.clickableObject = this.sceneHelper.getObjectByMesh(pointerInfo.pickInfo.pickedMesh);
+    switch (this.stateManager.getEditor().state) {
+      case 'move':
+        this.moveOnDown();
+        break;
+      case 'create':
+        this.createOnDown();
+        break;
+    }
+  }
 
-      if (this.clickableObject === null) { return; }
+  private onRightPointerDown() {
+    //TODO: add select
+  }
 
-      this.clickableObject.onClickExecute();
-      this.sceneHelper.disableCameraControl();
+  private moveOnDown() {
+    if (this.clickedIObject === null) { return; }
+
+    this.clickedIObject.onClickExecute();
+    this.sceneHelper.disableCameraControl();
+  }
+
+  private createOnDown() {
+    if (this.clickedIObject !== null) { return; }
+
+    if (this.mouseStartpoint !== null) {
+      this.sceneHelper.addObject(this.mouseStartpoint);
     }
   }
 
   private onPointerMove() {
-    if (this.mouseStartpoint == null || this.clickableObject == null) { return; }
+    if (this.mouseStartpoint === null || this.clickedIObject === null) { return; }
 
-    if (this.editorState.state === 'move') {
-      let location = this.getMouseWorldLocation();
+    if (this.stateManager.getEditor().state === 'move') {
+      let location = this.getMouseGridPosition();
 
       if (location !== null) {
-        this.clickableObject.onDragExecute(location);
+        this.clickedIObject.onDragExecute(location);
       }
     }
   }
 
   private onPointerUp() {
     this.sceneHelper.enableCameraControl();
-    this.clickableObject?.onReleaseExecute();
+    this.clickedIObject?.onReleaseExecute();
 
     this.resetClick();
   }
 
-  public getMouseWorldLocation(): Nullable<Vector3> {
+  public getMouseGridPosition(): Nullable<Vector3> {
     let info = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
 
     return info?.hit ? info?.pickedPoint : null;
   }
 
   private resetClick() {
-    this.clickableObject = null;
     this.mouseStartpoint = null;
-  }
-
-  private changeState(state: EditorState["state"]) {
-    switch (state) {
-      case 'wait':
-        this.editorState = {
-          state: 'wait',
-        }
-        break;
-      case 'move':
-        this.editorState = {
-          state: 'move'
-        }
-        break;
-      case 'delete':
-        this.editorState = {
-          state: 'delete'
-        }
-        break;
-      default:
-        break;
-    }
-
+    this.clickedIObject = null;
   }
 }
