@@ -1,57 +1,12 @@
-import { Mesh, HighlightLayer, Scene, Vector3, Nullable, Color3, AbstractMesh } from "@babylonjs/core";
-import { Transformable } from "../Compositions/Transformable";
-import { createSphere, createBox } from "../Helpers/ObjectCreator";
-import { IObject } from "./IObject";
+import { Scene, Vector3, AbstractMesh, Color3 } from "@babylonjs/core";
+import { createCustomMesh } from "../Helpers/ObjectCreator";
+import { BaseObject } from "./BaseObject";
 
-export class VariableObject implements IObject {
-  private transformable: Transformable;
-  private mesh: Mesh;
-  private highlight: HighlightLayer;
+export class VariableObject extends BaseObject {
+  constructor(scene: Scene, position: Vector3, objectList: BaseObject[]) {
+    let customMesh = createCustomMesh(scene, Color3.Magenta(), "model route");
+    let customHighlightColor = Color3.Magenta();
 
-  private objectList: IObject[];
-
-  constructor(scene: Scene, position: Vector3, objectList: IObject[]) {
-    this.mesh = createBox(scene);
-    this.highlight = new HighlightLayer('highlight', scene);
-
-    this.transformable = new Transformable(this.mesh);
-    this.move(position);
-
-    this.objectList = objectList;
-    this.objectList.push(this);
-  }
-
-  onClickExecute(): void {
-    this.highlight.addMesh(this.mesh, Color3.Purple());
-  }
-
-  onDragExecute(position: Vector3): void {
-    this.move(position);
-  }
-
-  onReleaseExecute(): void {
-    this.highlight.removeMesh(this.mesh);
-  }
-
-  getMesh(): AbstractMesh {
-    return this.mesh;
-  }
-
-  move(position: Nullable<Vector3>): void {
-    if (position !== null) {
-      this.mesh.position = this.transformable.move(position);
-    }
-  }
-
-  rotate(): void {
-    this.mesh.rotation = this.transformable.rotate();
-  }
-
-  delete(): void {
-    this.mesh.dispose();
-
-    let indexOfObject = this.objectList.findIndex((element) => this === element);
-    this.objectList.splice(indexOfObject, 1);
-  }
-
+    super(scene, position, customMesh, customHighlightColor, objectList);
+  }  
 }

@@ -1,6 +1,10 @@
 import { AbstractMesh, ArcRotateCamera, HemisphericLight, Nullable, Scene, Vector3 } from "@babylonjs/core";
+import { Direction } from "../Compositions/Transformable";
+import { GUITest } from "../GUI/guiTest";
+import { BaseObject } from "../Objects/BaseObject";
+import { DirectionObject } from "../Objects/DirectionObject";
 import { GridObject } from "../Objects/GridObject";
-import { IObject } from "../Objects/IObject";
+import { RobotObject } from "../Objects/RobotObject";
 import { VariableObject } from "../Objects/VariableObject";
 import { KeyboardHandler } from "./KeyboardHandler";
 import { MouseHandler } from "./MouseHandler";
@@ -8,7 +12,9 @@ import { createCamera } from "./ObjectCreator";
 import { StateManager } from "./StateManager";
 
 export class SceneHelper {
-  private sceneIObjects: IObject[] = [];
+  private sceneObjects: BaseObject[] = [];
+  private robotObjects: RobotObject[] = [];
+  
   private stateManager: StateManager;
 
   private camera: ArcRotateCamera;
@@ -22,6 +28,7 @@ export class SceneHelper {
     this.camera = createCamera(scene, canvas);
 
     this.stateManager = new StateManager();
+    //new GUITest();
   }
 
   public createScene() {
@@ -36,8 +43,46 @@ export class SceneHelper {
 
     new GridObject(this.scene, 60);
 
-    new VariableObject(this.scene, new Vector3(2,0,3), this.sceneIObjects);
-    new VariableObject(this.scene, new Vector3(10,3,5), this.sceneIObjects);
+    new VariableObject(this.scene, new Vector3(2,0,3), this.sceneObjects);
+    new VariableObject(this.scene, new Vector3(10,3,5), this.sceneObjects);
+
+    new DirectionObject(this.scene, new Vector3(-1, 0, 0), this.sceneObjects, Direction.NORTH);
+    new DirectionObject(this.scene, new Vector3(-10, 0, 0), this.sceneObjects, Direction.EAST);
+    new DirectionObject(this.scene, new Vector3(-10, 0, 9), this.sceneObjects, Direction.SOUTH);
+    new DirectionObject(this.scene, new Vector3(-1, 0, 9), this.sceneObjects, Direction.WEST);
+
+    new RobotObject(this.scene, Vector3.Zero(), this.sceneObjects, this.robotObjects);
+  }
+
+  private updateLoop(delta: number) {
+    setTimeout(() => {
+      if (this.stateManager.getGameState() === 'start') {
+        this.activateRobots();
+        this.updateLoop(delta);
+      }
+    }, delta);
+  }
+
+  public startProgram() {
+    this.stateManager.setEditorState('wait');
+    this.stateManager.setGameState('start');
+
+    console.log("Start the program");
+    this.updateLoop(1000);
+  }
+
+  public stopProgram() {
+    this.stateManager.setEditorState('transform');
+    this.stateManager.setGameState('build');
+  
+    console.log("Quit the program");
+  }
+
+  private activateRobots() {
+    this.robotObjects.forEach(robot => {
+      robot.stepForward();
+      robot.checkIntersection(this.sceneObjects);
+    });
   }
 
   public disableCameraControl() {
@@ -49,17 +94,16 @@ export class SceneHelper {
   }
 
   public addObject(position: Vector3) {
-    new VariableObject(this.scene, position, this.sceneIObjects);
+    new VariableObject(this.scene, position, this.sceneObjects);
   }
 
-  public getIObject(targetMesh: Nullable<AbstractMesh>) {
-    for (let object of this.sceneIObjects) {
+  public getObject(targetMesh: Nullable<AbstractMesh>) {
+    for (let object of this.sceneObjects) {
       if (object.getMesh() === targetMesh) {
         return object;
       }
     }
 
     return null;
-
   }
 }

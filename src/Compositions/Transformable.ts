@@ -1,48 +1,77 @@
-import { Mesh, Vector3 } from "@babylonjs/core";
+import { Mesh, Vector2, Vector3 } from "@babylonjs/core";
+
+export enum Direction {
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST
+}
 
 export class Transformable {
-  private mesh: Mesh;
-
   private height: number;
-  //private position: Vector3;
-  private rotation: Vector3;
-
-  private rotationAmount: number;
-  private rotationCounter: number;
+  private currentDirection: Direction;
 
   constructor(mesh: Mesh) {
-    this.mesh = mesh;
-
     this.height = mesh.getBoundingInfo().boundingBox.extendSize.y;
-    //this.position = mesh.position;
-    this.rotation = mesh.rotation;
 
-    //The amount of rotations that make a full circle (4 == 90 degree, 8 == 45 degree, etc.)
-    this.rotationAmount = 4;
-    this.rotationCounter = 0;
+    this.currentDirection = Direction.NORTH;
   }
 
   move(position: Vector3): Vector3 {
     return new Vector3(this.floor(position.x), this.height, this.floor(position.z));
   }
 
-  rotate(): Vector3 {
-    this.rotationCounter++;
-    let yRotation = this.rotation.y;
-
-    if (this.rotationCounter < this.rotationAmount) {
-      yRotation += Math.PI / (this.rotationAmount / 2);
-    }
-    else {
-      yRotation = 0;
-      this.rotationCounter = 0;
-    }
-
-    this.rotation = new Vector3(this.rotation.x, yRotation, this.rotation.z);
-    return this.rotation;
+  stepForward(position: Vector3): Vector3 {
+    return position.addInPlace(this.getForward(this.currentDirection));
   }
 
-  private floor(num: number) {
+  rotate(): Vector3 {
+    this.currentDirection++;
+
+    if (this.currentDirection % this.directionCount() === 0) {
+      this.currentDirection = 0;
+    }
+
+    let yRotation = (Math.PI / (this.directionCount() / 2)) * this.currentDirection;
+    return new Vector3(0, yRotation, 0);
+  }
+
+  rotateToward(direction: Direction) : Vector3 {
+    this.currentDirection = direction;
+
+    let yRotation = (Math.PI / (this.directionCount() / 2)) * direction;
+    return new Vector3(0, yRotation, 0);
+  }
+
+  getDirection() : Direction {
+    return this.currentDirection;
+  }
+
+  private floor(num: number): number {
     return Math.floor(num) + 0.5;
+  }
+
+  private floorVector3(vec: Vector3): Vector3 {
+    return new Vector3(Math.floor(vec.x), 0, Math.floor(vec.z))
+  }
+
+  private directionCount(): number {
+    return Object.keys(Direction).length / 2;
+  }
+
+  private getForward(direction: Direction): Vector3 {
+    switch (direction) {
+      case Direction.NORTH:
+        return new Vector3(0, 0, 1);
+      case Direction.EAST:
+        return new Vector3(1, 0, 0);
+      case Direction.SOUTH:
+        return new Vector3(0, 0, -1);
+      case Direction.WEST:
+        return new Vector3(-1, 0, 0);
+
+    }
+
+    return Vector3.Zero();
   }
 }

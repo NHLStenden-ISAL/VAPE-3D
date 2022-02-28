@@ -1,4 +1,4 @@
-import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Camera } from "@babylonjs/core";
+import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
 
 export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
@@ -45,4 +45,25 @@ export function createSphere(scene: Scene, size: number = 1): Mesh {
   const sphere = MeshBuilder.CreateSphere('sphere', { diameter: size }, scene);
 
   return sphere;
+}
+
+export function createDirection(scene: Scene, size: number = 1): Mesh {
+  const sphere = createBox(scene, Color3.Red(), size);
+
+  let triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
+  triangle.position = new Vector3(triangle.position.x, 0.51, triangle.position.z);
+  triangle.rotate(Vector3.Right(), Math.PI / 2, Space.LOCAL);
+  triangle.rotate(Vector3.Forward(), Math.PI / 2, Space.LOCAL);
+
+  sphere.addChild(triangle);
+
+  return sphere;
+
+}
+
+export function createCustomMesh(scene: Scene, color: Color3, objAddress: string): Mesh {
+
+  return createBox(scene, color);
+  //https://www.babylonjs-playground.com/#0SHBCK#13
+  alert("Missing functionality, can't create custom mesh");
 }

@@ -1,56 +1,41 @@
-export type EditorState = Wait | Move | Delete | Create;
-
-type Wait = {
-  state: 'wait'
-}
-
-type Move = {
-  state: 'move'
-}
-
-type Delete = {
-  state: 'delete'
-}
-
-type Create = {
-  state: 'create'
-}
+export type EditorState = 'wait' | 'transform' | 'delete' | 'create';
+export type GameState = 'build' | 'start' | 'stop';
 
 export class StateManager {
   private editorState: EditorState;
+  private gameState: GameState;
 
   constructor() {
-    this.editorState = { state: 'move' };
+    this.editorState = 'transform';
+    this.gameState = 'build';
   }
 
-  public getEditor(): EditorState {
+  public getEditorState(): EditorState {
     return this.editorState;
   }
 
-  public changeState(state: EditorState["state"]) {
-    switch (state) {
-      case 'wait':
-        this.editorState = {
-          state: 'wait',
-        }
-        break;
-      case 'move':
-        this.editorState = {
-          state: 'move'
-        }
-        break;
-      case 'delete':
-        this.editorState = {
-          state: 'delete'
-        }
-        break;
-      case 'create':
-        this.editorState = {
-          state: 'create'
-        }
+  public setEditorState(state: EditorState) {
+    this.editorState = state;
+  }
+
+  public getGameState(): GameState {
+    return this.gameState;
+  }
+
+  public setGameState(state: GameState) {
+    this.gameState = state;
+  }
+
+  public loopGameState() {
+    switch (this.gameState) {
+      case 'build':
+        this.gameState = 'start';
         break;
       default:
+        this.gameState = 'build';
         break;
     }
   }
+
+
 }
