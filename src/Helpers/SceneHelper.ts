@@ -1,7 +1,7 @@
 import { AbstractMesh, ArcRotateCamera, HemisphericLight, Nullable, Scene, Vector3 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
-import { GUITest } from "../GUI/guiTest";
 import { BaseObject } from "../Objects/BaseObject";
+import { DecisionObject } from "../Objects/DecisionObject";
 import { DirectionObject } from "../Objects/DirectionObject";
 import { GridObject } from "../Objects/GridObject";
 import { RobotObject } from "../Objects/RobotObject";
@@ -14,7 +14,7 @@ import { StateManager } from "./StateManager";
 export class SceneHelper {
   private sceneObjects: BaseObject[] = [];
   private robotObjects: RobotObject[] = [];
-  
+
   private stateManager: StateManager;
 
   private camera: ArcRotateCamera;
@@ -28,13 +28,12 @@ export class SceneHelper {
     this.camera = createCamera(scene, canvas);
 
     this.stateManager = new StateManager();
-    //new GUITest();
   }
 
   public createScene() {
     let light = new HemisphericLight("light", new Vector3(0, 1, 0), this.scene);
     light.intensity = 0.7;
-    
+
     let mouseHandler = new MouseHandler(this.scene, this, this.stateManager);
     mouseHandler.onMouseInteraction();
 
@@ -43,13 +42,13 @@ export class SceneHelper {
 
     new GridObject(this.scene, 60);
 
-    new VariableObject(this.scene, new Vector3(2,0,3), this.sceneObjects);
-    new VariableObject(this.scene, new Vector3(10,3,5), this.sceneObjects);
+    new VariableObject(this.scene, new Vector3(2, 0, 3), this.sceneObjects);
+    new VariableObject(this.scene, new Vector3(10, 3, 5), this.sceneObjects);
 
     new DirectionObject(this.scene, new Vector3(-1, 0, 0), this.sceneObjects, Direction.NORTH);
     new DirectionObject(this.scene, new Vector3(-10, 0, 0), this.sceneObjects, Direction.EAST);
-    new DirectionObject(this.scene, new Vector3(-10, 0, 9), this.sceneObjects, Direction.SOUTH);
-    new DirectionObject(this.scene, new Vector3(-1, 0, 9), this.sceneObjects, Direction.WEST);
+    new DecisionObject(this.scene, new Vector3(-10, 0, 9), this.sceneObjects, Direction.SOUTH);
+    new DecisionObject(this.scene, new Vector3(-1, 0, 9), this.sceneObjects, Direction.WEST);
 
     new RobotObject(this.scene, Vector3.Zero(), this.sceneObjects, this.robotObjects);
   }
@@ -74,7 +73,7 @@ export class SceneHelper {
   public stopProgram() {
     this.stateManager.setEditorState('transform');
     this.stateManager.setGameState('build');
-  
+
     console.log("Quit the program");
   }
 

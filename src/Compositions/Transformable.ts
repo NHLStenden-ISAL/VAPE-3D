@@ -1,4 +1,4 @@
-import { Mesh, Vector2, Vector3 } from "@babylonjs/core";
+import { Mesh, Vector3 } from "@babylonjs/core";
 
 export enum Direction {
   NORTH,
@@ -36,23 +36,19 @@ export class Transformable {
     return new Vector3(0, yRotation, 0);
   }
 
-  rotateToward(direction: Direction) : Vector3 {
+  rotateToward(direction: Direction): Vector3 {
     this.currentDirection = direction;
 
     let yRotation = (Math.PI / (this.directionCount() / 2)) * direction;
     return new Vector3(0, yRotation, 0);
   }
 
-  getDirection() : Direction {
+  getDirection(): Direction {
     return this.currentDirection;
   }
 
   private floor(num: number): number {
     return Math.floor(num) + 0.5;
-  }
-
-  private floorVector3(vec: Vector3): Vector3 {
-    return new Vector3(Math.floor(vec.x), 0, Math.floor(vec.z))
   }
 
   private directionCount(): number {

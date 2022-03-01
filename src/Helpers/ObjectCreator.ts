@@ -20,6 +20,8 @@ export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
 export function createGrid(scene: Scene, planeSize: number, gridRatio: number): Mesh {
   const gridMaterial = new GridMaterial('grid', scene);
   gridMaterial.gridRatio = gridRatio;
+  gridMaterial.lineColor = Color3.Teal();
+  gridMaterial.mainColor = new Color3(0.2, 0.2, 0.25);
 
   const gridObject: Mesh = createGround(scene, planeSize);
   gridObject.material = gridMaterial;
@@ -47,8 +49,8 @@ export function createSphere(scene: Scene, size: number = 1): Mesh {
   return sphere;
 }
 
-export function createDirection(scene: Scene, size: number = 1): Mesh {
-  const sphere = createBox(scene, Color3.Red(), size);
+export function createDirection(scene: Scene, color: Color3, size: number = 1): Mesh {
+  const sphere = createBox(scene, color, size);
 
   let triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
   triangle.position = new Vector3(triangle.position.x, 0.51, triangle.position.z);
@@ -65,5 +67,5 @@ export function createCustomMesh(scene: Scene, color: Color3, objAddress: string
 
   return createBox(scene, color);
   //https://www.babylonjs-playground.com/#0SHBCK#13
-  alert("Missing functionality, can't create custom mesh");
+  //alert("Missing functionality, can't create custom mesh");
 }

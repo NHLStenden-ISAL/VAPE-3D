@@ -5,11 +5,11 @@ import { createDirection } from "../Helpers/ObjectCreator";
 import { BaseObject } from "./BaseObject";
 import { RobotObject } from "./RobotObject";
 
-export class DirectionObject extends BaseObject {
+export class DecisionObject extends BaseObject {
 
   constructor(scene: Scene, position: Vector3, objectList: BaseObject[], direction: Direction = 0) {
-    let customMesh = createDirection(scene, Color3.Purple(), 0.8);
-    let customHighlightColor = Color3.Purple();
+    let customMesh = createDirection(scene, Color3.Blue(), 0.8);
+    let customHighlightColor = Color3.Blue();
 
     super(scene, position, customMesh, customHighlightColor, objectList);
 
@@ -18,6 +18,12 @@ export class DirectionObject extends BaseObject {
   }
 
   onIntersectExecute(robotObject: RobotObject) {
-    robotObject.rotateToward(this.transformable.getDirection());
+    if (this.checkCondition() === true) {
+      robotObject.rotateToward(this.transformable.getDirection());
+    }
+  }
+
+  private checkCondition() : boolean {
+    return false;
   }
 }
