@@ -43,12 +43,6 @@ export function createBox(scene: Scene, color: Color3 = Color3.White(), size: nu
   return box;
 }
 
-export function createSphere(scene: Scene, size: number = 1): Mesh {
-  const sphere = MeshBuilder.CreateSphere('sphere', { diameter: size }, scene);
-
-  return sphere;
-}
-
 export function createDirection(scene: Scene, color: Color3, size: number = 1): Mesh {
   const sphere = createBox(scene, color, size);
 

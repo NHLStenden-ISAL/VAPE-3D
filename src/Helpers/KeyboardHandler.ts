@@ -1,18 +1,18 @@
 import { Scene } from "@babylonjs/core";
-import { SceneHelper } from "./SceneHelper";
+import { AppManager } from "./AppManager";
 import { StateManager } from "./StateManager";
 
 export class KeyboardHandler {
   private scene: Scene;
-  private sceneHelper: SceneHelper;
+  private appManager: AppManager;
   private stateManager: StateManager;
 
   private isTyping: boolean;
   private isRunning: boolean;
 
-  constructor(scene: Scene, sceneHelper: SceneHelper, stateManager: StateManager) {
+  constructor(scene: Scene, appManager: AppManager, stateManager: StateManager) {
     this.scene = scene;
-    this.sceneHelper = sceneHelper;
+    this.appManager = appManager;
     this.stateManager = stateManager;
 
     this.isTyping = false;
@@ -48,10 +48,10 @@ export class KeyboardHandler {
           case 'p':
           case 'P':
             if (this.stateManager.getGameState() === 'build') {
-              this.sceneHelper.startProgram();
+              this.appManager.startProgram();
               this.isRunning = true;
             } else {
-              this.sceneHelper.stopProgram();
+              this.appManager.pauseProgram();
               this.isRunning = false;
             }
             break;

@@ -1,5 +1,5 @@
 export type EditorState = 'wait' | 'transform' | 'delete' | 'create';
-export type GameState = 'build' | 'start' | 'stop';
+export type GameState = 'build' | 'run' | 'reset';
 
 export class StateManager {
   private editorState: EditorState;
@@ -29,7 +29,7 @@ export class StateManager {
   public loopGameState() {
     switch (this.gameState) {
       case 'build':
-        this.gameState = 'start';
+        this.gameState = 'run';
         break;
       default:
         this.gameState = 'build';

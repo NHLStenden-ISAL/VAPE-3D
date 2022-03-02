@@ -24,6 +24,6 @@ export class DecisionObject extends BaseObject {
   }
 
   private checkCondition() : boolean {
-    return false;
+    return true;
   }
 }

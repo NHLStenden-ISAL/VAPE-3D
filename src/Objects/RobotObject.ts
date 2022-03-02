@@ -45,7 +45,6 @@ export class RobotObject extends BaseObject {
   addVariableToMap(variable: VariableContainer) {
     if (variable.getName() === "") { return; }
 
-
     if (this.variableMap.has(variable.getName())) {
       console.log("Key already exist");
     } else {

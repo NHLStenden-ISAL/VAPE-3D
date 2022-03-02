@@ -1,14 +1,14 @@
 import './App.css';
 
 import SceneComponent from './Objects/SceneComponent';
-import { SceneHelper } from './Helpers/SceneHelper';
+import { AppManager } from './Helpers/AppManager';
 
 //Start
 const onSceneReady = (scene: any) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  let sceneHelper = new SceneHelper(scene, canvas);
+  let appManager = new AppManager(scene, canvas);
 
-  sceneHelper.createScene();
+  appManager.runApp();
 };
 
 //Update

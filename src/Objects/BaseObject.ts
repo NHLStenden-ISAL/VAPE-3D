@@ -2,7 +2,6 @@ import { Vector3, AbstractMesh, Mesh, HighlightLayer, Scene, Color3, Nullable, V
 import { Interactable } from "../Compositions/Interactable";
 import { Transformable } from "../Compositions/Transformable";
 
-
 export class BaseObject {
   protected transformable: Transformable;
   protected interactable: Nullable<Interactable>;
@@ -41,7 +40,6 @@ export class BaseObject {
 
   onReleaseLeftExecute(): void {
     this.turnOffHighlight();
-
   }
 
   onReleaseRightExecute(): void {
