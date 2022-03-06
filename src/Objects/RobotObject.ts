@@ -1,48 +1,50 @@
-import { Color3, Scene, Vector3 } from "@babylonjs/core";
+import { Color3, Vector3 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
+import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
 import { BaseObject } from "./BaseObject";
 
 export class RobotObject extends BaseObject {
-
-  private robotList: RobotObject[];
   private variableMap: Map<string, VariableData>;
 
-  constructor(scene: Scene, position: Vector3, objectList: BaseObject[], robotList: RobotObject[]) {
-    let customMesh = createCustomMesh(scene, Color3.Green(), "model route");
-    let customHighlightColor = Color3.Green();
+  constructor(worldInfo: WorldInformation, pos: Vector3, dir: Direction) {
+    const objectMesh = createCustomMesh(worldInfo.getScene(), Color3.Green(), "model route");
+    const objectColor = Color3.Green();
 
-    super(scene, position, customMesh, customHighlightColor, objectList);
+    super(worldInfo, objectMesh, pos, dir, objectColor);
 
-    this.robotList = robotList;
-    this.robotList.push(this);
+    worldInfo.getRobotObjects().push(this);
 
     this.variableMap = new Map();
   }
 
   stepForward() {
-    this.mesh.position = this.transformable.stepForward(this.mesh.position);
+    this.position = this.transformable.stepForward(this.position);
+    this.mesh.position = this.position;
   }
 
-  rotateToward(direction: Direction) {
-    this.mesh.rotation = this.transformable.rotateToward(direction);
-  }
-
-  checkIntersection(objectList: BaseObject[]) {
-    objectList.forEach(object => {
+  checkIntersection() {
+    this.worldInfo.getSceneObjects().forEach(object => {
       object.getInteractable()?.checkIntersection(this);
     });
   }
 
   delete(): void {
-    let indexOfObject = this.robotList.findIndex((element) => this === element);
-    this.robotList.splice(indexOfObject, 1);
+    const indexOfObject = this.worldInfo.getRobotObjects().findIndex((element) => this === element);
+    this.worldInfo.getRobotObjects().splice(indexOfObject, 1);
 
     super.delete();
   }
 
-  addVariableToMap(variable: VariableContainer) {
+  restore(): void {
+    this.mesh = createCustomMesh(this.worldInfo.getScene(), Color3.Green(), "model route");
+    this.worldInfo.addRobotObject(this);
+
+    super.restore();
+  }
+
+  addVariable(variable: VariableContainer) {
     if (variable.getName() === "") { return; }
 
     if (this.variableMap.has(variable.getName())) {
@@ -51,5 +53,9 @@ export class RobotObject extends BaseObject {
       this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
       console.log("added new variable");
     }
+  }
+
+  removeVariable(variable: VariableContainer) {
+    this.variableMap.delete(variable.getName());
   }
 }

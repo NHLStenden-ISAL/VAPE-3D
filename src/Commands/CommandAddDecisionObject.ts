@@ -1,36 +1,31 @@
-import { Nullable, Scene, Vector3 } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
-import { BaseObject } from "../Objects/BaseObject";
+import { WorldInformation } from "../Helpers/WorldInformation";
 import { DecisionObject } from "../Objects/DecisionObject";
 import { ICommand } from "./ICommand";
 
 export class CommandAddDecisionObject implements ICommand {
-
-  private scene: Scene;
+  private worldInfo: WorldInformation;
   private position: Vector3;
-  private objectList: BaseObject[];
   private direction: Direction;
 
-  private object: Nullable<DecisionObject> = null;
+  private object: DecisionObject | undefined = undefined;
 
-  constructor(scene: Scene, position: Vector3, direction: Direction, objectList: BaseObject[]) {
-    this.scene = scene;
+  constructor(worldInfo: WorldInformation, position: Vector3, direction: Direction) {
+    this.worldInfo = worldInfo;
     this.position = position;
     this.direction = direction;
-
-    this.objectList = objectList;
   }
 
   execute(): void {
-    this.object = new DecisionObject(this.scene, this.position, this.objectList, this.direction);
+    this.object = new DecisionObject(this.worldInfo, this.position, this.direction);
   }
 
   undo(): void {
-    throw new Error("Method not implemented.");
+    this.object?.delete();
   }
   
   redo(): void {
-    throw new Error("Method not implemented.");
+    this.execute();
   }
-  
 }

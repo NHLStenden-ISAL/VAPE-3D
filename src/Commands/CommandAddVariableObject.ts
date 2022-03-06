@@ -1,33 +1,32 @@
-import { Nullable, Scene, Vector3 } from "@babylonjs/core";
-import { BaseObject } from "../Objects/BaseObject";
+import { Vector3 } from "@babylonjs/core";
+import { Direction } from "../Compositions/Transformable";
+import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableObject } from "../Objects/VariableObject";
 import { ICommand } from "./ICommand";
 
 export class CommandAddVariableObject implements ICommand {
-  private scene: Scene;
+  private worldInfo: WorldInformation;
   private position: Vector3;
-  private objectList: BaseObject[];
+  private direction: Direction;
 
-  private object: Nullable<VariableObject> = null;
+  private object: VariableObject | undefined = undefined;
 
-  constructor(scene: Scene, position: Vector3, objectList: BaseObject[]) {
-    this.scene = scene;
+  constructor(worldInfo: WorldInformation, position: Vector3, direction: Direction) {
+    this.worldInfo = worldInfo;
     this.position = position;
-    this.objectList = objectList;
+    this.direction = direction;
   }
 
   execute(): void {
-    this.object = new VariableObject(this.scene, this.position, this.objectList);
+    this.object = new VariableObject(this.worldInfo, this.position, this.direction);
   }
 
   undo(): void {
-    //TODO: remove object from list?
-    throw new Error("Method not implemented.");
+    this.object?.delete();
   }
 
   redo(): void {
-    //TODO: add object again to list?
-    throw new Error("Method not implemented.");
+    this.execute();
   }
 
 }

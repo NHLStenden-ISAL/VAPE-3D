@@ -1,32 +1,33 @@
-import { Nullable, PointerEventTypes, Scene, Vector3 } from "@babylonjs/core";
+import { PointerEventTypes, Vector3 } from "@babylonjs/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { SceneHelper } from "./SceneHelper";
 import { StateManager } from "./StateManager";
+import { WorldInformation } from "./WorldInformation";
 
 export class MouseHandler {
-  private scene: Scene;
+  private worldInfo: WorldInformation;
   private sceneHelper: SceneHelper;
   private stateManager: StateManager;
 
-  private mouseStartpoint: Nullable<Vector3>;
-  private clickedObject: Nullable<BaseObject>;
-  private selectedObject: Nullable<BaseObject>;
+  private mouseStartpoint: Vector3 | undefined;
+  private clickedObject: BaseObject | undefined;
+  private selectedObject: BaseObject | undefined;
 
   private isDraging: boolean;
 
-  constructor(scene: Scene, sceneHelper: SceneHelper, stateManager: StateManager) {
-    this.scene = scene;
+  constructor(worldInfo: WorldInformation, sceneHelper: SceneHelper, stateManager: StateManager) {
+    this.worldInfo = worldInfo;
     this.sceneHelper = sceneHelper;
     this.stateManager = stateManager;
 
-    this.mouseStartpoint = null;
-    this.clickedObject = null;
-    this.selectedObject = null;
+    this.mouseStartpoint = undefined;
+    this.clickedObject = undefined;
+    this.selectedObject = undefined;
     this.isDraging = false;
   }
 
   public onMouseInteraction() {
-    this.scene.onPointerObservable.add((pointerInfo) => {
+    this.worldInfo.getScene().onPointerObservable.add((pointerInfo) => {
       if (this.stateManager.getEditorState() === 'wait') { return; }
 
       switch (pointerInfo.type) {
@@ -43,7 +44,7 @@ export class MouseHandler {
 
           //Check if you've hit something clickable
           if (pointerInfo.pickInfo?.hit === true) {
-            this.clickedObject = this.sceneHelper.getObject(pointerInfo.pickInfo.pickedMesh);
+            this.clickedObject = this.worldInfo.getObjectByMesh(pointerInfo.pickInfo.pickedMesh);
             this.mouseStartpoint = this.getMouseGridPosition();
 
             if (pointerInfo.event.button === 0) {
@@ -68,7 +69,7 @@ export class MouseHandler {
   }
 
   private onLeftPointerDown() {
-    if (this.clickedObject === null) { return; }
+    if (!this.clickedObject) { return; }
 
     this.isDraging = true;
 
@@ -99,7 +100,7 @@ export class MouseHandler {
   }
 
   private onRightPointerTap() {
-    if (this.clickedObject === null) { return; }
+    if (!this.clickedObject) { return; }
     this.selectedObject = this.clickedObject;
 
     //TODO: add select
@@ -107,52 +108,58 @@ export class MouseHandler {
   }
 
   private createOnTap() {
-    if (this.clickedObject !== null) { return; }
+    if (this.clickedObject) { return; }
 
-    if (this.mouseStartpoint !== null) {
+    if (this.mouseStartpoint) {
       this.sceneHelper.addObject(this.mouseStartpoint);
     }
   }
 
   private deleteOnTap() {
-    if (this.clickedObject === null) { return; }
-
-    this.clickedObject.delete();
+    if (!this.clickedObject) { return; }
+    this.sceneHelper.deleteObject(this.clickedObject);
   }
 
   private rotateOnTap() {
-    if (this.clickedObject === null) { return; }
+    if (!this.clickedObject) { return; }
 
     this.clickedObject.rotate();
   }
 
   private onLeftPointerDrag() {
-    if (this.mouseStartpoint === null || this.clickedObject === null) { return; }
+    if (!this.mouseStartpoint || !this.clickedObject) { return; }
 
     if (this.stateManager.getEditorState() === 'transform') {
-      let location = this.getMouseGridPosition();
+      let mouseLocation = this.getMouseGridPosition();
 
-      if (location !== null) {
-        this.clickedObject.onDragExecute(location);
+      if (mouseLocation) {
+        this.clickedObject.onDragExecute(mouseLocation);
       }
     }
   }
 
-  public getMouseGridPosition(): Nullable<Vector3> {
-    let info = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+  public getMouseGridPosition(): Vector3 | undefined {
+    const info = this.worldInfo.getScene().pick(this.worldInfo.getScene().pointerX, this.worldInfo.getScene().pointerY);
 
-    return info?.hit ? info?.pickedPoint : null;
+    if (!info?.hit)
+      return undefined;
+
+      if (!info.pickedPoint)
+      return undefined;
+
+
+    return info.pickedPoint;
   }
 
   private resetClick() {
-    this.mouseStartpoint = null;
-    this.clickedObject = null;
+    this.mouseStartpoint = undefined;
+    this.clickedObject = undefined;
   }
 
   private resetSelection() {
-    if (this.selectedObject !== null) {
+    if (this.selectedObject) {
       this.selectedObject.onDeselect();
-      this.selectedObject = null;
+      this.selectedObject = undefined;
     }
   }
 }

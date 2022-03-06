@@ -1,17 +1,17 @@
-import { Scene } from "@babylonjs/core";
 import { AppManager } from "./AppManager";
 import { StateManager } from "./StateManager";
+import { WorldInformation } from "./WorldInformation";
 
 export class KeyboardHandler {
-  private scene: Scene;
+  private worldInfo: WorldInformation;
   private appManager: AppManager;
   private stateManager: StateManager;
 
   private isTyping: boolean;
   private isRunning: boolean;
 
-  constructor(scene: Scene, appManager: AppManager, stateManager: StateManager) {
-    this.scene = scene;
+  constructor(worldInfo: WorldInformation, appManager: AppManager, stateManager: StateManager) {
+    this.worldInfo = worldInfo;
     this.appManager = appManager;
     this.stateManager = stateManager;
 
@@ -20,7 +20,7 @@ export class KeyboardHandler {
   }
 
   public onKeyboardInteraction() {
-    this.scene.onKeyboardObservable.add((kbInfo) => {
+    this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
       if (this.isTyping === false && this.isRunning === false) {
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
@@ -38,6 +38,14 @@ export class KeyboardHandler {
             case 'D':
               this.stateManager.setEditorState('delete');
               console.log("Enter delete state");
+              break;
+            case 'U':
+              this.appManager.undo();
+              console.log("undo");
+              break;
+            case 'R':
+              this.appManager.redo();
+              console.log("redo");
               break;
           }
         }

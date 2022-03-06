@@ -32,14 +32,15 @@ export class Transformable {
       this.currentDirection = 0;
     }
 
-    let yRotation = (Math.PI / (this.directionCount() / 2)) * this.currentDirection;
+    const yRotation = (Math.PI / (this.directionCount() / 2)) * this.currentDirection;
+
     return new Vector3(0, yRotation, 0);
   }
 
   rotateToward(direction: Direction): Vector3 {
     this.currentDirection = direction;
 
-    let yRotation = (Math.PI / (this.directionCount() / 2)) * direction;
+    const yRotation = (Math.PI / (this.directionCount() / 2)) * direction;
     return new Vector3(0, yRotation, 0);
   }
 

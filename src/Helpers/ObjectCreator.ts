@@ -46,7 +46,7 @@ export function createBox(scene: Scene, color: Color3 = Color3.White(), size: nu
 export function createDirection(scene: Scene, color: Color3, size: number = 1): Mesh {
   const sphere = createBox(scene, color, size);
 
-  let triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
+  const triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
   triangle.position = new Vector3(triangle.position.x, 0.51, triangle.position.z);
   triangle.rotate(Vector3.Right(), Math.PI / 2, Space.LOCAL);
   triangle.rotate(Vector3.Forward(), Math.PI / 2, Space.LOCAL);

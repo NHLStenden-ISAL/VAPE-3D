@@ -1,31 +1,35 @@
 import { Scene } from "@babylonjs/core";
+import { CommandBroker } from "./CommandBroker";
 import { KeyboardHandler } from "./KeyboardHandler";
 import { MouseHandler } from "./MouseHandler";
 import { SceneHelper } from "./SceneHelper";
 import { StateManager } from "./StateManager";
+import { WorldInformation } from "./WorldInformation";
 
 export class AppManager {
-  private scene: Scene;
   private canvas: any;
 
   private sceneHelper: SceneHelper;
   private stateManager: StateManager;
+  private commandBroker: CommandBroker;
+  private worldInformation: WorldInformation;
 
   constructor(scene: Scene, canvas: any) {
-    this.scene = scene;
     this.canvas = canvas;
 
     this.stateManager = new StateManager();
-    this.sceneHelper = new SceneHelper(this.scene, this.canvas);
+    this.commandBroker = new CommandBroker();
+    this.worldInformation = new WorldInformation(scene, this.commandBroker);
+    this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
   }
 
   public runApp() {
     this.sceneHelper.createScene();
 
-    let mouseHandler = new MouseHandler(this.scene, this.sceneHelper, this.stateManager);
+    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.stateManager);
     mouseHandler.onMouseInteraction();
 
-    let keyboardHandler = new KeyboardHandler(this.scene, this, this.stateManager);
+    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.stateManager);
     keyboardHandler.onKeyboardInteraction();
   }
 
@@ -48,6 +52,14 @@ export class AppManager {
   private stopProgram() {
     //TODO: place the robot at the start position, reset all the variables?
 
+  }
+
+  public undo() {
+    this.commandBroker.undo();
+  }
+
+  public redo() {
+    this.commandBroker.redo();
   }
 
   private updateLoop(delta: number) {

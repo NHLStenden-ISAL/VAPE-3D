@@ -11,24 +11,30 @@ export class CommandBroker {
 
   public executeCommand(command: ICommand): void {
     command.execute();
+
+    this.undoArray.push(command);
+    this.redoArray.length = 0;
+
+    console.log(`Commands executed: ${this.undoArray.length}`);
   }
 
-  public undo(): void {
-    let command = this.undoArray.pop();
-    if (command !== undefined) {
-      command.undo();
+  public undo(): boolean {
+    const command = this.undoArray.pop();
+    if (!command)
+      return false;
+    
+    command.undo();
+    this.redoArray.push(command);
 
-      this.redoArray.push(command);
-    }
+    return true;
   }
 
   public redo(): void {
-    let command = this.redoArray.pop();
-    if (command !== undefined) {
-      command.redo();
+    const command = this.redoArray.pop();
+    if (!command)
+      return;
 
-      this.undoArray.push(command);
-    }
-
+    command.redo();
+    this.undoArray.push(command);
   }
 }
