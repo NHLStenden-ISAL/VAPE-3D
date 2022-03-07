@@ -1,20 +1,21 @@
 import { ICommand } from "./ICommand";
 import { BaseObject } from "../Objects/BaseObject";
-import { Vector2, Vector3 } from "@babylonjs/core";
+import { Vector2 } from "@babylonjs/core";
 
 export class CommandMoveObject implements ICommand {
   private object: BaseObject;
+  
   private startPosition: Vector2;
   private endPosition: Vector2;
 
   constructor(object: BaseObject) {
     this.object = object;
     this.startPosition = object.getStartPosition();
-    this.endPosition = object.getEndPosition();
+    this.endPosition = object.getGridPosition();
   }
 
   execute(): void {
-    this.endPosition = this.object.getEndPosition();
+    this.endPosition = this.object.getGridPosition();
   }
 
   undo(): void {

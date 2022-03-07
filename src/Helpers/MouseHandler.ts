@@ -78,11 +78,12 @@ export class MouseHandler {
   }
 
   private onLeftPointerUp() {
+    if (!this.clickedObject) { return; }
 
     this.isDraging = false;
 
     this.sceneHelper.enableCameraControl();
-    this.clickedObject?.onReleaseLeftExecute();
+    this.clickedObject.onReleaseLeftExecute();
   }
 
   private onLeftPointerTap() {
@@ -140,7 +141,6 @@ export class MouseHandler {
 
   private getMouseGridPosition(): Vector2 | undefined {
     const info = this.worldInfo.getScene().pick(this.worldInfo.getScene().pointerX, this.worldInfo.getScene().pointerY);
-
     
     if (!info?.hit)
     return undefined;

@@ -26,7 +26,7 @@ export class RobotObject extends BaseObject {
 
   private stepForward() {
     this.gridPosition = this.transformable.stepForward(this.gridPosition);
-    this.mesh.position = new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
+    this.mesh.position = this.updateMeshPosition();
   }
 
   private checkIntersection() {

@@ -1,5 +1,6 @@
-import { Vector3, AbstractMesh, Mesh, HighlightLayer, Color3, Nullable, Vector2 } from "@babylonjs/core";
+import { Vector3, Vector2, AbstractMesh, Mesh, HighlightLayer, Color3, Nullable } from "@babylonjs/core";
 import { CommandMoveObject } from "../Commands/CommandMoveObject";
+import { CommandRotateObject } from "../Commands/CommandRotateObject";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction, Transformable } from "../Compositions/Transformable";
 import { WorldInformation } from "../Helpers/WorldInformation";
@@ -18,20 +19,20 @@ export class BaseObject {
   protected height: number;
 
   private startPosition: Vector2;
-  private endPosition: Vector2;
+  private startDirection: Direction;
 
-
-  constructor(worldInfo: WorldInformation, mesh: Mesh, gridPos: Vector2, dir: Direction, lightColor: Color3) {
+  constructor(worldInfo: WorldInformation, mesh: Mesh, gridPos: Vector2, direction: Direction, lightColor: Color3) {
     this.worldInfo = worldInfo;
     worldInfo.addSceneObject(this);
 
     this.mesh = mesh;
-    this.gridPosition = gridPos;
-    this.direction = dir;
     this.height = mesh.getBoundingInfo().boundingBox.extendSize.y;
+    
+    this.gridPosition = gridPos;
+    this.startPosition = this.gridPosition;
 
-    this.startPosition = gridPos;
-    this.endPosition = gridPos;
+    this.direction = direction;
+    this.startDirection = this.direction;
 
     this.highlight = new HighlightLayer('highlight', worldInfo.getScene());
     this.highlightColor = lightColor;
@@ -56,8 +57,9 @@ export class BaseObject {
   }
 
   public onReleaseLeftExecute(): void {
-    this.endPosition = this.gridPosition;
     this.turnOffHighlight();
+
+    if (this.startPosition.equals(this.gridPosition)) { return; }
 
     const command = new CommandMoveObject(this);
     this.worldInfo.getCommandBroker().executeCommand(command);
@@ -86,22 +88,33 @@ export class BaseObject {
     return this.gridPosition;
   }
 
+  public getDirection(): Direction {
+    return this.direction;
+  }
+
   public getStartPosition(): Vector2 {
     return this.startPosition;
   }
 
-  public getEndPosition(): Vector2 {
-    return this.endPosition;
+  public getStartDirection(): Direction {
+    return this.startDirection;
   }
 
   public move(position: Vector2): void {
     this.gridPosition = this.transformable.move(position);
-    this.mesh.position = new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
+    this.mesh.position = this.updateMeshPosition()
   }
 
   public rotate(): void {
+    this.startDirection = this.direction;
+
     this.mesh.rotation = this.transformable.rotate();
     this.direction = this.transformable.getDirection();
+
+    if (this.startDirection == this.direction) { return; }
+
+    const command = new CommandRotateObject(this);
+    this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   public rotateToward(direction: Direction) {
@@ -117,7 +130,7 @@ export class BaseObject {
     this.worldInfo.getSceneObjects().splice(indexOfObject, 1);
   }
 
-  public restore() : void {
+  public restore(): void {
     this.worldInfo.getSceneObjects().push(this);
     this.transformable = new Transformable(this.mesh);
 
@@ -127,6 +140,10 @@ export class BaseObject {
 
   public getInteractable(): Nullable<Interactable> {
     return this.interactable;
+  }
+
+  protected updateMeshPosition(): Vector3 {
+    return new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
   }
 
   private turnOnHighlight() {
