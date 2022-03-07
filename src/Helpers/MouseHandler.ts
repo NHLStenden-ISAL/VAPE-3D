@@ -1,4 +1,4 @@
-import { PointerEventTypes, Vector3 } from "@babylonjs/core";
+import { PointerEventTypes, Vector2 } from "@babylonjs/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { SceneHelper } from "./SceneHelper";
 import { StateManager } from "./StateManager";
@@ -9,7 +9,7 @@ export class MouseHandler {
   private sceneHelper: SceneHelper;
   private stateManager: StateManager;
 
-  private mouseStartpoint: Vector3 | undefined;
+  private mouseStartpoint: Vector2 | undefined;
   private clickedObject: BaseObject | undefined;
   private selectedObject: BaseObject | undefined;
 
@@ -138,17 +138,17 @@ export class MouseHandler {
     }
   }
 
-  public getMouseGridPosition(): Vector3 | undefined {
+  private getMouseGridPosition(): Vector2 | undefined {
     const info = this.worldInfo.getScene().pick(this.worldInfo.getScene().pointerX, this.worldInfo.getScene().pointerY);
 
+    
     if (!info?.hit)
-      return undefined;
+    return undefined;
+    
+    if (!info.pickedPoint)
+    return undefined;
 
-      if (!info.pickedPoint)
-      return undefined;
-
-
-    return info.pickedPoint;
+    return new Vector2(info.pickedPoint.x, info.pickedPoint.z);
   }
 
   private resetClick() {

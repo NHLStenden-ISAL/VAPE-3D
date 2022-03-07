@@ -14,8 +14,6 @@ export class CommandBroker {
 
     this.undoArray.push(command);
     this.redoArray.length = 0;
-
-    console.log(`Commands executed: ${this.undoArray.length}`);
   }
 
   public undo(): boolean {
@@ -29,12 +27,14 @@ export class CommandBroker {
     return true;
   }
 
-  public redo(): void {
+  public redo(): boolean {
     const command = this.redoArray.pop();
     if (!command)
-      return;
+      return false;
 
     command.redo();
     this.undoArray.push(command);
+
+    return true;
   }
 }

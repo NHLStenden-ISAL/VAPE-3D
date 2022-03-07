@@ -1,4 +1,4 @@
-import { Mesh, Vector3 } from "@babylonjs/core";
+import { Mesh, Vector2, Vector3 } from "@babylonjs/core";
 
 export enum Direction {
   NORTH,
@@ -17,11 +17,11 @@ export class Transformable {
     this.currentDirection = Direction.NORTH;
   }
 
-  move(position: Vector3): Vector3 {
-    return new Vector3(this.floor(position.x), this.height, this.floor(position.z));
+  move(position: Vector2): Vector2 {
+    return new Vector2(this.floor(position.x), this.floor(position.y));
   }
 
-  stepForward(position: Vector3): Vector3 {
+  stepForward(position: Vector2): Vector2 {
     return position.addInPlace(this.getForward(this.currentDirection));
   }
 
@@ -56,19 +56,19 @@ export class Transformable {
     return Object.keys(Direction).length / 2;
   }
 
-  private getForward(direction: Direction): Vector3 {
+  private getForward(direction: Direction): Vector2 {
     switch (direction) {
       case Direction.NORTH:
-        return new Vector3(0, 0, 1);
+        return new Vector2(0, 1);
       case Direction.EAST:
-        return new Vector3(1, 0, 0);
+        return new Vector2(1, 0);
       case Direction.SOUTH:
-        return new Vector3(0, 0, -1);
+        return new Vector2(0, -1);
       case Direction.WEST:
-        return new Vector3(-1, 0, 0);
+        return new Vector2(-1, 0);
 
     }
 
-    return Vector3.Zero();
+    return Vector2.Zero();
   }
 }

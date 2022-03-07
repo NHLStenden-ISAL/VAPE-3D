@@ -1,4 +1,4 @@
-import { Vector3, Color3 } from "@babylonjs/core";
+import { Color3, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction } from "../Compositions/Transformable";
 import { createDirection } from "../Helpers/ObjectCreator";
@@ -8,24 +8,24 @@ import { RobotObject } from "./RobotObject";
 
 export class DecisionObject extends BaseObject {
 
-  constructor(worldInfo: WorldInformation, pos: Vector3, dir: Direction) {
-    const objectMesh = createDirection(worldInfo.getScene(), Color3.Blue(), 0.8);
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Blue();
+    const objectMesh = createDirection(worldInfo.getScene(), objectColor, 0.8);
 
-    super(worldInfo, objectMesh, pos, dir, objectColor);
+    super(worldInfo, objectMesh, gridPos, dir, objectColor);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     
     objectMesh.rotation = this.transformable.rotateToward(dir);
   }
 
-  onIntersectExecute(robotObject: RobotObject) {
+  private onIntersectExecute(robotObject: RobotObject) {
     if (this.checkCondition() === true) {
       robotObject.rotateToward(this.transformable.getDirection());
     }
   }
 
-  restore(): void {
+  public restore(): void {
     this.mesh = createDirection(this.worldInfo.getScene(), Color3.Blue(), 0.8);
 
     super.restore();

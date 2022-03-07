@@ -13,22 +13,25 @@ export class BaseObject {
   protected highlight: HighlightLayer;
   protected highlightColor: Color3;
 
-  protected position: Vector3;
+  protected gridPosition: Vector2;
   protected direction: Direction;
+  protected height: number;
 
-  public startPosition: Vector3;
-  public endPosition: Vector3;
+  private startPosition: Vector2;
+  private endPosition: Vector2;
 
-  constructor(worldInfo: WorldInformation, mesh: Mesh, pos: Vector3, dir: Direction, lightColor: Color3) {
+
+  constructor(worldInfo: WorldInformation, mesh: Mesh, gridPos: Vector2, dir: Direction, lightColor: Color3) {
     this.worldInfo = worldInfo;
     worldInfo.addSceneObject(this);
 
     this.mesh = mesh;
-    this.position = pos;
+    this.gridPosition = gridPos;
     this.direction = dir;
+    this.height = mesh.getBoundingInfo().boundingBox.extendSize.y;
 
-    this.startPosition = pos;
-    this.endPosition = pos;
+    this.startPosition = gridPos;
+    this.endPosition = gridPos;
 
     this.highlight = new HighlightLayer('highlight', worldInfo.getScene());
     this.highlightColor = lightColor;
@@ -36,93 +39,93 @@ export class BaseObject {
     this.transformable = new Transformable(this.mesh);
     this.interactable = null;
 
-    this.move(this.position);
+    this.move(this.gridPosition);
   }
 
-  onClickLeftExecute(): void {
-    this.startPosition = this.position;
+  public onClickLeftExecute(): void {
+    this.startPosition = this.gridPosition;
     this.turnOnHighlight();
   }
 
-  onClickRightExecute(): void {
+  public onClickRightExecute(): void {
     this.turnOnHighlight();
   }
 
-  onDragExecute(mouseLocation: Vector3): void {
+  public onDragExecute(mouseLocation: Vector2): void {
     this.move(mouseLocation);
   }
 
-  onReleaseLeftExecute(): void {
-    this.endPosition = this.position;
+  public onReleaseLeftExecute(): void {
+    this.endPosition = this.gridPosition;
     this.turnOffHighlight();
 
     const command = new CommandMoveObject(this);
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  onReleaseRightExecute(): void {
+  public onReleaseRightExecute(): void {
 
   }
 
-  onSelect(): void {
+  public onSelect(): void {
     console.log("Select an object");
     this.turnOnHighlight();
 
     //TODO: Add GUI window with options for the object, most likely per class, so not here
   }
 
-  onDeselect(): void {
+  public onDeselect(): void {
     this.turnOffHighlight();
   }
 
-  getMesh(): AbstractMesh {
+  public getMesh(): AbstractMesh {
     return this.mesh;
   }
 
-  getGridPosition(): Vector2 {
-    return new Vector2(this.mesh.position.x, this.mesh.position.z);
+  public getGridPosition(): Vector2 {
+    return this.gridPosition;
   }
 
-  getStartPosition(): Vector3 {
+  public getStartPosition(): Vector2 {
     return this.startPosition;
   }
 
-  getEndPosition(): Vector3 {
+  public getEndPosition(): Vector2 {
     return this.endPosition;
   }
 
-  move(position: Vector3): void {
-    this.position = this.transformable.move(position);
-    this.mesh.position = this.position;
+  public move(position: Vector2): void {
+    this.gridPosition = this.transformable.move(position);
+    this.mesh.position = new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
   }
 
-  rotate(): void {
+  public rotate(): void {
     this.mesh.rotation = this.transformable.rotate();
     this.direction = this.transformable.getDirection();
   }
 
-  rotateToward(direction: Direction) {
+  public rotateToward(direction: Direction) {
     this.direction = direction;
     this.mesh.rotation = this.transformable.rotateToward(direction);
   }
 
 
-  delete(): void {
+  public delete(): void {
     this.mesh.dispose();
 
     const indexOfObject = this.worldInfo.getSceneObjects().findIndex((element) => this === element);
     this.worldInfo.getSceneObjects().splice(indexOfObject, 1);
   }
 
-  restore() : void {
+  public restore() : void {
     this.worldInfo.getSceneObjects().push(this);
     this.transformable = new Transformable(this.mesh);
 
-    this.move(this.position);
+    this.move(this.gridPosition);
     this.rotateToward(this.direction);
   }
 
-  getInteractable(): Nullable<Interactable> {
+  public getInteractable(): Nullable<Interactable> {
     return this.interactable;
   }
 

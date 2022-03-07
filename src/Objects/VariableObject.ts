@@ -1,4 +1,4 @@
-import { Vector3, Color3 } from "@babylonjs/core";
+import { Color3, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
@@ -11,21 +11,23 @@ export class VariableObject extends BaseObject {
   private variable: VariableContainer;
   private interactedRobots: RobotObject[];
 
-  constructor(worldInfo: WorldInformation, pos: Vector3, dir: Direction) {
-    const objectMesh = createCustomMesh(worldInfo.getScene(), Color3.Magenta(), "model route");
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
     const objectColor = Color3.Magenta();
+    const objectMesh = createCustomMesh(worldInfo.getScene(), objectColor, "model route");
 
-    super(worldInfo, objectMesh, pos, dir, objectColor);
+    super(worldInfo, objectMesh, gridPosition, direction, objectColor);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
+    //TEMP
     const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
     const value: number = Math.random() * 10;
+
     this.variable = new VariableContainer(name, value);
   }
 
-  onIntersectExecute(robotObject: RobotObject) {
+  private onIntersectExecute(robotObject: RobotObject) {
     if (this.variable.getName() === "") { return; }
 
     robotObject.addVariable(this.variable);
@@ -36,7 +38,7 @@ export class VariableObject extends BaseObject {
     this.variable = variable;
   }
 
-  delete(): void {
+  public delete(): void {
     this.interactedRobots.forEach(robot => {
       robot.removeVariable(this.variable);
     });
@@ -44,7 +46,7 @@ export class VariableObject extends BaseObject {
     super.delete();
   }
 
-  restore(): void {
+  public restore(): void {
     this.mesh = createCustomMesh(this.worldInfo.getScene(), Color3.Magenta(), "model route"); 
 
     this.interactedRobots.forEach(robot => {

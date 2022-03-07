@@ -1,4 +1,4 @@
-import { ArcRotateCamera, HemisphericLight, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/core";
 import { CommandAddDecisionObject } from "../Commands/CommandAddDecisionObject";
 import { CommandAddDirectionObject } from "../Commands/CommandAddDirectionObject";
 import { CommandAddRobotObject } from "../Commands/CommandAddRobotObject";
@@ -29,22 +29,21 @@ export class SceneHelper {
 
     new GridObject(this.worldInfo.getScene(), 60);
 
-    this.addVariableObject(new Vector3(2, 0, 3));
-    this.addVariableObject(new Vector3(10, 3, 5));
+    this.addVariableObject(new Vector2(2, 3));
+    this.addVariableObject(new Vector2(10,5));
 
-    this.addDirectionObject(new Vector3(-1, 0, 0), Direction.NORTH);
-    this.addDirectionObject(new Vector3(-10, 0, 0), Direction.EAST);
+    this.addDirectionObject(new Vector2(-1,0), Direction.NORTH);
+    this.addDirectionObject(new Vector2(-10, 0), Direction.EAST);
 
-    this.addRobotObject(new Vector3(0, 0, 0));
+    this.addRobotObject(new Vector2(0, 0));
 
-    this.addDecisionObject(new Vector3(-10, 0, 9), Direction.SOUTH);
-    this.addDecisionObject(new Vector3(-1, 0, 9), Direction.WEST);
+    this.addDecisionObject(new Vector2(-10, 9), Direction.SOUTH);
+    this.addDecisionObject(new Vector2(-1, 9), Direction.WEST);
   }
 
   public updateRobots() {
     this.worldInfo.getRobotObjects().forEach(robot => {
-      robot.stepForward();
-      robot.checkIntersection();
+      robot.updateRobot();
     });
   }
 
@@ -56,9 +55,9 @@ export class SceneHelper {
     this.camera.attachControl(this.canvas, true);
   }
 
-  public addObject(position: Vector3) {
+  public addObject(gridPosition: Vector2) {
     //TODO: add different object types
-    this.addVariableObject(position);
+    this.addVariableObject(gridPosition);
   }
 
   public deleteObject(object: BaseObject) {
@@ -66,23 +65,23 @@ export class SceneHelper {
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  private addVariableObject(position: Vector3, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddVariableObject(this.worldInfo, position, direction);
+  private addVariableObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
+    const command = new CommandAddVariableObject(this.worldInfo, gridPosition, direction);
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  private addDirectionObject(position: Vector3, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddDirectionObject(this.worldInfo, position, direction);
+  private addDirectionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
+    const command = new CommandAddDirectionObject(this.worldInfo, gridPosition, direction);
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  private addDecisionObject(position: Vector3, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddDecisionObject(this.worldInfo, position, direction);
+  private addDecisionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
+    const command = new CommandAddDecisionObject(this.worldInfo, gridPosition, direction);
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  private addRobotObject(position: Vector3, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddRobotObject(this.worldInfo, position, direction);
+  private addRobotObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
+    const command = new CommandAddRobotObject(this.worldInfo, gridPosition, direction);
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 }
