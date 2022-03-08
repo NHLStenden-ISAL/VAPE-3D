@@ -2,7 +2,6 @@ import { ICommand } from "./ICommand";
 import { BaseObject } from "../Objects/BaseObject";
 import { Direction } from "../Compositions/Transformable";
 
-
 export class CommandRotateObject implements ICommand {
   private object: BaseObject;
   private startDirection: Direction;
@@ -12,8 +11,6 @@ export class CommandRotateObject implements ICommand {
     this.object = object;
     this.startDirection = object.getStartDirection();
     this.endDirection = object.getDirection();
-
-    console.log("Created rotate command: ", this.startDirection, this.endDirection);
   }
 
   execute(): void {
@@ -27,5 +24,4 @@ export class CommandRotateObject implements ICommand {
   redo(): void {
     this.object.rotateToward(this.endDirection);
   }
-
 }

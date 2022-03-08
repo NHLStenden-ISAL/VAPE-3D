@@ -1,4 +1,4 @@
-import { Color3, Vector2, Vector3 } from "@babylonjs/core";
+import { Color3, Mesh, Vector2, Vector3 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
@@ -10,13 +10,17 @@ export class RobotObject extends BaseObject {
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Green();
-    const objectMesh = createCustomMesh(worldInfo.getScene(), objectColor, "model route");
 
-    super(worldInfo, objectMesh, gridPos, dir, objectColor);
-
+    super(worldInfo, gridPos, dir, objectColor);
     worldInfo.getRobotObjects().push(this);
 
+    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
+
     this.variableMap = new Map();
+  }
+
+  protected createMesh(): Mesh {
+    return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Green(), "");
   }
 
   public updateRobot() {
@@ -43,7 +47,6 @@ export class RobotObject extends BaseObject {
   }
 
   public restore(): void {
-    this.mesh = createCustomMesh(this.worldInfo.getScene(), Color3.Green(), "model route");
     this.worldInfo.addRobotObject(this);
 
     super.restore();

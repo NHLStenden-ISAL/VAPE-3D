@@ -30,9 +30,9 @@ export class SceneHelper {
     new GridObject(this.worldInfo.getScene(), 60);
 
     this.addVariableObject(new Vector2(2, 3));
-    this.addVariableObject(new Vector2(10,5));
+    this.addVariableObject(new Vector2(10, 5));
 
-    this.addDirectionObject(new Vector2(-1,0), Direction.NORTH);
+    this.addDirectionObject(new Vector2(-1, 0), Direction.NORTH);
     this.addDirectionObject(new Vector2(-10, 0), Direction.EAST);
 
     this.addRobotObject(new Vector2(0, 0));

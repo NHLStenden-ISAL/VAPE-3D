@@ -1,13 +1,15 @@
 import { Vector3, Vector2, AbstractMesh, Mesh, HighlightLayer, Color3, Nullable } from "@babylonjs/core";
+import { v4 as uuidv4 } from 'uuid';
 import { CommandMoveObject } from "../Commands/CommandMoveObject";
 import { CommandRotateObject } from "../Commands/CommandRotateObject";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction, Transformable } from "../Compositions/Transformable";
+import { createBox } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 
 export class BaseObject {
   protected transformable: Transformable;
-  protected interactable: Nullable<Interactable>;
+  protected interactable: Interactable | undefined;
   protected worldInfo: WorldInformation;
 
   protected mesh: Mesh;
@@ -16,18 +18,24 @@ export class BaseObject {
 
   protected gridPosition: Vector2;
   protected direction: Direction;
-  protected height: number;
+  protected height: number | undefined;
 
   private startPosition: Vector2;
   private startDirection: Direction;
 
-  constructor(worldInfo: WorldInformation, mesh: Mesh, gridPos: Vector2, direction: Direction, lightColor: Color3) {
+  private readonly objectuuid: string;
+
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, direction: Direction, lightColor: Color3) {
+    this.objectuuid = uuidv4();
+
     this.worldInfo = worldInfo;
     worldInfo.addSceneObject(this);
-
-    this.mesh = mesh;
-    this.height = mesh.getBoundingInfo().boundingBox.extendSize.y;
     
+    this.mesh = this.createMesh();
+    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
+
+    console.log(this.objectuuid);
+
     this.gridPosition = gridPos;
     this.startPosition = this.gridPosition;
 
@@ -37,11 +45,13 @@ export class BaseObject {
     this.highlight = new HighlightLayer('highlight', worldInfo.getScene());
     this.highlightColor = lightColor;
 
-    this.transformable = new Transformable(this.mesh);
-    this.interactable = null;
+    this.transformable = new Transformable();
+    this.interactable = undefined;
 
     this.move(this.gridPosition);
   }
+
+
 
   public onClickLeftExecute(): void {
     this.startPosition = this.gridPosition;
@@ -80,7 +90,7 @@ export class BaseObject {
     this.turnOffHighlight();
   }
 
-  public getMesh(): AbstractMesh {
+  public getMesh(): AbstractMesh | undefined {
     return this.mesh;
   }
 
@@ -111,7 +121,7 @@ export class BaseObject {
     this.mesh.rotation = this.transformable.rotate();
     this.direction = this.transformable.getDirection();
 
-    if (this.startDirection == this.direction) { return; }
+    if (this.startDirection === this.direction) { return; }
 
     const command = new CommandRotateObject(this);
     this.worldInfo.getCommandBroker().executeCommand(command);
@@ -122,24 +132,31 @@ export class BaseObject {
     this.mesh.rotation = this.transformable.rotateToward(direction);
   }
 
-
   public delete(): void {
     this.mesh.dispose();
 
-    const indexOfObject = this.worldInfo.getSceneObjects().findIndex((element) => this === element);
-    this.worldInfo.getSceneObjects().splice(indexOfObject, 1);
+    this.worldInfo.removeSceneObject(this);
   }
 
   public restore(): void {
-    this.worldInfo.getSceneObjects().push(this);
-    this.transformable = new Transformable(this.mesh);
+    this.worldInfo.addSceneObject(this);
+
+    this.mesh = this.createMesh();
 
     this.move(this.gridPosition);
     this.rotateToward(this.direction);
   }
 
-  public getInteractable(): Nullable<Interactable> {
+  protected createMesh(): Mesh {
+    return createBox(this.worldInfo.getScene(), this.objectuuid);
+  }
+
+  public getInteractable(): Interactable | undefined {
     return this.interactable;
+  }
+
+  public getUUID(): string {
+    return this.objectuuid;
   }
 
   protected updateMeshPosition(): Vector3 {

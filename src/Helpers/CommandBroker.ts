@@ -20,7 +20,7 @@ export class CommandBroker {
     const command = this.undoArray.pop();
     if (!command)
       return false;
-    
+
     command.undo();
     this.redoArray.push(command);
 

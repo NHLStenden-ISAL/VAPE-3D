@@ -33,8 +33,8 @@ function createGround(scene: Scene, size: number): Mesh {
   return MeshBuilder.CreateGround('ground', { width: size, height: size }, scene);
 }
 
-export function createBox(scene: Scene, color: Color3 = Color3.White(), size: number = 1): Mesh {
-  const box = MeshBuilder.CreateBox('box', { size: size }, scene);
+export function createBox(scene: Scene, name: string, color: Color3 = Color3.White(), size: number = 1): Mesh {
+  const box = MeshBuilder.CreateBox(name, { size: size }, scene);
   const boxMaterial = new StandardMaterial('color', scene);
   boxMaterial.diffuseColor = color;
 
@@ -43,8 +43,8 @@ export function createBox(scene: Scene, color: Color3 = Color3.White(), size: nu
   return box;
 }
 
-export function createDirection(scene: Scene, color: Color3, size: number = 1): Mesh {
-  const sphere = createBox(scene, color, size);
+export function createDirection(scene: Scene, name: string, color: Color3, size: number = 1): Mesh {
+  const sphere = createBox(scene, name, color, size);
 
   const triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
   triangle.position = new Vector3(triangle.position.x, 0.51, triangle.position.z);
@@ -57,9 +57,9 @@ export function createDirection(scene: Scene, color: Color3, size: number = 1): 
 
 }
 
-export function createCustomMesh(scene: Scene, color: Color3, objAddress: string): Mesh {
+export function createCustomMesh(scene: Scene, name: string, color: Color3, objAddress: string): Mesh {
 
-  return createBox(scene, color);
+  return createBox(scene, name, color);
   //https://www.babylonjs-playground.com/#0SHBCK#13
   //alert("Missing functionality, can't create custom mesh");
 }

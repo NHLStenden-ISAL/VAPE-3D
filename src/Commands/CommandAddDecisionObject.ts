@@ -1,4 +1,4 @@
-import { Vector2, Vector3 } from "@babylonjs/core";
+import { Vector2 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { DecisionObject } from "../Objects/DecisionObject";
@@ -24,7 +24,7 @@ export class CommandAddDecisionObject implements ICommand {
   undo(): void {
     this.object?.delete();
   }
-  
+
   redo(): void {
     this.execute();
   }

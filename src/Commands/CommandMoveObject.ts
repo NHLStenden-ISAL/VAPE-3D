@@ -4,7 +4,7 @@ import { Vector2 } from "@babylonjs/core";
 
 export class CommandMoveObject implements ICommand {
   private object: BaseObject;
-  
+
   private startPosition: Vector2;
   private endPosition: Vector2;
 

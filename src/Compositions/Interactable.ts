@@ -4,7 +4,6 @@ import { RobotObject } from "../Objects/RobotObject";
 type CallbackVoid = (robotObject: RobotObject) => void;
 
 export class Interactable {
-
   private onIntersect: CallbackVoid;
   private object: BaseObject;
 

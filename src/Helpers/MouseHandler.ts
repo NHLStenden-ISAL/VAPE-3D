@@ -37,7 +37,7 @@ export class MouseHandler {
             this.onLeftPointerTap();
           } else if (pointerInfo.event.button === 2) {
             this.onRightPointerTap();
-          } 
+          }
           break;
         case PointerEventTypes.POINTERDOWN:
           this.resetSelection();
@@ -59,7 +59,7 @@ export class MouseHandler {
 
           this.resetClick();
           break;
-        case PointerEventTypes.POINTERMOVE:    
+        case PointerEventTypes.POINTERMOVE:
           if (this.isDraging) {
             this.onLeftPointerDrag();
           }
@@ -141,12 +141,12 @@ export class MouseHandler {
 
   private getMouseGridPosition(): Vector2 | undefined {
     const info = this.worldInfo.getScene().pick(this.worldInfo.getScene().pointerX, this.worldInfo.getScene().pointerY);
-    
+
     if (!info?.hit)
-    return undefined;
-    
+      return undefined;
+
     if (!info.pickedPoint)
-    return undefined;
+      return undefined;
 
     return new Vector2(info.pickedPoint.x, info.pickedPoint.z);
   }

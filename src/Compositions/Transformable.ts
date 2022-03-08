@@ -1,4 +1,4 @@
-import { Mesh, Vector2, Vector3 } from "@babylonjs/core";
+import { Vector2, Vector3 } from "@babylonjs/core";
 
 export enum Direction {
   NORTH,
@@ -8,12 +8,9 @@ export enum Direction {
 }
 
 export class Transformable {
-  private height: number;
   private currentDirection: Direction;
 
-  constructor(mesh: Mesh) {
-    this.height = mesh.getBoundingInfo().boundingBox.extendSize.y;
-
+  constructor() {
     this.currentDirection = Direction.NORTH;
   }
 
@@ -66,7 +63,6 @@ export class Transformable {
         return new Vector2(0, -1);
       case Direction.WEST:
         return new Vector2(-1, 0);
-
     }
 
     return Vector2.Zero();

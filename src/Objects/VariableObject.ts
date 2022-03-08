@@ -1,4 +1,4 @@
-import { Color3, Vector2 } from "@babylonjs/core";
+import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
@@ -13,9 +13,10 @@ export class VariableObject extends BaseObject {
 
   constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
     const objectColor = Color3.Magenta();
-    const objectMesh = createCustomMesh(worldInfo.getScene(), objectColor, "model route");
 
-    super(worldInfo, objectMesh, gridPosition, direction, objectColor);
+    super(worldInfo, gridPosition, direction, objectColor);
+
+    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
@@ -25,6 +26,10 @@ export class VariableObject extends BaseObject {
     const value: number = Math.random() * 10;
 
     this.variable = new VariableContainer(name, value);
+  }
+
+  protected createMesh(): Mesh {
+    return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), "");
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
@@ -47,8 +52,6 @@ export class VariableObject extends BaseObject {
   }
 
   public restore(): void {
-    this.mesh = createCustomMesh(this.worldInfo.getScene(), Color3.Magenta(), "model route"); 
-
     this.interactedRobots.forEach(robot => {
       robot.addVariable(this.variable);
     });

@@ -64,13 +64,11 @@ export class AppManager {
 
   private updateLoop(delta: number) {
     setTimeout(() => {
-      if(this.stateManager.getGameState() === 'run') {
+      if (this.stateManager.getGameState() === 'run') {
         this.sceneHelper.updateRobots();
-        
+
         this.updateLoop(delta);
       }
     }, delta);
   }
-
-
 }

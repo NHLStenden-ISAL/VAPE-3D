@@ -1,4 +1,4 @@
-import { Vector2, Vector3 } from "@babylonjs/core";
+import { Vector2 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableObject } from "../Objects/VariableObject";
@@ -28,5 +28,4 @@ export class CommandAddVariableObject implements ICommand {
   redo(): void {
     this.execute();
   }
-
 }

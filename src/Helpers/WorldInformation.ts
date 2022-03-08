@@ -5,7 +5,7 @@ import { CommandBroker } from "./CommandBroker";
 
 export class WorldInformation {
   private scene: Scene;
-  private sceneObjects: BaseObject[] = [];
+  private sceneObjects: Map<string, BaseObject> = new Map();
   private robotObjects: RobotObject[] = [];
 
   private commandBroker: CommandBroker;
@@ -20,11 +20,17 @@ export class WorldInformation {
   }
 
   public addSceneObject(object: BaseObject): void {
-    this.sceneObjects.push(object);
+    this.sceneObjects.set(object.getUUID(), object);
   }
 
-  public getSceneObjects(): BaseObject[] {
+  public getSceneObjects(): Map<string, BaseObject> {
     return this.sceneObjects;
+  }
+
+  public removeSceneObject(object: BaseObject): void {
+    if (!this.sceneObjects.has(object.getUUID())) { return; }
+
+    this.sceneObjects.delete(object.getUUID());
   }
 
   public addRobotObject(object: RobotObject): void {
@@ -39,10 +45,8 @@ export class WorldInformation {
     if (targetMesh == null)
       return undefined;
 
-    for (let object of this.sceneObjects) {
-      if (object.getMesh() === targetMesh) {
-        return object;
-      }
+    if (this.sceneObjects.has(targetMesh.name)) {
+      return this.sceneObjects.get(targetMesh.name);
     }
 
     return undefined;
