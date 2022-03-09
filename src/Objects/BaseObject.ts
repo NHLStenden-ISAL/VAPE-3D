@@ -1,4 +1,4 @@
-import { Vector3, Vector2, AbstractMesh, Mesh, HighlightLayer, Color3, Nullable } from "@babylonjs/core";
+import { Vector3, Vector2, AbstractMesh, Mesh, HighlightLayer, Color3 } from "@babylonjs/core";
 import { v4 as uuidv4 } from 'uuid';
 import { CommandMoveObject } from "../Commands/CommandMoveObject";
 import { CommandRotateObject } from "../Commands/CommandRotateObject";
@@ -23,18 +23,16 @@ export class BaseObject {
   private startPosition: Vector2;
   private startDirection: Direction;
 
-  private readonly objectuuid: string;
+  private readonly objectUUID: string;
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, direction: Direction, lightColor: Color3) {
-    this.objectuuid = uuidv4();
+    this.objectUUID = uuidv4();
 
     this.worldInfo = worldInfo;
     worldInfo.addSceneObject(this);
     
     this.mesh = this.createMesh();
     this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
-
-    console.log(this.objectuuid);
 
     this.gridPosition = gridPos;
     this.startPosition = this.gridPosition;
@@ -50,8 +48,6 @@ export class BaseObject {
 
     this.move(this.gridPosition);
   }
-
-
 
   public onClickLeftExecute(): void {
     this.startPosition = this.gridPosition;
@@ -80,7 +76,7 @@ export class BaseObject {
   }
 
   public onSelect(): void {
-    console.log("Select an object");
+    console.log("Selected an object");
     this.turnOnHighlight();
 
     //TODO: Add GUI window with options for the object, most likely per class, so not here
@@ -148,7 +144,7 @@ export class BaseObject {
   }
 
   protected createMesh(): Mesh {
-    return createBox(this.worldInfo.getScene(), this.objectuuid);
+    return createBox(this.worldInfo.getScene(), this.objectUUID);
   }
 
   public getInteractable(): Interactable | undefined {
@@ -156,7 +152,7 @@ export class BaseObject {
   }
 
   public getUUID(): string {
-    return this.objectuuid;
+    return this.objectUUID;
   }
 
   protected updateMeshPosition(): Vector3 {

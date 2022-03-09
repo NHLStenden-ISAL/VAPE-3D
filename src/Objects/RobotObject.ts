@@ -14,8 +14,6 @@ export class RobotObject extends BaseObject {
     super(worldInfo, gridPos, dir, objectColor);
     worldInfo.getRobotObjects().push(this);
 
-    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
-
     this.variableMap = new Map();
   }
 

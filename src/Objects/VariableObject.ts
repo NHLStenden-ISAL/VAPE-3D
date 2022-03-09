@@ -15,9 +15,7 @@ export class VariableObject extends BaseObject {
     const objectColor = Color3.Magenta();
 
     super(worldInfo, gridPosition, direction, objectColor);
-
-    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
-
+    
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 

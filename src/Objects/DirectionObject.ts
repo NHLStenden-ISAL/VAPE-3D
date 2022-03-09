@@ -13,7 +13,6 @@ export class DirectionObject extends BaseObject {
 
     super(worldInfo, gridPos, dir, objectColor);
 
-    this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
     this.mesh.rotation = this.transformable.rotateToward(dir);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));

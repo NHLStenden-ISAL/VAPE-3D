@@ -10,6 +10,8 @@ export class KeyboardHandler {
   private isTyping: boolean;
   private isRunning: boolean;
 
+  private isCtrl: boolean;
+
   constructor(worldInfo: WorldInformation, appManager: AppManager, stateManager: StateManager) {
     this.worldInfo = worldInfo;
     this.appManager = appManager;
@@ -17,11 +19,14 @@ export class KeyboardHandler {
 
     this.isTyping = false;
     this.isRunning = false;
+    this.isCtrl = false;
   }
 
   public onKeyboardInteraction() {
     this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
       if (this.isTyping === false && this.isRunning === false) {
+        this.isCtrl = kbInfo.event.ctrlKey;
+
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
             case 'c':
@@ -39,13 +44,15 @@ export class KeyboardHandler {
               this.stateManager.setEditorState('delete');
               console.log("Enter delete state");
               break;
-            case 'U':
-              this.appManager.undo();
-              console.log("undo");
+            case 'z':
+              if (kbInfo.event.ctrlKey) {
+                this.appManager.undo();
+              }
               break;
-            case 'R':
-              this.appManager.redo();
-              console.log("redo");
+            case 'y':
+              if (kbInfo.event.ctrlKey) {
+                this.appManager.redo();
+              }
               break;
           }
         }
