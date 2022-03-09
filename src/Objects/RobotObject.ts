@@ -1,4 +1,4 @@
-import { Color3, Mesh, Vector2, Vector3 } from "@babylonjs/core";
+import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";

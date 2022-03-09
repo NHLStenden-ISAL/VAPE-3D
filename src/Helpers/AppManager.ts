@@ -1,5 +1,6 @@
 import { Scene } from "@babylonjs/core";
 import { CommandBroker } from "./CommandBroker";
+import { GUIHelper } from "./GUIHelper";
 import { KeyboardHandler } from "./KeyboardHandler";
 import { MouseHandler } from "./MouseHandler";
 import { SceneHelper } from "./SceneHelper";
