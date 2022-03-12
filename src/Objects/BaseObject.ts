@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CommandMoveObject } from "../Commands/CommandMoveObject";
 import { CommandRotateObject } from "../Commands/CommandRotateObject";
 import { Interactable } from "../Compositions/Interactable";
+import { Storable } from "../Compositions/Storable";
 import { Direction, Transformable } from "../Compositions/Transformable";
 import { createBox } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
@@ -10,6 +11,8 @@ import { WorldInformation } from "../Helpers/WorldInformation";
 export class BaseObject {
   protected transformable: Transformable;
   protected interactable: Interactable | undefined;
+  protected storable: Storable | undefined;
+  
   protected worldInfo: WorldInformation;
 
   protected mesh: Mesh;
@@ -45,6 +48,7 @@ export class BaseObject {
 
     this.transformable = new Transformable();
     this.interactable = undefined;
+    this.storable = undefined;
 
     this.move(this.gridPosition);
   }
@@ -76,14 +80,18 @@ export class BaseObject {
   }
 
   public onSelect(): void {
-    console.log("Selected an object");
+    // console.log("Selected an object");
     this.turnOnHighlight();
+
+    this.worldInfo.getGUIHelper().onSelect(this);
 
     //TODO: Add GUI window with options for the object, most likely per class, so not here
   }
 
   public onDeselect(): void {
     this.turnOffHighlight();
+
+    this.worldInfo.getGUIHelper().onDeselect();
   }
 
   public getMesh(): AbstractMesh | undefined {
@@ -149,6 +157,10 @@ export class BaseObject {
 
   public getInteractable(): Interactable | undefined {
     return this.interactable;
+  }
+
+  public getStorable(): Storable | undefined {
+    return this.storable;
   }
 
   public getUUID(): string {

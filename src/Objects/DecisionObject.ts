@@ -7,7 +7,6 @@ import { BaseObject } from "./BaseObject";
 import { RobotObject } from "./RobotObject";
 
 export class DecisionObject extends BaseObject {
-
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Blue();
 

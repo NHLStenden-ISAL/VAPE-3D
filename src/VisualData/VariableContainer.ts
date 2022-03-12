@@ -12,23 +12,36 @@ export class VariableContainer {
     this.variableData = { value: value, isKnown: false };
   }
 
+  setName(name: string) {
+    this.variableName = name.trim();
+  }
+
   getName(): string {
     return this.variableName;
   }
 
-  setName(name: string) {
-    this.variableName = name.trim();
+  setValue(value: string | number) {
+    this.variableData = { value: value, isKnown: this.variableData.isKnown };
   }
 
   getValue(): string | number {
     return this.variableData.value;
   }
 
+  setIsKnown(isKnown: boolean) {
+    this.variableData = { value: this.variableData.value, isKnown: isKnown };
+  }
+
   getIsKnown(): boolean {
     return this.variableData.isKnown;
   }
 
-  setValue(value: VariableData) {
+  setData(value: VariableData) {
     this.variableData = value;
+  }
+
+  setContainer(name: string, value: VariableData) {
+    this.setName(name);
+    this.setData(value);
   }
 }

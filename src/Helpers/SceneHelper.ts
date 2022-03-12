@@ -7,7 +7,6 @@ import { CommandDeleteObject } from "../Commands/CommandDeleteObject";
 import { Direction } from "../Compositions/Transformable";
 import { BaseObject } from "../Objects/BaseObject";
 import { GridObject } from "../Objects/GridObject";
-import { GUIHelper } from "./GUIHelper";
 import { createCamera } from "./ObjectCreator";
 import { WorldInformation } from "./WorldInformation";
 
@@ -22,8 +21,6 @@ export class SceneHelper {
 
     this.canvas = canvas;
     this.camera = createCamera(this.worldInfo.getScene(), canvas);
-
-    new GUIHelper();
   }
 
   public createScene() {

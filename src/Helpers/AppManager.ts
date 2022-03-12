@@ -15,13 +15,18 @@ export class AppManager {
   private commandBroker: CommandBroker;
   private worldInformation: WorldInformation;
 
+  private gui: GUIHelper;
+
   constructor(scene: Scene, canvas: any) {
     this.canvas = canvas;
 
+    this.gui = new GUIHelper();
+
     this.stateManager = new StateManager();
     this.commandBroker = new CommandBroker();
-    this.worldInformation = new WorldInformation(scene, this.commandBroker);
+    this.worldInformation = new WorldInformation(scene, this.commandBroker, this.gui);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
+    
   }
 
   public runApp() {
@@ -55,14 +60,6 @@ export class AppManager {
 
   }
 
-  public undo() {
-    this.commandBroker.undo();
-  }
-
-  public redo() {
-    this.commandBroker.redo();
-  }
-
   private updateLoop(delta: number) {
     setTimeout(() => {
       if (this.stateManager.getGameState() === 'run') {
@@ -71,5 +68,13 @@ export class AppManager {
         this.updateLoop(delta);
       }
     }, delta);
+  }
+  
+  public undo() {
+    this.commandBroker.undo();
+  }
+
+  public redo() {
+    this.commandBroker.redo();
   }
 }

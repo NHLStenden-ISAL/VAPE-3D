@@ -1,29 +1,24 @@
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
+import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
-import { VariableContainer } from "../VisualData/VariableContainer";
 import { BaseObject } from "./BaseObject";
 import { RobotObject } from "./RobotObject";
 
 export class VariableObject extends BaseObject {
-  private variable: VariableContainer;
   private interactedRobots: RobotObject[];
 
   constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
     const objectColor = Color3.Magenta();
 
     super(worldInfo, gridPosition, direction, objectColor);
-    
+
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    //TEMP
-    const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-    const value: number = Math.random() * 10;
-
-    this.variable = new VariableContainer(name, value);
+    this.storable = new Storable('Variable');
   }
 
   protected createMesh(): Mesh {
@@ -31,19 +26,20 @@ export class VariableObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
-    if (this.variable.getName() === "") { return; }
+    if (!this.storable) { return; }
 
-    robotObject.addVariable(this.variable);
+    if (this.storable.getName() === "") { return; }
+
+    robotObject.addVariable(this.storable.getContainer());
+    this.storable.printInfo();
     this.interactedRobots.push(robotObject);
-  }
-
-  setVariable(variable: VariableContainer) {
-    this.variable = variable;
   }
 
   public delete(): void {
     this.interactedRobots.forEach(robot => {
-      robot.removeVariable(this.variable);
+      if (this.storable) {
+        robot.removeVariable(this.storable.getContainer());
+      }
     });
 
     super.delete();
@@ -51,7 +47,9 @@ export class VariableObject extends BaseObject {
 
   public restore(): void {
     this.interactedRobots.forEach(robot => {
-      robot.addVariable(this.variable);
+      if (this.storable) {
+        robot.addVariable(this.storable.getContainer());
+      }
     });
 
     super.restore();

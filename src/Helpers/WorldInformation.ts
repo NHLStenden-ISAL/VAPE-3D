@@ -2,6 +2,7 @@ import { AbstractMesh, Nullable, Scene } from "@babylonjs/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { RobotObject } from "../Objects/RobotObject";
 import { CommandBroker } from "./CommandBroker";
+import { GUIHelper } from "./GUIHelper";
 
 export class WorldInformation {
   private scene: Scene;
@@ -9,10 +10,12 @@ export class WorldInformation {
   private robotObjects: RobotObject[] = [];
 
   private commandBroker: CommandBroker;
+  private guiHelper: GUIHelper;
 
-  constructor(scene: Scene, commandBroker: CommandBroker) {
+  constructor(scene: Scene, commandBroker: CommandBroker, guiHelper: GUIHelper) {
     this.scene = scene;
     this.commandBroker = commandBroker;
+    this.guiHelper = guiHelper;
   }
 
   public getScene(): Scene {
@@ -54,5 +57,9 @@ export class WorldInformation {
 
   public getCommandBroker(): CommandBroker {
     return this.commandBroker;
+  }
+
+  public getGUIHelper(): GUIHelper {
+    return this.guiHelper;
   }
 }
