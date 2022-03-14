@@ -18,7 +18,7 @@ export class VariableObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    this.storable = new Storable('Variable');
+    this.storable = new Storable('variable');
   }
 
   protected createMesh(): Mesh {
@@ -31,7 +31,6 @@ export class VariableObject extends BaseObject {
     if (this.storable.getName() === "") { return; }
 
     robotObject.addVariable(this.storable.getContainer());
-    this.storable.printInfo();
     this.interactedRobots.push(robotObject);
   }
 

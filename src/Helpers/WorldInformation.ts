@@ -1,4 +1,4 @@
-import { AbstractMesh, Nullable, Scene } from "@babylonjs/core";
+import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene } from "@babylonjs/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { RobotObject } from "../Objects/RobotObject";
 import { CommandBroker } from "./CommandBroker";
@@ -6,6 +6,7 @@ import { GUIHelper } from "./GUIHelper";
 
 export class WorldInformation {
   private scene: Scene;
+  private highLightLayer: HighlightLayer;
   private sceneObjects: Map<string, BaseObject> = new Map();
   private robotObjects: RobotObject[] = [];
 
@@ -16,6 +17,8 @@ export class WorldInformation {
     this.scene = scene;
     this.commandBroker = commandBroker;
     this.guiHelper = guiHelper;
+
+    this.highLightLayer = new HighlightLayer('highlight', this.scene);
   }
 
   public getScene(): Scene {
@@ -61,5 +64,13 @@ export class WorldInformation {
 
   public getGUIHelper(): GUIHelper {
     return this.guiHelper;
+  }
+
+  public turnOnHighLight(mesh: Mesh, color: Color3) {
+    this.highLightLayer.addMesh(mesh, color);
+  }
+
+  public turnOffHighLight(mesh: Mesh) {
+    this.highLightLayer.removeMesh(mesh);
   }
 }

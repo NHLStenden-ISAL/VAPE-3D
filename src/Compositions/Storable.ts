@@ -1,19 +1,21 @@
+import { GUIBoxInfo } from "../Helpers/GUIHelper";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
 
 export class Storable {
   //TODO: make it so this can be multliple
   private variable: VariableContainer;
 
-  private objectType: string;
+  private objectType: GUIBoxInfo['objectType'];
 
-  constructor(objectType: string) {
-    this.objectType = objectType;
-    
+  constructor(objType: GUIBoxInfo['objectType']) {
+    this.objectType = objType;
+
     //TEMP
     const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
     const value: number = Math.random() * 10;
 
     this.variable = new VariableContainer(name, value);
+    // this.variable = new VariableContainer();
   }
 
   public changeName(name: string) {
@@ -33,10 +35,6 @@ export class Storable {
     this.variable.setData(data);
   }
 
-  public getType(): string {
-    return this.objectType;
-  }
-
   public getName(): string {
     return this.variable.getName();
   }
@@ -49,11 +47,29 @@ export class Storable {
     return this.variable.getIsKnown();
   }
 
-  public getContainer() : VariableContainer {
+  public getContainer(): VariableContainer {
     return this.variable;
   }
 
-  public printInfo(): void {
-    console.log("Name: ", this.getName(), " value: ", this.getValue());
+  public getGUIBox(): GUIBoxInfo {
+    switch (this.objectType) {
+      case 'variable':
+        return {
+          objectType: this.objectType,
+          varName: this.getName(),
+          varValue: this.getValue().toString()
+        }
+      case 'decision':
+        return {
+          objectType: this.objectType,
+          varAmount: 0,
+          varNames: [],
+          varValue: []
+        }
+      default:
+        return {
+          objectType: ''
+        }
+    }
   }
 }

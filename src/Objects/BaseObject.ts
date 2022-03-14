@@ -1,4 +1,4 @@
-import { Vector3, Vector2, AbstractMesh, Mesh, HighlightLayer, Color3 } from "@babylonjs/core";
+import { Vector3, Vector2, AbstractMesh, Mesh, Color3 } from "@babylonjs/core";
 import { v4 as uuidv4 } from 'uuid';
 import { CommandMoveObject } from "../Commands/CommandMoveObject";
 import { CommandRotateObject } from "../Commands/CommandRotateObject";
@@ -16,7 +16,6 @@ export class BaseObject {
   protected worldInfo: WorldInformation;
 
   protected mesh: Mesh;
-  protected highlight: HighlightLayer;
   protected highlightColor: Color3;
 
   protected gridPosition: Vector2;
@@ -43,7 +42,6 @@ export class BaseObject {
     this.direction = direction;
     this.startDirection = this.direction;
 
-    this.highlight = new HighlightLayer('highlight', worldInfo.getScene());
     this.highlightColor = lightColor;
 
     this.transformable = new Transformable();
@@ -172,10 +170,10 @@ export class BaseObject {
   }
 
   private turnOnHighlight() {
-    this.highlight.addMesh(this.mesh, this.highlightColor);
+    this.worldInfo.turnOnHighLight(this.mesh, this.highlightColor);
   }
 
   private turnOffHighlight() {
-    this.highlight.removeMesh(this.mesh);
+    this.worldInfo.turnOffHighLight(this.mesh);
   }
 }

@@ -3,6 +3,17 @@ import { Storable } from "../Compositions/Storable";
 import { TestGUI } from "../GUI/TestGUI";
 import { BaseObject } from "../Objects/BaseObject";
 
+export type GUIBoxInfo = { objectType: ''; } | {
+  objectType: 'variable';
+  varName: string;
+  varValue: string;
+} | {
+  objectType: 'decision';
+  varAmount: number;
+  varNames: string[];
+  varValue: string[];
+}
+
 export class GUIHelper {
   private selectedObject: Storable | undefined;
 
@@ -18,11 +29,7 @@ export class GUIHelper {
 
     if (!this.selectedObject) { return; }
 
-    this.guiStuff.onSelect(this.selectedObject.getType(),
-      this.selectedObject.getName(),
-      this.selectedObject.getValue().toString(),
-      this.selectedObject.getIsKnown()
-    );
+    this.guiStuff.onSelect(this.selectedObject.getGUIBox());
 
     this.guiStuff.toggleVariable(true);
   }
