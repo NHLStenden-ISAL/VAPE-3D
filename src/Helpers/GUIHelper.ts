@@ -1,45 +1,54 @@
-import { InputText } from "@babylonjs/gui";
+import { AdvancedDynamicTexture, InputText } from "@babylonjs/gui";
 import { Storable } from "../Compositions/Storable";
-import { TestGUI } from "../GUI/TestGUI";
+import { DirectionGUI } from "../GUI/DirectionGUI";
+import { ParentGUI } from "../GUI/ParentGUI";
+import { VariableGUI } from "../GUI/VariableGUI";
 import { BaseObject } from "../Objects/BaseObject";
-
-export type GUIBoxInfo = { objectType: ''; } | {
-  objectType: 'variable';
-  varName: string;
-  varValue: string;
-} | {
-  objectType: 'decision';
-  varAmount: number;
-  varNames: string[];
-  varValue: string[];
-}
 
 export class GUIHelper {
   private selectedObject: Storable | undefined;
 
-  private guiStuff: TestGUI;
+  private advancedTexture: AdvancedDynamicTexture;
+  private variableGUI: VariableGUI;
+  private directionGUI: DirectionGUI;
+
+  private selectedGUI: ParentGUI;
 
   constructor() {
-    this.guiStuff = new TestGUI();
-    this.guiStuff.onBlur.add((inputElement) => { this.onValueChanged(inputElement) });
+    this.advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI('UI');
+    this.selectedGUI = new ParentGUI(this.advancedTexture);
+
+    this.directionGUI = new DirectionGUI(this.advancedTexture);
+
+    this.variableGUI = new VariableGUI(this.advancedTexture);
+    this.variableGUI.onBlur.add((inputElement) => { this.onVariableChanged(inputElement) });
   }
 
   public onSelect(object: BaseObject) {
     this.selectedObject = object.getStorable();
 
-    if (!this.selectedObject) { return; }
+    switch (object.getGUIBox()['objectType']) {
+      case 'variable':
+        this.selectedGUI = this.variableGUI;
+        break;
+      case 'direction':
+        this.selectedGUI = this.directionGUI;
+        break;
+      default:
+        alert("ERROR: Unexpected object type");
+        return;
+    }
 
-    this.guiStuff.onSelect(this.selectedObject.getGUIBox());
-
-    this.guiStuff.toggleVariable(true);
+    this.selectedGUI.onSelect(object.getGUIBox());
+    this.selectedGUI.toggleVariable(true);
   }
 
   public onDeselect() {
     this.selectedObject = undefined;
-    this.guiStuff.toggleVariable(false);
+    this.selectedGUI.toggleVariable(false);
   }
 
-  public onValueChanged(information: InputText) {
+  private onVariableChanged(information: InputText) {
     if (!this.selectedObject) { return; }
 
     switch (information.name) {
@@ -50,7 +59,7 @@ export class GUIHelper {
         this.selectedObject.changeValue(information.text);
         break;
       default:
-        console.log("ERROR: input object name isn't expected");
+        alert("ERROR: unexpected input name");
         break;
     }
   }

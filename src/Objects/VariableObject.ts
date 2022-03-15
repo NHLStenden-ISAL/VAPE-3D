@@ -2,6 +2,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
+import { GUIBoxInfo } from "../GUI/GUIInfo";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { BaseObject } from "./BaseObject";
@@ -18,7 +19,7 @@ export class VariableObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    this.storable = new Storable('variable');
+    this.storable = new Storable();
   }
 
   protected createMesh(): Mesh {
@@ -31,6 +32,10 @@ export class VariableObject extends BaseObject {
     if (this.storable.getName() === "") { return; }
 
     robotObject.addVariable(this.storable.getContainer());
+    this.storable.changeIsKnown(true);
+
+    console.log(`Name: ${this.storable.getName()}, Value ${this.storable.getValue()}`);
+    
     this.interactedRobots.push(robotObject);
   }
 
@@ -52,5 +57,19 @@ export class VariableObject extends BaseObject {
     });
 
     super.restore();
+  }
+
+  public getGUIBox(): GUIBoxInfo {
+    if (!this.storable) { return { objectType: '' } };
+
+    return {
+      objectType: 'variable',
+      location: this.getPositionForGUI(),
+      direction: this.getDirection(),
+      isKnown: this.storable.getIsKnown(),
+
+      name: this.storable.getName(),
+      value: this.storable.getValue().toString()
+    }
   }
 }

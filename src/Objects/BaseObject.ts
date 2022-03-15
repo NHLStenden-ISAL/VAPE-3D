@@ -5,6 +5,7 @@ import { CommandRotateObject } from "../Commands/CommandRotateObject";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction, Transformable } from "../Compositions/Transformable";
+import { GUIBoxInfo } from "../GUI/GUIInfo";
 import { createBox } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 
@@ -100,6 +101,10 @@ export class BaseObject {
     return this.gridPosition;
   }
 
+  protected getPositionForGUI(): Vector2 {
+    return new Vector2(this.gridPosition.x + 0.5, this.gridPosition.y + 0.5);
+  }
+
   public getDirection(): Direction {
     return this.direction;
   }
@@ -163,6 +168,10 @@ export class BaseObject {
 
   public getUUID(): string {
     return this.objectUUID;
+  }
+
+  public getGUIBox(): GUIBoxInfo {
+    return { objectType: '' };
   }
 
   protected updateMeshPosition(): Vector3 {
