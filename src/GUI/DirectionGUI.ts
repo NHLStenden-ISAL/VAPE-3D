@@ -21,20 +21,17 @@ export class DirectionGUI extends ParentGUI {
     /**
     * Type        ->   text     1
     * 
-    * x          ->    text     2 
-    * x pos      ->    text     2
-    * y          ->    text     2
-    * y pos      ->    text     2
+    * x          ->    text      
+    * x pos      ->    text     
+    * y          ->    text     
+    * y pos      ->    text     
     * 
-    * direction  ->    text     3 
-    * dir value  ->    text     3
+    * direction  ->    text      
+    * dir value  ->    text     
     */
 
-    this.objType = this.createTextBlock('type', Control.HORIZONTAL_ALIGNMENT_CENTER);
+    this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
-
-    this.controlsArray.push(this.createPosition(['X', 'Y']));
-    this.controlsArray.push(this.createDirection());
 
     super.createBody();
 

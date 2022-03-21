@@ -1,12 +1,17 @@
-import { AdvancedDynamicTexture, Control } from "@babylonjs/gui";
-import { GUIBoxInfo } from "./GUIInfo";
+import { AdvancedDynamicTexture, Control, InputText } from "@babylonjs/gui";
+import { GUIBoxInfo, KeyGroup } from "./GUIInfo";
 import { ParentGUI } from "./ParentGUI";
 
 export class DecisionGUI extends ParentGUI {
+  private objInput: InputText;
+
   constructor(advancedTexture: AdvancedDynamicTexture) {
     super(advancedTexture);
 
     this.createParentGrid('400px', '300px', Control.HORIZONTAL_ALIGNMENT_RIGHT, Control.VERTICAL_ALIGNMENT_BOTTOM);
+
+    this.objInput = new InputText();
+
     this.createBody();
   }
 
@@ -15,26 +20,31 @@ export class DecisionGUI extends ParentGUI {
     super.onSelect(guiInfo);
 
     this.objType.text = 'Decision object';
+    this.objInput.text = guiInfo.statement;
   }
 
   protected createBody(): void {
     /**
-    * Type        ->   text     1
+    * Type        ->    text    1
     * 
-    * x          ->    text     2 
-    * x pos      ->    text     2
-    * y          ->    text     2
-    * y pos      ->    text     2
+    * If          ->    text    2
+    * input       ->    input   2
     * 
-    * direction  ->    text     3 
-    * dir value  ->    text     3
+    * x           ->    text
+    * x pos       ->    text
+    * y           ->    text
+    * y pos       ->    text
+    * 
+    * direction   ->    text
+    * dir value   ->    text
     */
 
-    this.objType = this.createTextBlock('type', Control.HORIZONTAL_ALIGNMENT_CENTER);
+    this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
 
-    this.controlsArray.push(this.createPosition(['X', 'Y']));
-    this.controlsArray.push(this.createDirection());
+    this.controlsArray.push(this.createTextBlock('If', Control.HORIZONTAL_ALIGNMENT_LEFT));
+    this.objInput = this.createInputBlock('If', KeyGroup.SYMBALPHANUMERIC);
+    this.controlsArray.push(this.objInput);
 
     super.createBody();
   }

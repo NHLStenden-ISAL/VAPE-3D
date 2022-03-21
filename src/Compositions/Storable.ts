@@ -8,7 +8,7 @@ export class Storable {
 
     //TEMP
     const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-    const value: number = Math.random() * 10;
+    const value: number = Math.round(Math.random() * 100);
 
     this.variable = new VariableContainer(name, value);
     // this.variable = new VariableContainer();
@@ -40,8 +40,8 @@ export class Storable {
     return this.variable.getName();
   }
 
-  public getValue(): string | number {
-    return this.variable.getValue();
+  public getValue(): string {
+    return this.variable.getValue().toString();
   }
 
   public getIsKnown(): boolean {

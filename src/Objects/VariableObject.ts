@@ -31,8 +31,8 @@ export class VariableObject extends BaseObject {
 
     if (this.storable.getName() === "") { return; }
 
-    robotObject.addVariable(this.storable.getContainer());
     this.storable.changeIsKnown(true);
+    robotObject.addVariable(this.storable.getContainer());
 
     console.log(`Name: ${this.storable.getName()}, Value ${this.storable.getValue()}`);
     
@@ -69,7 +69,7 @@ export class VariableObject extends BaseObject {
       isKnown: this.storable.getIsKnown(),
 
       name: this.storable.getName(),
-      value: this.storable.getValue().toString()
+      value: this.storable.getValue()
     }
   }
 }

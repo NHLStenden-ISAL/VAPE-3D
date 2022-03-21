@@ -64,4 +64,14 @@ export class RobotObject extends BaseObject {
   public removeVariable(variable: VariableContainer) {
     this.variableMap.delete(variable.getName());
   }
+
+  public checkVariable(variableName: string): VariableData {
+    if (variableName === "") { return { value: '', isKnown: false }; }
+
+    if (this.variableMap.has(variableName)) {
+      return this.variableMap.get(variableName) as VariableData;
+    }
+
+    return { value: '', isKnown: false };
+  }
 }

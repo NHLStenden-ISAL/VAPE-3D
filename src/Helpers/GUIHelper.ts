@@ -1,5 +1,6 @@
 import { AdvancedDynamicTexture, InputText } from "@babylonjs/gui";
 import { Storable } from "../Compositions/Storable";
+import { DecisionGUI } from "../GUI/DecisionGUI";
 import { DirectionGUI } from "../GUI/DirectionGUI";
 import { ParentGUI } from "../GUI/ParentGUI";
 import { VariableGUI } from "../GUI/VariableGUI";
@@ -11,6 +12,7 @@ export class GUIHelper {
   private advancedTexture: AdvancedDynamicTexture;
   private variableGUI: VariableGUI;
   private directionGUI: DirectionGUI;
+  private decisionGUI: DecisionGUI;
 
   private selectedGUI: ParentGUI;
 
@@ -19,9 +21,11 @@ export class GUIHelper {
     this.selectedGUI = new ParentGUI(this.advancedTexture);
 
     this.directionGUI = new DirectionGUI(this.advancedTexture);
-
+    this.decisionGUI = new DecisionGUI(this.advancedTexture);
     this.variableGUI = new VariableGUI(this.advancedTexture);
+
     this.variableGUI.onBlur.add((inputElement) => { this.onVariableChanged(inputElement) });
+    this.decisionGUI.onBlur.add((inputElement) => { this.onDecisionChanged(inputElement) });
   }
 
   public onSelect(object: BaseObject) {
@@ -34,8 +38,11 @@ export class GUIHelper {
       case 'direction':
         this.selectedGUI = this.directionGUI;
         break;
+      case 'decision':
+        this.selectedGUI = this.decisionGUI;
+        break;
       default:
-        alert("ERROR: Unexpected object type");
+        alert("ERROR: Unexpected object type. (GUIHelper)");
         return;
     }
 
@@ -58,9 +65,26 @@ export class GUIHelper {
       case 'inputValue':
         this.selectedObject.changeValue(information.text);
         break;
-      default:
-        alert("ERROR: unexpected input name");
+      case 'inputX':
+      case 'inputY':
         break;
+      default:
+        alert("ERROR: unexpected input name. (GUIHelper)");
+        break;
+    }
+  }
+
+  private onDecisionChanged(information: InputText) {
+    if (!this.selectedObject) { return; }
+    switch (information.name) {
+
+      case 'inputIf':
+        this.selectedObject.changeValue(information.text);
+        break;
+      default:
+        alert("ERROR: unexpected input name. (GUIHelper)");
+        break;
+
     }
   }
 }

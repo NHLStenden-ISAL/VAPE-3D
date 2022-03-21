@@ -1,7 +1,7 @@
 import { Observable } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Checkbox, Control, Grid, InputText, TextBlock } from "@babylonjs/gui";
 import { Direction } from "../Compositions/Transformable";
-import { GUIBoxInfo } from "./GUIInfo";
+import { AllowKey, GUIBoxInfo, KeyGroup } from "./GUIInfo";
 
 export class ParentGUI {
   protected advancedTexture: AdvancedDynamicTexture;
@@ -40,6 +40,9 @@ export class ParentGUI {
   }
 
   protected createBody(): void {
+    this.controlsArray.push(this.createPosition(['X', 'Y'], KeyGroup.NUMERIC));
+    this.controlsArray.push(this.createDirection());
+    
     this.parentGrid.addControl(this.addBodyToScreen(), 1, 1);
   }
 
@@ -94,7 +97,7 @@ export class ParentGUI {
     return block;
   }
 
-  protected createInputBlock(label: string): InputText {
+  protected createInputBlock(label: string, keyGroup: KeyGroup): InputText {
     const block = new InputText('input' + label);
     block.width = 1;
     block.height = '35px';
@@ -103,29 +106,50 @@ export class ParentGUI {
     block.background = 'white';
     block.focusedBackground = 'cyan';
 
-    block.onBlurObservable.add((inputText) => {
-      inputText.text = inputText.text.trim();
-      block.text = inputText.text;
+    block.onBlurObservable.add((input) => {
+      input.text = input.text.trim();
+      block.text = input.text;
 
-      this.onBlur.notifyObservers(inputText);
+      this.onBlur.notifyObservers(input);
+    });
+
+    block.onBeforeKeyAddObservable.add((input) => {
+      const key = input.currentKey;
+      input.addKey = AllowKey(key, keyGroup);
+
+      if (key === 'Dead') {
+        input.addKey = false;
+      }
     });
 
     return block;
   }
 
-  protected createDisabledInputBlock(label: string): InputText {
-    const block = this.createInputBlock(label);
+  protected createDisabledInputBlock(label: string, keyGroup: KeyGroup): InputText {
+    const block = this.createInputBlock(label, keyGroup);
     block.isEnabled = false;
 
     return block;
   }
 
-  protected createPositionInputBlock(label: string): InputText {
-    const block = this.createDisabledInputBlock(label);
+  protected createPositionInputBlock(label: string, keyGroup: KeyGroup): InputText {
+    const block = this.createDisabledInputBlock(label, keyGroup);
 
-    //TODO: Allow only numbers
-    block.onBeforeKeyAddObservable.add(() => {
+    block.onBeforeKeyAddObservable.add((input) => {
+      const key = input.currentKey;
+      input.addKey = AllowKey(key, KeyGroup.NUMERIC);
+    });
 
+
+    block.onTextPasteObservable.add((input) => {
+      let text = '';
+      for (let i = 0; i < input.text.length; i++) {
+        if (AllowKey(input.text.charAt(i), KeyGroup.NUMERIC)) {
+          text += input.text.charAt(i);
+        }
+      }
+
+      input.text = text;
     });
 
     return block;
@@ -146,7 +170,7 @@ export class ParentGUI {
     const check = this.createCheckbox();
 
     check.isEnabled = false;
-    check.disabledColorItem = 'white';
+    check.disabledColorItem = check.color;
 
     return check;
   }
@@ -161,14 +185,14 @@ export class ParentGUI {
     return grid;
   }
 
-  protected createPosition(labels: string[]): Grid {
+  protected createPosition(labels: string[], keyGroup: KeyGroup): Grid {
     const grid = new Grid();
 
     for (let index = 0; index < labels.length; index++) {
       grid.addColumnDefinition(0.2);
       grid.addColumnDefinition(0.8);
 
-      const block = this.createPositionInputBlock(labels[index]);
+      const block = this.createPositionInputBlock(labels[index], keyGroup);
       this.objLocation[index] = block;
 
       grid.addControl(this.createTextBlock(labels[index], Control.HORIZONTAL_ALIGNMENT_CENTER), 0, 0 + (index * 2));

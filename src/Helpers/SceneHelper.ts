@@ -1,8 +1,5 @@
 import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/core";
-import { CommandAddDecisionObject } from "../Commands/CommandAddDecisionObject";
-import { CommandAddDirectionObject } from "../Commands/CommandAddDirectionObject";
-import { CommandAddRobotObject } from "../Commands/CommandAddRobotObject";
-import { CommandAddVariableObject } from "../Commands/CommandAddVariableObject";
+import { CommandAddObject } from "../Commands/CommandAddObject";
 import { CommandDeleteObject } from "../Commands/CommandDeleteObject";
 import { Direction } from "../Compositions/Transformable";
 import { BaseObject } from "../Objects/BaseObject";
@@ -66,22 +63,22 @@ export class SceneHelper {
   }
 
   private addVariableObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddVariableObject(this.worldInfo, gridPosition, direction);
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'VariableObject');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addDirectionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddDirectionObject(this.worldInfo, gridPosition, direction);
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'DirectionObject');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addDecisionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddDecisionObject(this.worldInfo, gridPosition, direction);
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'DecisionObject');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addRobotObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddRobotObject(this.worldInfo, gridPosition, direction);
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'RobotObject');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 }

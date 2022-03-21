@@ -1,5 +1,5 @@
 import { AdvancedDynamicTexture, Checkbox, Control, Grid, InputText } from "@babylonjs/gui";
-import { GUIBoxInfo } from "./GUIInfo";
+import { GUIBoxInfo, KeyGroup } from "./GUIInfo";
 import { ParentGUI } from "./ParentGUI";
 
 export class VariableGUI extends ParentGUI {
@@ -16,7 +16,6 @@ export class VariableGUI extends ParentGUI {
     this.objValue = new InputText();
     this.objIsKnown = new Checkbox();
 
-
     this.createBody();
   }
 
@@ -29,6 +28,11 @@ export class VariableGUI extends ParentGUI {
     this.objName.text = guiInfo.name;
     this.objValue.text = guiInfo.value;
     this.objIsKnown.isChecked = guiInfo.isKnown;
+
+    if (guiInfo.isKnown) {
+      this.objName.isEnabled = false;
+      this.objValue.isEnabled = false;
+    }
   }
 
   protected createBody(): void {
@@ -41,31 +45,30 @@ export class VariableGUI extends ParentGUI {
     * Value      ->    text      3
     * Value val  ->    input     3
     * 
-    * x          ->    text      4 
-    * x pos      ->    text      4
-    * y          ->    text      4
-    * y pos      ->    text      4
+    * is Known   ->    text      4 
+    * known val  ->    checkbox  4
+    *
+    * x          ->    text       
+    * x pos      ->    text      
+    * y          ->    text      
+    * y pos      ->    text      
     * 
-    * direction  ->    text      5 
-    * dir value  ->    text      5
+    * direction  ->    text       
+    * dir value  ->    text      
     * 
-    * is Known   ->    text      6 
-    * known val  ->    checkbox  6
     */
 
-    this.objType = this.createTextBlock('type', Control.HORIZONTAL_ALIGNMENT_CENTER);
+    this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
 
     this.controlsArray.push(this.createTextBlock('Name', Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objName = this.createInputBlock('Name');
+    this.objName = this.createInputBlock('Name', KeyGroup.ALPHANUMERIC);
     this.controlsArray.push(this.objName);
 
     this.controlsArray.push(this.createTextBlock('Value', Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objValue = this.createInputBlock('Value');
+    this.objValue = this.createInputBlock('Value', KeyGroup.ALPHANUMERIC);
     this.controlsArray.push(this.objValue);
-
-    this.controlsArray.push(this.createPosition(['X', 'Y']));
-    this.controlsArray.push(this.createDirection());
+    
     this.controlsArray.push(this.createIsKnown());
 
     super.createBody();
