@@ -12,6 +12,7 @@ export class VariableGUI extends ParentGUI {
 
     this.createParentGrid('400px', '500px', Control.HORIZONTAL_ALIGNMENT_RIGHT, Control.VERTICAL_ALIGNMENT_BOTTOM);
 
+    this.objTypeName = 'Variable object';
     this.objName = new InputText();
     this.objValue = new InputText();
     this.objIsKnown = new Checkbox();
@@ -24,7 +25,7 @@ export class VariableGUI extends ParentGUI {
 
     super.onSelect(guiInfo);
 
-    this.objType.text = 'Variable object';
+    this.objType.text = this.objTypeName;
     this.objName.text = guiInfo.name;
     this.objValue.text = guiInfo.value;
     this.objIsKnown.isChecked = guiInfo.isKnown;
@@ -61,12 +62,14 @@ export class VariableGUI extends ParentGUI {
     this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
 
-    this.controlsArray.push(this.createTextBlock('Name', Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objName = this.createInputBlock('Name', KeyGroup.ALPHANUMERIC);
+    const inputName = 'Name';
+    this.controlsArray.push(this.createTextBlock(inputName, Control.HORIZONTAL_ALIGNMENT_LEFT));
+    this.objName = this.createInputBlock(inputName, KeyGroup.ALPHANUMERIC);
     this.controlsArray.push(this.objName);
 
-    this.controlsArray.push(this.createTextBlock('Value', Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objValue = this.createInputBlock('Value', KeyGroup.ALPHANUMERIC);
+    const inputValue = 'Value'
+    this.controlsArray.push(this.createTextBlock(inputValue, Control.HORIZONTAL_ALIGNMENT_LEFT));
+    this.objValue = this.createInputBlock(inputValue, KeyGroup.ALPHANUMERIC);
     this.controlsArray.push(this.objValue);
     
     this.controlsArray.push(this.createIsKnown());

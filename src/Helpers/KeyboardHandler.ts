@@ -7,7 +7,6 @@ export class KeyboardHandler {
   private appManager: AppManager;
   private stateManager: StateManager;
 
-  private isTyping: boolean;
   private isRunning: boolean;
 
   constructor(worldInfo: WorldInformation, appManager: AppManager, stateManager: StateManager) {
@@ -15,13 +14,12 @@ export class KeyboardHandler {
     this.appManager = appManager;
     this.stateManager = stateManager;
 
-    this.isTyping = false;
     this.isRunning = false;
   }
 
   public onKeyboardInteraction() {
     this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
-      if (this.isTyping === false && this.isRunning === false) {
+      if (this.isRunning === false) {
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
             case 'c':

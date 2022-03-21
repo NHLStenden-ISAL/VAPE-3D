@@ -9,6 +9,7 @@ export class ParentGUI {
 
   protected controlsArray: Control[];
 
+  protected objTypeName: string;
   protected objType: TextBlock;
   protected objLocation: InputText[];
   protected objDirection: TextBlock;
@@ -20,6 +21,7 @@ export class ParentGUI {
     this.parentGrid = new Grid();
 
     this.controlsArray = [];
+    this.objTypeName = 'Type';
     this.objType = new TextBlock();
     this.objLocation = [];
     this.objDirection = new TextBlock();

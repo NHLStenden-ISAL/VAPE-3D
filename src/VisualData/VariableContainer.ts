@@ -40,6 +40,10 @@ export class VariableContainer {
     this.variableData = value;
   }
 
+  getData(): VariableData {
+    return this.variableData;
+  }
+
   setContainer(name: string, value: VariableData) {
     this.setName(name);
     this.setData(value);

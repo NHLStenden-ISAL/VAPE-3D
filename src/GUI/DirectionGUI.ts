@@ -6,6 +6,8 @@ export class DirectionGUI extends ParentGUI {
   constructor(advancedTexture: AdvancedDynamicTexture) {
     super(advancedTexture);
 
+    this.objTypeName = 'Direction object';
+
     this.createParentGrid('400px', '200px', Control.HORIZONTAL_ALIGNMENT_RIGHT, Control.VERTICAL_ALIGNMENT_BOTTOM);
     this.createBody();
   }
@@ -14,7 +16,7 @@ export class DirectionGUI extends ParentGUI {
     if (guiInfo.objectType !== 'direction') { return; }
     super.onSelect(guiInfo);
 
-    this.objType.text = 'Direction object';
+    this.objType.text = this.objTypeName;
   }
 
   protected createBody(): void {

@@ -17,6 +17,7 @@ export class Storable {
   public changeName(name: string) {
     if (this.getIsKnown()) return;
 
+    
     this.variable.setName(name);
   }
 
@@ -25,15 +26,19 @@ export class Storable {
 
     this.variable.setValue(value);
   }
+  
+  public changeData(data: VariableData) {
+    if (this.getIsKnown()) return;
+
+    this.variable.setData(data);
+  }
 
   public changeIsKnown(isKnown: boolean) {
     this.variable.setIsKnown(isKnown);
   }
 
-  public changeData(data: VariableData) {
-    if (this.getIsKnown()) return;
-
-    this.variable.setData(data);
+  public changeContainer(container: VariableContainer): void {
+    this.variable.setContainer(container.getName(), container.getData());
   }
 
   public getName(): string {
@@ -51,4 +56,6 @@ export class Storable {
   public getContainer(): VariableContainer {
     return this.variable;
   }
+
+
 }

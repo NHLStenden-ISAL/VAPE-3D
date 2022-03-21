@@ -74,10 +74,6 @@ export class BaseObject {
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
-  public onReleaseRightExecute(): void {
-
-  }
-
   public onSelect(): void {
     // console.log("Selected an object");
     this.turnOnHighlight();

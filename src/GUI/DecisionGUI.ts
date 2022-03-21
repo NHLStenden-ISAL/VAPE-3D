@@ -10,6 +10,7 @@ export class DecisionGUI extends ParentGUI {
 
     this.createParentGrid('400px', '300px', Control.HORIZONTAL_ALIGNMENT_RIGHT, Control.VERTICAL_ALIGNMENT_BOTTOM);
 
+    this.objTypeName = 'Decision object';
     this.objInput = new InputText();
 
     this.createBody();
@@ -19,7 +20,7 @@ export class DecisionGUI extends ParentGUI {
     if (guiInfo.objectType !== 'decision') { return; }
     super.onSelect(guiInfo);
 
-    this.objType.text = 'Decision object';
+    this.objType.text = this.objTypeName;
     this.objInput.text = guiInfo.statement;
   }
 
@@ -42,8 +43,9 @@ export class DecisionGUI extends ParentGUI {
     this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
 
-    this.controlsArray.push(this.createTextBlock('If', Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objInput = this.createInputBlock('If', KeyGroup.SYMBALPHANUMERIC);
+    const inputName = 'If';
+    this.controlsArray.push(this.createTextBlock(inputName, Control.HORIZONTAL_ALIGNMENT_LEFT));
+    this.objInput = this.createInputBlock(inputName, KeyGroup.SYMBALPHANUMERIC);
     this.controlsArray.push(this.objInput);
 
     super.createBody();
