@@ -1,5 +1,5 @@
 export type VariableData = {
-  value: string | number;
+  value: string;
   isKnown: boolean;
 }
 
@@ -7,7 +7,7 @@ export class VariableContainer {
   private variableName: string;
   private variableData: VariableData;
 
-  constructor(name: string = "", value = 0) {
+  constructor(name: string = "", value:string = '') {
     this.variableName = name;
     this.variableData = { value: value, isKnown: false };
   }
@@ -20,11 +20,11 @@ export class VariableContainer {
     return this.variableName;
   }
 
-  setValue(value: string | number) {
+  setValue(value: string ) {
     this.variableData = { value: value, isKnown: this.variableData.isKnown };
   }
 
-  getValue(): string | number {
+  getValue(): string {
     return this.variableData.value;
   }
 
@@ -47,5 +47,9 @@ export class VariableContainer {
   setContainer(name: string, value: VariableData) {
     this.setName(name);
     this.setData(value);
+  }
+
+  getContainer(): VariableContainer {
+    return new VariableContainer(this.getName(), this.getValue());
   }
 }

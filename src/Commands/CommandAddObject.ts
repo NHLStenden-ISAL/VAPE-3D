@@ -48,6 +48,6 @@ export class CommandAddObject implements ICommand {
   }
 
   redo(): void {
-    this.execute();
+    this.object?.restore();
   }
 }

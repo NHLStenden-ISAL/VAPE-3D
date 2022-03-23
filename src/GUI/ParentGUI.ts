@@ -73,9 +73,6 @@ export class ParentGUI {
 
     grid.isVisible = false;
 
-    // grid.width = 0.2;
-    // grid.height = 0.5;
-
     grid.addColumnDefinition(0.1);
     grid.addColumnDefinition(1);
     grid.addColumnDefinition(0.1);

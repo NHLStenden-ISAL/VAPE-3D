@@ -52,6 +52,14 @@ export class BaseObject {
     this.move(this.gridPosition);
   }
 
+  public getUUID(): string {
+    return this.objectUUID;
+  }
+
+  protected createMesh(): Mesh {
+    return createBox(this.worldInfo.getScene(), this.objectUUID);
+  }
+
   public onClickLeftExecute(): void {
     this.startPosition = this.gridPosition;
     this.turnOnHighlight();
@@ -75,22 +83,29 @@ export class BaseObject {
   }
 
   public onSelect(): void {
-    // console.log("Selected an object");
     this.turnOnHighlight();
-
     this.worldInfo.getGUIHelper().onSelect(this);
-
-    //TODO: Add GUI window with options for the object, most likely per class, so not here
   }
 
   public onDeselect(): void {
     this.turnOffHighlight();
-
     this.worldInfo.getGUIHelper().onDeselect();
+  }
+
+  private turnOnHighlight() {
+    this.worldInfo.turnOnHighLight(this.mesh, this.highlightColor);
+  }
+
+  private turnOffHighlight() {
+    this.worldInfo.turnOffHighLight(this.mesh);
   }
 
   public getMesh(): AbstractMesh | undefined {
     return this.mesh;
+  }
+  
+  protected updateMeshPosition(): Vector3 {
+    return new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
   }
 
   public getGridPosition(): Vector2 {
@@ -150,35 +165,15 @@ export class BaseObject {
     this.rotateToward(this.direction);
   }
 
-  protected createMesh(): Mesh {
-    return createBox(this.worldInfo.getScene(), this.objectUUID);
-  }
-
   public getInteractable(): Interactable | undefined {
     return this.interactable;
   }
 
   public getStorable(): Storable | undefined {
     return this.storable;
-  }
-
-  public getUUID(): string {
-    return this.objectUUID;
-  }
+  } 
 
   public getGUIBox(): GUIBoxInfo {
     return { objectType: '' };
-  }
-
-  protected updateMeshPosition(): Vector3 {
-    return new Vector3(this.gridPosition.x, this.height, this.gridPosition.y);
-  }
-
-  private turnOnHighlight() {
-    this.worldInfo.turnOnHighLight(this.mesh, this.highlightColor);
-  }
-
-  private turnOffHighlight() {
-    this.worldInfo.turnOffHighLight(this.mesh);
   }
 }

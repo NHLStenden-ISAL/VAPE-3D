@@ -1,36 +1,43 @@
-import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
+import { CommandChangeValue } from "../Commands/CommandChangeValue";
+import { WorldInformation } from "../Helpers/WorldInformation";
+import { VariableContainer } from "../VisualData/VariableContainer";
 
 export class Storable {
   //TODO: make it so this can be multliple
   private variable: VariableContainer;
+  private worldInfo: WorldInformation;
 
-  constructor() {
+  private previousVariable: VariableContainer;
+
+  constructor(worldInfo: WorldInformation) {
+    this.worldInfo = worldInfo;
 
     //TEMP
     const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
     const value: number = Math.round(Math.random() * 100);
 
-    this.variable = new VariableContainer(name, value);
-    // this.variable = new VariableContainer();
+    this.variable = new VariableContainer(name, value.toString());
+    this.previousVariable = new VariableContainer();
   }
 
   public changeName(name: string) {
     if (this.getIsKnown()) return;
 
-    
+    this.previousVariable = this.variable.getContainer();
     this.variable.setName(name);
+
+    if (this.previousVariable.getName() === this.variable.getName()) { return; }
+    this.changeCommand();
   }
 
-  public changeValue(value: string | number) {
+  public changeValue(value: string) {
     if (this.getIsKnown()) return;
 
+    this.previousVariable = this.variable.getContainer();
     this.variable.setValue(value);
-  }
-  
-  public changeData(data: VariableData) {
-    if (this.getIsKnown()) return;
 
-    this.variable.setData(data);
+    if (this.previousVariable.getValue() === this.variable.getValue()) { return; }
+    this.changeCommand();
   }
 
   public changeIsKnown(isKnown: boolean) {
@@ -57,5 +64,16 @@ export class Storable {
     return this.variable;
   }
 
+  public getContainerCopy(): VariableContainer {
+    return this.variable.getContainer();
+  }
 
+  public getPreviousValue(): VariableContainer {
+    return this.previousVariable;
+  }
+
+  private changeCommand() {
+    const command = new CommandChangeValue(this);
+    this.worldInfo.getCommandBroker().executeCommand(command);
+  }
 }

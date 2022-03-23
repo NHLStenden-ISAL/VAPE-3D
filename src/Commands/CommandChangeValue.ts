@@ -11,12 +11,12 @@ export class CommandChangeValue implements ICommand {
   constructor(object: Storable) {
     this.object = object;
 
-    this.previousValue = this.object.getContainer();
-    this.newValue = this.object.getContainer();
+    this.previousValue = this.object.getPreviousValue().getContainer();
+    this.newValue = this.object.getContainerCopy();
   }
 
   execute(): void {
-    this.newValue = this.object.getContainer();
+    this.newValue = this.object.getContainerCopy();
   }
 
   undo(): void {

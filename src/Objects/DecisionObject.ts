@@ -22,7 +22,7 @@ export class DecisionObject extends BaseObject {
     this.mesh.rotation = this.transformable.rotateToward(dir);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
-    this.storable = new Storable();
+    this.storable = new Storable(this.worldInfo);
 
     this.variableMap = new Map();
     this.condition = false;

@@ -19,7 +19,7 @@ export class VariableObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    this.storable = new Storable();
+    this.storable = new Storable(this.worldInfo);
   }
 
   protected createMesh(): Mesh {
