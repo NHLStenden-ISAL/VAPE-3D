@@ -15,11 +15,6 @@ export type GUIBoxInfo = { objectType: ''; } | {
   direction: Direction;
 
   statement: string;
-
-  // varAmount: number;
-  // varNames: string[];
-  // varValue: string[];
-  // isKnown: boolean;
 } | {
   objectType: 'direction';
   location: Vector2;
@@ -31,6 +26,7 @@ export enum KeyGroup {
   ALPHABETIC,
   ALPHANUMERIC,
   SYMBOLIC,
+  NUMBOLIC,
   SYMBALPHANUMERIC,
   ALL
 }
@@ -52,11 +48,15 @@ export function AllowKey(key: string, keyGroup: KeyGroup): boolean {
     return isSymbol(key);
   }
 
+  if (keyGroup === KeyGroup.NUMBOLIC) {
+    return isSymbol(key) || isNumber(key);
+  }
+
   if (keyGroup === KeyGroup.SYMBALPHANUMERIC) {
     return isNumber(key) || isLetter(key) || isSymbol(key);
   }
 
-  return false;
+  return true;
 }
 
 export function CheckKeyGroup(key: string): KeyGroup {
@@ -73,6 +73,26 @@ export function CheckKeyGroup(key: string): KeyGroup {
   }
 
   return KeyGroup.ALL;
+}
+
+export function CheckNumbolicExpression(word: string): boolean {
+  for (let i = 0; i < word.length; i++) {
+    if (!AllowKey(word[i], KeyGroup.NUMBOLIC)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function CheckNumberExpresion(word: string): boolean {
+  for (let i = 0; i < word.length; i++) {
+    if (!AllowKey(word[i], KeyGroup.NUMERIC)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function isNumber(key: string): boolean {

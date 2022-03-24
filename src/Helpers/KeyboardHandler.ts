@@ -56,7 +56,8 @@ export class KeyboardHandler {
           case 'p':
           case 'P':
             if (this.stateManager.getGameState() === 'build') {
-              this.appManager.startProgram();
+              if (!this.isRunning)
+                this.appManager.startProgram();
               this.isRunning = true;
             } else {
               this.appManager.pauseProgram();

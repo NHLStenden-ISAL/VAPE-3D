@@ -8,6 +8,7 @@ export class ParentGUI {
   protected parentGrid: Grid;
 
   protected controlsArray: Control[];
+  protected panelControls: Control[];
 
   protected objTypeName: string;
   protected objType: TextBlock;
@@ -21,6 +22,7 @@ export class ParentGUI {
     this.parentGrid = new Grid();
 
     this.controlsArray = [];
+    this.panelControls = [];
     this.objTypeName = 'Type';
     this.objType = new TextBlock();
     this.objLocation = [];
@@ -41,26 +43,29 @@ export class ParentGUI {
     this.objDirection.text = Direction[guiInfo.direction];
   }
 
-  protected createBody(): void {
+  protected createBody(testing: boolean = false): void {
     this.controlsArray.push(this.createPosition(['X', 'Y'], KeyGroup.NUMERIC));
     this.controlsArray.push(this.createDirection());
-    
-    this.parentGrid.addControl(this.addBodyToScreen(), 1, 1);
+
+    this.parentGrid.addControl(this.addBodyToScreen(testing), 1, 1);
   }
 
-  protected addBodyToScreen(): Grid {
-    const grid = new Grid();
+  protected addBodyToScreen(testing: boolean = false): Grid {
+    const grid = new Grid('body grid');
 
     for (let index = 0; index < this.controlsArray.length; index++) {
       grid.addRowDefinition(1);
       grid.addControl(this.controlsArray[index], index, 0);
-    }
+      if (testing) {
+        console.log(this.controlsArray[index].name + " " + this.controlsArray[index].zIndex);
 
+      }
+    }
     return grid;
   }
 
   protected createParentGrid(width: string | number, height: string | number, horizontalAlignment: number, verticalAlignment: number) {
-    const grid = new Grid();
+    const grid = new Grid('parentGrid');
 
     grid.horizontalAlignment = horizontalAlignment;
     grid.verticalAlignment = verticalAlignment;
@@ -197,6 +202,17 @@ export class ParentGUI {
       grid.addControl(this.createTextBlock(labels[index], Control.HORIZONTAL_ALIGNMENT_CENTER), 0, 0 + (index * 2));
       grid.addControl(block, 0, 1 + (index * 2));
     }
+
+    return grid;
+  }
+
+  protected createInputArea(label: string, keyGroup: KeyGroup): Grid {
+    const grid = new Grid(`Input ${label} grid`);
+    grid.addColumnDefinition(0.2);
+    grid.addColumnDefinition(0.8);
+
+    grid.addControl(this.createTextBlock(label, Control.HORIZONTAL_ALIGNMENT_CENTER), 0, 0);
+    grid.addControl(this.createInputBlock(label, keyGroup), 0, 1);
 
     return grid;
   }

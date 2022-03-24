@@ -2,7 +2,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
-import { GUIBoxInfo } from "../GUI/GUIInfo";
+import { CheckNumberExpresion, CheckNumbolicExpression, GUIBoxInfo } from "../GUI/GUIInfo";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableData } from "../VisualData/VariableContainer";
@@ -37,16 +37,28 @@ export class DecisionObject extends BaseObject {
 
     let statement = '';
 
-    let words = this.storable.getValue().split(' ');
+    let words = this.storable.getValue().split(/\s|(-\+\/)/g);
 
     words.forEach((word) => {
+      if (word === undefined || word === '') { return; }
+
       const variable = robotObject.checkVariable(word);
       if (variable.isKnown) {
-        statement += `${variable.value} `;
+        if (CheckNumberExpresion(variable.value)) {
+          statement += `${variable.value} `;
+        } 
+        else {
+          statement += `"${variable.value}" `;
+        }
         this.variableMap.set(word, variable);
       }
       else {
-        statement += `${word} `;
+        if (CheckNumbolicExpression(word)) {
+          statement += `${word}`;
+        }
+        else {
+          statement += `"${word}" `;
+        }
       }
     });
 
@@ -55,8 +67,16 @@ export class DecisionObject extends BaseObject {
 
   private executeIf(statement: string) {
     console.log(statement);
-    
-    eval(`if (${statement}) { this.condition = true } else { this.condition = false }`);
+
+    try {
+      // if it doesn't work use this VVV
+      //if (${statement}) { this.condition = true; } else { this.condition = false; }
+      eval(`this.condition = ${statement};`);
+    } catch (error) {
+      //TODO: fix ff dat verschillende errors verschillende dingen doen, en messages geven.
+      console.log(error);
+      this.condition = false;
+    }
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

@@ -30,10 +30,8 @@ export class VariableGUI extends ParentGUI {
     this.objValue.text = guiInfo.value;
     this.objIsKnown.isChecked = guiInfo.isKnown;
 
-    if (guiInfo.isKnown) {
-      this.objName.isEnabled = false;
-      this.objValue.isEnabled = false;
-    }
+    this.objName.isEnabled = !guiInfo.isKnown;
+    this.objValue.isEnabled = !guiInfo.isKnown;
   }
 
   protected createBody(): void {
@@ -62,16 +60,15 @@ export class VariableGUI extends ParentGUI {
     this.objType = this.createTextBlock('Type', Control.HORIZONTAL_ALIGNMENT_CENTER);
     this.controlsArray.push(this.objType);
 
-    const inputName = 'Name';
-    this.controlsArray.push(this.createTextBlock(inputName, Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objName = this.createInputBlock(inputName, KeyGroup.ALPHANUMERIC);
-    this.controlsArray.push(this.objName);
+    let nameGrid = this.createInputArea('Name', KeyGroup.ALPHANUMERIC);
+    let valueGrid = this.createInputArea('Value', KeyGroup.ALPHANUMERIC);
 
-    const inputValue = 'Value'
-    this.controlsArray.push(this.createTextBlock(inputValue, Control.HORIZONTAL_ALIGNMENT_LEFT));
-    this.objValue = this.createInputBlock(inputValue, KeyGroup.ALPHANUMERIC);
-    this.controlsArray.push(this.objValue);
-    
+    this.objName = nameGrid.children[1] as InputText;
+    this.objValue = valueGrid.children[1] as InputText;
+
+    this.controlsArray.push(nameGrid);
+    this.controlsArray.push(valueGrid);
+
     this.controlsArray.push(this.createIsKnown());
 
     super.createBody();
