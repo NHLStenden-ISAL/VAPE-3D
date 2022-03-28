@@ -1,7 +1,7 @@
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction } from "../Compositions/Transformable";
-import { GUIBoxInfo } from "../GUI/GUIInfo";
+import { GuiBoxDirection } from "../GUI/Info/GuiBoxes";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { BaseObject } from "./BaseObject";
@@ -31,7 +31,7 @@ export class DirectionObject extends BaseObject {
     super.restore();
   }
 
-  public getGUIBox(): GUIBoxInfo {
+  public getGUIBox(): GuiBoxDirection {
     return {
       objectType: 'direction',
       location: this.getPositionForGUI(),

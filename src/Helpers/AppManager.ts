@@ -1,11 +1,14 @@
 import { Scene } from "@babylonjs/core";
+import { Dispatch, SetStateAction } from "react";
+import { BaseObject } from "../Objects/BaseObject";
 import { CommandBroker } from "./CommandBroker";
-import { GUIHelper } from "./GUIHelper";
 import { KeyboardHandler } from "./KeyboardHandler";
 import { MouseHandler } from "./MouseHandler";
 import { SceneHelper } from "./SceneHelper";
 import { StateManager } from "./StateManager";
 import { WorldInformation } from "./WorldInformation";
+
+export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
 export class AppManager {
   private canvas: any;
@@ -15,16 +18,12 @@ export class AppManager {
   private commandBroker: CommandBroker;
   private worldInformation: WorldInformation;
 
-  private gui: GUIHelper;
-
-  constructor(scene: Scene, canvas: any) {
+  constructor(scene: Scene, canvas: any, setSelectedObject: SetSelectedObject) {
     this.canvas = canvas;
-
-    this.gui = new GUIHelper();
 
     this.stateManager = new StateManager();
     this.commandBroker = new CommandBroker();
-    this.worldInformation = new WorldInformation(scene, this.commandBroker, this.gui);
+    this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
     
   }

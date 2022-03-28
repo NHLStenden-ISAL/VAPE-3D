@@ -1,8 +1,8 @@
 import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene } from "@babylonjs/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { RobotObject } from "../Objects/RobotObject";
+import { SetSelectedObject } from "./AppManager";
 import { CommandBroker } from "./CommandBroker";
-import { GUIHelper } from "./GUIHelper";
 
 export class WorldInformation {
   private scene: Scene;
@@ -11,12 +11,12 @@ export class WorldInformation {
   private robotObjects: RobotObject[] = [];
 
   private commandBroker: CommandBroker;
-  private guiHelper: GUIHelper;
+  private setSelectedObject: SetSelectedObject;
 
-  constructor(scene: Scene, commandBroker: CommandBroker, guiHelper: GUIHelper) {
+  constructor(scene: Scene, commandBroker: CommandBroker, setSelectedObject: SetSelectedObject) {
     this.scene = scene;
     this.commandBroker = commandBroker;
-    this.guiHelper = guiHelper;
+    this.setSelectedObject = setSelectedObject;
 
     this.highLightLayer = new HighlightLayer('highlight', this.scene);
   }
@@ -62,15 +62,19 @@ export class WorldInformation {
     return this.commandBroker;
   }
 
-  public getGUIHelper(): GUIHelper {
-    return this.guiHelper;
+  public onSelect(object: BaseObject): void {
+    this.setSelectedObject(object);
   }
 
-  public turnOnHighLight(mesh: Mesh, color: Color3) {
+  public onDeselect(): void {
+    this.setSelectedObject(undefined);
+  }
+
+  public turnOnHighLight(mesh: Mesh, color: Color3): void {
     this.highLightLayer.addMesh(mesh, color);
   }
 
-  public turnOffHighLight(mesh: Mesh) {
+  public turnOffHighLight(mesh: Mesh): void {
     this.highLightLayer.removeMesh(mesh);
   }
 }

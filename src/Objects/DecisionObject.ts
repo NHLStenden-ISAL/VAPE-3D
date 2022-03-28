@@ -2,7 +2,8 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
-import { CheckNumberExpresion, CheckNumbolicExpression, GUIBoxInfo } from "../GUI/GUIInfo";
+import { CheckNumberExpresion, CheckNumbolicExpression } from "../GUI/GUIInfo";
+import { GuiBoxDecision } from "../GUI/Info/GuiBoxes";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableData } from "../VisualData/VariableContainer";
@@ -46,7 +47,7 @@ export class DecisionObject extends BaseObject {
       if (variable.isKnown) {
         if (CheckNumberExpresion(variable.value)) {
           statement += `${variable.value} `;
-        } 
+        }
         else {
           statement += `"${variable.value}" `;
         }
@@ -97,8 +98,15 @@ export class DecisionObject extends BaseObject {
     return this.condition;
   }
 
-  public getGUIBox(): GUIBoxInfo {
-    if (!this.storable) { return { objectType: '' } };
+  public getGUIBox(): GuiBoxDecision {
+    if (!this.storable) {
+      return {
+        objectType: 'decision',
+        location: this.getPositionForGUI(),
+        direction: this.getDirection(),
+        statement: ''
+      }
+    };
 
     return {
       objectType: 'decision',

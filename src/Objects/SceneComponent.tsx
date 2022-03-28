@@ -1,25 +1,28 @@
 import { Engine, Scene } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
+import { SetSelectedObject } from "../Helpers/AppManager";
 
-export default function CreateCanvas(props: any) {
+type CanvasProps = {
+  antialias: boolean,
+  onSceneReady: any,
+  id: string,
+  setSelectedObject: SetSelectedObject,
+}
+
+export default function CreateCanvas({ antialias, onSceneReady, id, setSelectedObject }: CanvasProps) {
   const rectCanvas = useRef(null);
-  const { antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest } = props;
 
   useEffect(() => {
     if (rectCanvas.current) {
-      const engine = new Engine(rectCanvas.current, antialias, engineOptions, adaptToDeviceRatio);
-      const scene = new Scene(engine, sceneOptions);
+      const engine = new Engine(rectCanvas.current, antialias);
+      const scene = new Scene(engine);
       if (scene.isReady()) {
-        props.onSceneReady(scene);
+        onSceneReady(scene, setSelectedObject);
       } else {
-        scene.onReadyObservable.addOnce((scene) => props.onSceneReady(scene));
+        scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
       }
 
       engine.runRenderLoop(() => {
-        if (typeof onRender === "function") {
-          onRender(scene);
-        }
-
         scene.render();
       });
 
@@ -41,5 +44,5 @@ export default function CreateCanvas(props: any) {
     }
   }, [rectCanvas]);
 
-  return <canvas ref={rectCanvas} {...rest} />;
+  return <canvas ref={rectCanvas} id={id} />;
 };

@@ -5,7 +5,6 @@ import { CommandRotateObject } from "../Commands/CommandRotateObject";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction, Transformable } from "../Compositions/Transformable";
-import { GUIBoxInfo } from "../GUI/GUIInfo";
 import { createBox } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 
@@ -84,12 +83,12 @@ export class BaseObject {
 
   public onSelect(): void {
     this.turnOnHighlight();
-    this.worldInfo.getGUIHelper().onSelect(this);
+    this.worldInfo.onSelect(this);
   }
 
   public onDeselect(): void {
     this.turnOffHighlight();
-    this.worldInfo.getGUIHelper().onDeselect();
+    this.worldInfo.onDeselect();
   }
 
   private turnOnHighlight() {
@@ -172,8 +171,4 @@ export class BaseObject {
   public getStorable(): Storable | undefined {
     return this.storable;
   } 
-
-  public getGUIBox(): GUIBoxInfo {
-    return { objectType: '' };
-  }
 }
