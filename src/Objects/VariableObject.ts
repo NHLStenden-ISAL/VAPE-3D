@@ -10,6 +10,7 @@ import { RobotObject } from "./RobotObject";
 
 export class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
+  private storable: Storable;
 
   constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
     const objectColor = Color3.Magenta();
@@ -60,26 +61,17 @@ export class VariableObject extends BaseObject {
   }
 
   public getGUIBox(): GuiBoxVariable {
-    if (!this.storable) {
-      return {
-        objectType: 'variable',
-        location: this.getPositionForGUI(),
-        direction: this.getDirection(),
-        isKnown: false,
-
-        name: '',
-        value: ''
-      }
-    };
-
     return {
       objectType: 'variable',
       location: this.getPositionForGUI(),
       direction: this.getDirection(),
-      isKnown: this.storable?.getIsKnown(),
+      isKnown: this.storable.getIsKnown(),
+      name: this.storable.getName(),
+      value: this.storable.getValue()
+    };
+  }
 
-      name: this.storable?.getName(),
-      value: this.storable?.getValue()
-    }
+  public getStorable(): Storable {
+    return this.storable;
   }
 }

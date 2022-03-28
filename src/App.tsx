@@ -7,6 +7,7 @@ import { BaseObject } from './Objects/BaseObject';
 import VariableGUI from './GUI/VariableGUI';
 import { VariableObject } from './Objects/VariableObject';
 import { DecisionObject } from './Objects/DecisionObject';
+import DecisionGUI from './GUI/DecisionGUI';
 
 //Start
 const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject) => {
@@ -24,9 +25,7 @@ export default function App() {
       <SceneComponent antialias onSceneReady={onSceneReady} id="my-canvas" setSelectedObject={setSelectedObject}/>
       
       {selectedObject instanceof VariableObject  && <VariableGUI selectedObject={selectedObject} />}
-      {/* {selectedObject instanceof DecisionObject  && <VariableGUI selectedObject={selectedObject} />} */}
-      {/* {selectedObject instanceof VariableObject  && <VariableGUI selectedObject={selectedObject} />} */}
-      {/* <ParentGUI selectedObject={selectedObject}/> */}
+      {selectedObject instanceof DecisionObject  && <DecisionGUI selectedObject={selectedObject} />}
     </div>
   );
 }

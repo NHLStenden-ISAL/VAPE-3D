@@ -2,7 +2,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
-import { CheckNumberExpresion, CheckNumbolicExpression } from "../GUI/GUIInfo";
+import { CheckForExpression, KeyGroup } from "../GUI/InputFilter";
 import { GuiBoxDecision } from "../GUI/Info/GuiBoxes";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
@@ -12,6 +12,7 @@ import { RobotObject } from "./RobotObject";
 
 export class DecisionObject extends BaseObject {
   private variableMap: Map<string, VariableData>;
+  private storable: Storable;
 
   private condition: boolean;
 
@@ -34,8 +35,6 @@ export class DecisionObject extends BaseObject {
   }
 
   private checkForVariables(robotObject: RobotObject) {
-    if (!this.storable) { return; }
-
     let statement = '';
 
     let words = this.storable.getValue().split(/\s|(-\+\/)/g);
@@ -45,7 +44,7 @@ export class DecisionObject extends BaseObject {
 
       const variable = robotObject.checkVariable(word);
       if (variable.isKnown) {
-        if (CheckNumberExpresion(variable.value)) {
+        if (CheckForExpression(variable.value, KeyGroup.NUMERIC)) {
           statement += `${variable.value} `;
         }
         else {
@@ -54,7 +53,7 @@ export class DecisionObject extends BaseObject {
         this.variableMap.set(word, variable);
       }
       else {
-        if (CheckNumbolicExpression(word)) {
+        if (CheckForExpression(word, KeyGroup.NUMBOLIC)) {
           statement += `${word}`;
         }
         else {
@@ -81,8 +80,6 @@ export class DecisionObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
-    if (!this.storable) { return; }
-
     this.checkForVariables(robotObject);
 
     if (this.checkCondition() === true) {
@@ -99,20 +96,15 @@ export class DecisionObject extends BaseObject {
   }
 
   public getGUIBox(): GuiBoxDecision {
-    if (!this.storable) {
-      return {
-        objectType: 'decision',
-        location: this.getPositionForGUI(),
-        direction: this.getDirection(),
-        statement: ''
-      }
-    };
-
     return {
       objectType: 'decision',
       location: this.getPositionForGUI(),
       direction: this.getDirection(),
       statement: this.storable.getValue()
     }
+  }
+
+  public getStorable(): Storable {
+    return this.storable;
   }
 }

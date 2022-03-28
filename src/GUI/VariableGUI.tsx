@@ -1,57 +1,59 @@
-import { Dispatch, KeyboardEvent, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { VariableObject } from "../Objects/VariableObject";
+import { KeyGroup } from "./InputFilter";
+import DisabledInputField from "./Info/DisabledInputField";
+import InputField from "./Info/InputField";
 
-export default function VariableGUI({selectedObject} : {selectedObject: VariableObject}) {
+export default function VariableGUI({ selectedObject }: { selectedObject: VariableObject }) {
   const guiBox = selectedObject.getGUIBox();
 
   const [name, setName] = useState(guiBox.name);
   const [value, setValue] = useState(guiBox.value);
+  const position = guiBox.location;
+  const isKnown = guiBox.isKnown;
 
-  // useEffect(() => {
-  //   console.log(value);
-  // }, [value]);
+  const onBlur = (target: EventTarget & HTMLInputElement) => {
+    if (target.value.length <= 0) { return; }
+    
+    if (target.id === "Name") {
+      selectedObject.getStorable().changeName(target.value);
+    }
 
-  // const onChange = (e: KeyboardEvent<HTMLInputElement>) => {
-  //   // setValue(e.target.value);
-  //   console.log(e.key);
-  // }
-
-  const onBlur = (value: string) => {
-
-    console.log(`We're done now lol ${value}`)
+    if (target.id === "Value") {
+      selectedObject.getStorable().changeValue(target.value);
+    }
   }
-
-
 
   return (
     <div>
-      <form>
-        <InputField name="Name" value={name} setValue={setName} onBlur={onBlur} />
-        <br />
-        <InputField name="Value" value={value} setValue={setValue} onBlur={onBlur} />
-      </form>
+      <h3>Variable object</h3>
+      <InputField name="Name" value={name} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setName} onBlur={onBlur} />
+      <br />
+      <InputField name="Value" value={value} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setValue} onBlur={onBlur} />
+      <br />
+      <DisabledInputField name="X" value={position.x.toString()}/>
+      <DisabledInputField name="Y" value={position.y.toString()}/>
+      <br />
+      <CheckBox name="IsKnown" value={isKnown}/>
     </div>
   );
 }
 
-type InputFieldProps = { 
-  name: string, 
-  value: string,
-  setValue: Dispatch<SetStateAction<string>> ,
-  // onChange: (e: KeyboardEvent<HTMLInputElement>) => void,
-  onBlur: (value : string) => void,
+
+type CheckBoxProps = {
+  name: string,
+  value: boolean,
 }
 
-export function InputField({ name, value, setValue, onBlur } : InputFieldProps) {
+function CheckBox({name, value}: CheckBoxProps) {
   return (
     <label htmlFor={name}>
       {name}
-      <input 
-        type='text' 
-        id={name} 
-        value={value}
-        onChange={(e) => { setValue(e.target.value) } }
-        onBlur={() => onBlur(value)} 
+      <input
+        type='checkbox'
+        id={name}
+        readOnly
+        checked={value}
       />
     </label>
   )
