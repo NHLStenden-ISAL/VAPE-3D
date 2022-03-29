@@ -3,7 +3,7 @@ import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
 import { CheckForExpression, KeyGroup } from "../GUI/InputFilter";
-import { GuiBoxDecision } from "../GUI/Info/GuiBoxes";
+import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { VariableData } from "../VisualData/VariableContainer";
@@ -54,7 +54,7 @@ export class DecisionObject extends BaseObject {
       }
       else {
         if (CheckForExpression(word, KeyGroup.NUMBOLIC)) {
-          statement += `${word}`;
+          statement += `${word} `;
         }
         else {
           statement += `"${word}" `;

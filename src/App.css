@@ -16,6 +16,15 @@
   z-index: -1;
 }
 
+#selection {
+  width: 350px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px 10px 20px 20px;
+  background-color: white;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

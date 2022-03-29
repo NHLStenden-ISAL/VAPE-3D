@@ -56,9 +56,12 @@ export class RobotObject extends BaseObject {
     if (this.variableMap.has(variable.getName())) {
       console.log("Key already exist");
     } else {
-      this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
+      //Only when the key doesn't exist yet
+      // this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
       console.log("added new variable");
     }
+
+    this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
   }
 
   public removeVariable(variable: VariableContainer) {

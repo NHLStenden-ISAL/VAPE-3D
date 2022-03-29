@@ -1,7 +1,7 @@
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Direction } from "../Compositions/Transformable";
-import { GuiBoxDirection } from "../GUI/Info/GuiBoxes";
+import { GuiBoxDirection } from "../GUI/Components/GuiBoxes";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { BaseObject } from "./BaseObject";

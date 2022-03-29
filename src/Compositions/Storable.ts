@@ -13,10 +13,11 @@ export class Storable {
     this.worldInfo = worldInfo;
 
     //TEMP
-    const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-    const value: number = Math.round(Math.random() * 100);
+    // const name: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+    // const value: number = Math.round(Math.random() * 100);
+    // this.variable = new VariableContainer(name, value.toString());
 
-    this.variable = new VariableContainer(name, value.toString());
+    this.variable = new VariableContainer();
     this.previousVariable = new VariableContainer();
   }
 

@@ -2,7 +2,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { Interactable } from "../Compositions/Interactable";
 import { Storable } from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
-import { GuiBoxVariable } from "../GUI/Info/GuiBoxes";
+import { GuiBoxVariable } from "../GUI/Components/GuiBoxes";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { WorldInformation } from "../Helpers/WorldInformation";
 import { BaseObject } from "./BaseObject";
