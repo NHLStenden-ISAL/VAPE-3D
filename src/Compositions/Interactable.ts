@@ -1,9 +1,9 @@
-import { BaseObject } from "../Objects/BaseObject";
-import { RobotObject } from "../Objects/RobotObject";
+import BaseObject from "../Objects/BaseObject";
+import RobotObject from "../Objects/RobotObject";
 
 type CallbackVoid = (robotObject: RobotObject) => void;
 
-export class Interactable {
+export default class Interactable {
   private onIntersect: CallbackVoid;
   private object: BaseObject;
 

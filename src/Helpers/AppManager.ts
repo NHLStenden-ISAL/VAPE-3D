@@ -1,16 +1,16 @@
-import { Scene } from "@babylonjs/core";
+import BaseObject from "../Objects/BaseObject";
+import CommandBroker from "./CommandBroker";
+import KeyboardHandler from "./KeyboardHandler";
+import MouseHandler from "./MouseHandler";
+import SceneHelper from "./SceneHelper";
+import StateManager from "./StateManager";
+import WorldInformation from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
-import { BaseObject } from "../Objects/BaseObject";
-import { CommandBroker } from "./CommandBroker";
-import { KeyboardHandler } from "./KeyboardHandler";
-import { MouseHandler } from "./MouseHandler";
-import { SceneHelper } from "./SceneHelper";
-import { StateManager } from "./StateManager";
-import { WorldInformation } from "./WorldInformation";
+import { Observable, Scene } from "@babylonjs/core";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
-export class AppManager {
+export default class AppManager {
   private canvas: any;
 
   private sceneHelper: SceneHelper;
@@ -25,7 +25,6 @@ export class AppManager {
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-    
   }
 
   public runApp() {
@@ -38,7 +37,14 @@ export class AppManager {
     keyboardHandler.onKeyboardInteraction();
   }
 
+  public setupObservers(start: Observable<any>, pause: Observable<any>, stop: Observable<any>) {
+    start.add(() => this.startProgram());
+    pause.add(() => this.pauseProgram());
+    stop.add(() => this.stopProgram());
+  }
+
   public startProgram() {
+    if(this.stateManager.getGameState() === 'run') { return; }
     this.stateManager.setEditorState('wait');
     this.stateManager.setGameState('run');
 
@@ -47,6 +53,8 @@ export class AppManager {
   }
 
   public pauseProgram() {
+    if(this.stateManager.getGameState() !== 'run') { return; }
+
     this.stateManager.setEditorState('transform');
     this.stateManager.setGameState('build');
 
@@ -54,7 +62,7 @@ export class AppManager {
 
   }
 
-  private stopProgram() {
+  public stopProgram() {
     //TODO: place the robot at the start position, reset all the variables?
 
   }

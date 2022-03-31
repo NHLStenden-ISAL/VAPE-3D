@@ -16,6 +16,7 @@ export default function DisabledInputField({ name, value }: DisabledInputFieldPr
           id={name}
           value={value}
           disabled
+          size="small"
         />
       </Grid>
     </Grid>

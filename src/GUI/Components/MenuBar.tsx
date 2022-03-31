@@ -1,16 +1,30 @@
-import { AppBar, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemText, styled, Toolbar } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { ChevronLeft, Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
-import { useState } from "react";
+import PersistentDrawer from "./PersistentDrawer";
+import { AppBar, Grid, IconButton, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
+import { Observable } from "@babylonjs/core";
+import { Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
+import { useState } from "react";
 
-export default function MenuBar() {
+type MenuBarProps = {
+  start: Observable<any>,
+  pause: Observable<any>,
+  stop: Observable<any>,
+}
+
+export default function MenuBar({ start, pause, stop }: MenuBarProps) {
   const [open, setOpen] = useState(false);
+
+  const items = ['variable', 'robot', 'direction', 'decision']
 
   const handleDrawerOpen = () => { setOpen(true); };
   const handleDrawerClose = () => { setOpen(false); };
 
-  const selectObjectType = (type:string) => {
+  const startClick = () => { start.notifyObservers(false); };
+  const pauseClick = () => { pause.notifyObservers(false); };
+  const stopClick = () => { stop.notifyObservers(false); };
+
+  const onButtonPress = (type: string) => {
     console.log(type);
     setOpen(false);
   };
@@ -35,6 +49,7 @@ export default function MenuBar() {
                 size="large"
                 edge="start"
                 color="inherit"
+                onClick={startClick}
               >
                 <PlayArrow />
               </IconButton>
@@ -42,6 +57,8 @@ export default function MenuBar() {
                 size="large"
                 edge="start"
                 color="inherit"
+                onClick={pauseClick}
+                // onClick={pauseProgram}
               >
                 <Pause />
               </IconButton>
@@ -49,6 +66,8 @@ export default function MenuBar() {
                 size="large"
                 edge="start"
                 color="inherit"
+                onClick={stopClick}
+                // onClick={stopProgram}
               >
                 <Stop />
               </IconButton>
@@ -65,43 +84,7 @@ export default function MenuBar() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <PersistentDrawerLeft open={open} closeFunc={handleDrawerClose} objectSelect={selectObjectType}></PersistentDrawerLeft>
+      <PersistentDrawer anchor="left" open={open} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
     </Box>
   );
-}
-
-const DrawerHeader = styled('div')(({ }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: 1,
-  justifyContent: 'flex-end',
-}));
-
-function PersistentDrawerLeft({ open, closeFunc, objectSelect }: { open: boolean, closeFunc: () => void, objectSelect: (objType: string) => void }) {
-  return (
-    <Drawer
-      variant="persistent"
-      anchor="left"
-      open={open}
-    >
-      <DrawerHeader>
-        <IconButton 
-          onClick={closeFunc}
-          size="large"
-          edge="start"
-          color="inherit"
-        >
-          <ChevronLeft />
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
-      <List>
-        {['first', 'second', 'third', 'last'].map((text) => (
-          <ListItem button onClick={() => objectSelect(text)} key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
-  )
 }

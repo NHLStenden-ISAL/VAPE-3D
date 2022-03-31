@@ -1,8 +1,8 @@
-import { AppManager } from "./AppManager";
-import { StateManager } from "./StateManager";
-import { WorldInformation } from "./WorldInformation";
+import AppManager from "./AppManager";
+import StateManager from "./StateManager";
+import WorldInformation from "./WorldInformation";
 
-export class KeyboardHandler {
+export default class KeyboardHandler {
   private worldInfo: WorldInformation;
   private appManager: AppManager;
   private stateManager: StateManager;

@@ -1,5 +1,5 @@
-import { Grid, TextField, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
+import { Grid, TextField, Typography } from "@mui/material";
 import { FilterString, KeyGroup } from "../InputFilter";
 
 type InputFieldProps = {
@@ -22,6 +22,7 @@ export default function InputField({ name, value, keyGroup, setValue, onBlur }: 
           value={value}
           onChange={(e) => setValue(FilterString(e.target.value, keyGroup))}
           onBlur={(e) => onBlur(e.target)}
+          autoComplete='off'
         />
       </Grid>
     </Grid>

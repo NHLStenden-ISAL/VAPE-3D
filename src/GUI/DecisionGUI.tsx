@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { DecisionObject } from "../Objects/DecisionObject";
-import { FilterString, KeyGroup } from "./InputFilter";
 import DisabledInputField from "./Components/DisabledInputField";
-import { Grid, TextField, Typography } from "@mui/material";
+import { DecisionObject } from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
+import { FilterString, KeyGroup } from "./InputFilter";
+import { Grid, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
 export default function DecisionGUI({ selectedObject }: { selectedObject: DecisionObject }) {
   const guiBox = selectedObject.getGUIBox();
@@ -16,7 +16,6 @@ export default function DecisionGUI({ selectedObject }: { selectedObject: Decisi
 
     selectedObject.getStorable().changeValue(target.value);
   }
-
 
   return (
     <Grid container spacing={1} direction='column'>

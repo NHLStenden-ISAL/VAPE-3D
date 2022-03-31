@@ -1,16 +1,16 @@
-import { Vector2 } from "@babylonjs/core";
-import { Direction } from "../Compositions/Transformable";
-import { WorldInformation } from "../Helpers/WorldInformation";
-import { BaseObject } from "../Objects/BaseObject";
+import BaseObject from "../Objects/BaseObject";
+import DirectionObject from "../Objects/DirectionObject";
+import ICommand from "./ICommand";
+import RobotObject from "../Objects/RobotObject";
+import VariableObject from "../Objects/VariableObject";
+import WorldInformation from "../Helpers/WorldInformation";
 import { DecisionObject } from "../Objects/DecisionObject";
-import { DirectionObject } from "../Objects/DirectionObject";
-import { RobotObject } from "../Objects/RobotObject";
-import { VariableObject } from "../Objects/VariableObject";
-import { ICommand } from "./ICommand";
+import { Direction } from "../Compositions/Transformable";
+import { Vector2 } from "@babylonjs/core";
 
 export type ObjectTypes = 'DecisionObject' | 'DirectionObject' | 'RobotObject' | 'VariableObject';
 
-export class CommandAddObject implements ICommand {
+export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
   private gridPosition: Vector2;
   private direction: Direction;

@@ -1,7 +1,7 @@
-import { Mesh, Scene } from "@babylonjs/core";
 import { createGrid } from "../Helpers/ObjectCreator";
+import { Mesh, Scene } from "@babylonjs/core";
 
-export class GridObject {
+export default class GridObject {
   private scene: Scene;
   private mesh: Mesh;
 

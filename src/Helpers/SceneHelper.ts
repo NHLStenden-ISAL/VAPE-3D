@@ -1,13 +1,14 @@
+import BaseObject from "../Objects/BaseObject";
+import CommandAddObject from "../Commands/CommandAddObject";
+import CommandDeleteObject from "../Commands/CommandDeleteObject";
+import GridObject from "../Objects/GridObject";
+import WorldInformation from "./WorldInformation";
 import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/core";
-import { CommandAddObject } from "../Commands/CommandAddObject";
-import { CommandDeleteObject } from "../Commands/CommandDeleteObject";
-import { Direction } from "../Compositions/Transformable";
-import { BaseObject } from "../Objects/BaseObject";
-import { GridObject } from "../Objects/GridObject";
+import { BuildState } from "./StateManager";
 import { createCamera } from "./ObjectCreator";
-import { WorldInformation } from "./WorldInformation";
+import { Direction } from "../Compositions/Transformable";
 
-export class SceneHelper {
+export default class SceneHelper {
   private worldInfo: WorldInformation;
 
   private camera: ArcRotateCamera;
@@ -52,9 +53,21 @@ export class SceneHelper {
     this.camera.attachControl(this.canvas, true);
   }
 
-  public addObject(gridPosition: Vector2) {
-    //TODO: add different object types
-    this.addVariableObject(gridPosition);
+  public addObject(gridPosition: Vector2, object: BuildState) {
+    switch (object) {
+      case 'variable':
+        this.addVariableObject(gridPosition);
+        break;
+      case 'robot':
+        this.addRobotObject(gridPosition);
+        break;
+      case 'direction':
+        this.addDirectionObject(gridPosition);
+        break;
+      case 'decision':
+        this.addDecisionObject(gridPosition);
+        break;
+    }
   }
 
   public deleteObject(object: BaseObject) {

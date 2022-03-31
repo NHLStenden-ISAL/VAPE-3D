@@ -1,11 +1,11 @@
+import BaseObject from "./BaseObject";
+import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { Direction } from "../Compositions/Transformable";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
-import { WorldInformation } from "../Helpers/WorldInformation";
+import { Direction } from "../Compositions/Transformable";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
-import { BaseObject } from "./BaseObject";
 
-export class RobotObject extends BaseObject {
+export default class RobotObject extends BaseObject {
   private variableMap: Map<string, VariableData>;
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {

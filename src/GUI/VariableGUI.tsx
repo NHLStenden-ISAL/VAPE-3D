@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { VariableObject } from "../Objects/VariableObject";
-import { KeyGroup } from "./InputFilter";
+import CheckBox from "./Components/CheckBox";
 import DisabledInputField from "./Components/DisabledInputField";
 import InputField from "./Components/InputField";
+import VariableObject from "../Objects/VariableObject";
 import { Grid, Typography } from "@mui/material";
-import CheckBox from "./Components/CheckBox";
+import { KeyGroup } from "./InputFilter";
+import { useState } from "react";
 
 export default function VariableGUI({ selectedObject }: { selectedObject: VariableObject }) {
   const guiBox = selectedObject.getGUIBox();

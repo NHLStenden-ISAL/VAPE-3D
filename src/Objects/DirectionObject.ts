@@ -1,13 +1,13 @@
+import BaseObject from "./BaseObject";
+import Interactable from "../Compositions/Interactable";
+import RobotObject from "./RobotObject";
+import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { Interactable } from "../Compositions/Interactable";
+import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { GuiBoxDirection } from "../GUI/Components/GuiBoxes";
-import { createDirection } from "../Helpers/ObjectCreator";
-import { WorldInformation } from "../Helpers/WorldInformation";
-import { BaseObject } from "./BaseObject";
-import { RobotObject } from "./RobotObject";
 
-export class DirectionObject extends BaseObject {
+export default class DirectionObject extends BaseObject {
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Purple();

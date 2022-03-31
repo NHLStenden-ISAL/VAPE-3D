@@ -1,14 +1,14 @@
-import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { Interactable } from "../Compositions/Interactable";
-import { Storable } from "../Compositions/Storable";
-import { Direction } from "../Compositions/Transformable";
+import Interactable from "../Compositions/Interactable";
+import BaseObject from "./BaseObject";
+import RobotObject from "./RobotObject";
+import Storable from "../Compositions/Storable";
+import WorldInformation from "../Helpers/WorldInformation";
 import { CheckForExpression, KeyGroup } from "../GUI/InputFilter";
-import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
+import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createDirection } from "../Helpers/ObjectCreator";
-import { WorldInformation } from "../Helpers/WorldInformation";
+import { Direction } from "../Compositions/Transformable";
+import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
 import { VariableData } from "../VisualData/VariableContainer";
-import { BaseObject } from "./BaseObject";
-import { RobotObject } from "./RobotObject";
 
 export class DecisionObject extends BaseObject {
   private variableMap: Map<string, VariableData>;

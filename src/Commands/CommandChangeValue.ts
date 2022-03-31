@@ -1,8 +1,8 @@
-import { ICommand } from "./ICommand";
+import ICommand from "./ICommand";
+import Storable from "../Compositions/Storable";
 import { VariableContainer } from "../VisualData/VariableContainer";
-import { Storable } from "../Compositions/Storable";
 
-export class CommandChangeValue implements ICommand {
+export default class CommandChangeValue implements ICommand {
   private object: Storable;
 
   private previousValue: VariableContainer;

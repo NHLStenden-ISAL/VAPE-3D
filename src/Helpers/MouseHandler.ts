@@ -1,10 +1,10 @@
+import BaseObject from "../Objects/BaseObject";
+import SceneHelper from "./SceneHelper";
+import StateManager from "./StateManager";
+import WorldInformation from "./WorldInformation";
 import { PointerEventTypes, Vector2 } from "@babylonjs/core";
-import { BaseObject } from "../Objects/BaseObject";
-import { SceneHelper } from "./SceneHelper";
-import { StateManager } from "./StateManager";
-import { WorldInformation } from "./WorldInformation";
 
-export class MouseHandler {
+export default class MouseHandler {
   private worldInfo: WorldInformation;
   private sceneHelper: SceneHelper;
   private stateManager: StateManager;
@@ -112,7 +112,7 @@ export class MouseHandler {
     if (this.clickedObject) { return; }
 
     if (this.mouseStartpoint) {
-      this.sceneHelper.addObject(this.mouseStartpoint);
+      this.sceneHelper.addObject(this.mouseStartpoint, this.stateManager.getBuildState());
     }
   }
 

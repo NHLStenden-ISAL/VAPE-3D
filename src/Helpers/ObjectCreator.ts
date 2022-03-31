@@ -1,5 +1,5 @@
-import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
+import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
 
 export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
   const camera: ArcRotateCamera = new ArcRotateCamera(

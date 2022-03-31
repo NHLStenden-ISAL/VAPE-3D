@@ -1,10 +1,10 @@
+import BaseObject from "../Objects/BaseObject";
+import CommandBroker from "./CommandBroker";
+import RobotObject from "../Objects/RobotObject";
 import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene } from "@babylonjs/core";
-import { BaseObject } from "../Objects/BaseObject";
-import { RobotObject } from "../Objects/RobotObject";
 import { SetSelectedObject } from "./AppManager";
-import { CommandBroker } from "./CommandBroker";
 
-export class WorldInformation {
+export default class WorldInformation {
   private scene: Scene;
   private highLightLayer: HighlightLayer;
   private sceneObjects: Map<string, BaseObject> = new Map();

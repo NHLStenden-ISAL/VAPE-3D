@@ -1,5 +1,5 @@
-import { Vector2 } from "@babylonjs/core";
 import { Direction } from "../../Compositions/Transformable";
+import { Vector2 } from "@babylonjs/core";
 
 export type GuiBoxVariable = {
   objectType: 'variable';

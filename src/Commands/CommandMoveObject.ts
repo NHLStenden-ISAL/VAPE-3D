@@ -1,8 +1,8 @@
-import { ICommand } from "./ICommand";
-import { BaseObject } from "../Objects/BaseObject";
+import BaseObject from "../Objects/BaseObject";
+import ICommand from "./ICommand";
 import { Vector2 } from "@babylonjs/core";
 
-export class CommandMoveObject implements ICommand {
+export default class CommandMoveObject implements ICommand {
   private object: BaseObject;
 
   private startPosition: Vector2;

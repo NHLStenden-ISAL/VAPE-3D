@@ -1,6 +1,6 @@
-import { ICommand } from "../Commands/ICommand";
+import ICommand from "../Commands/ICommand";
 
-export class CommandBroker {
+export default class CommandBroker {
   private undoArray: ICommand[];
   private redoArray: ICommand[];
 

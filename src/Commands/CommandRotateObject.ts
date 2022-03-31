@@ -1,8 +1,8 @@
-import { ICommand } from "./ICommand";
-import { BaseObject } from "../Objects/BaseObject";
+import BaseObject from "../Objects/BaseObject";
+import ICommand from "./ICommand";
 import { Direction } from "../Compositions/Transformable";
 
-export class CommandRotateObject implements ICommand {
+export default class CommandRotateObject implements ICommand {
   private object: BaseObject;
   private startDirection: Direction;
   private endDirection: Direction;

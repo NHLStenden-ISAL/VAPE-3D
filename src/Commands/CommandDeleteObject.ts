@@ -1,7 +1,7 @@
-import { ICommand } from "./ICommand";
-import { BaseObject } from "../Objects/BaseObject";
+import BaseObject from "../Objects/BaseObject";
+import ICommand from "./ICommand";
 
-export class CommandDeleteObject implements ICommand {
+export default class CommandDeleteObject implements ICommand {
   private object: BaseObject;
 
   constructor(object: BaseObject) {
