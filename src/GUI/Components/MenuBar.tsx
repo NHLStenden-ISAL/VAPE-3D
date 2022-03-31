@@ -5,27 +5,31 @@ import { Box } from "@mui/system";
 import { Observable } from "@babylonjs/core";
 import { Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
 import { useState } from "react";
+import { BuildState, buildTypes } from '../../Helpers/StateManager';
 
 type MenuBarProps = {
-  start: Observable<any>,
-  pause: Observable<any>,
-  stop: Observable<any>,
+  start: Observable<null>,
+  pause: Observable<null>,
+  stop: Observable<null>,
+  select: Observable<BuildState>,
 }
 
-export default function MenuBar({ start, pause, stop }: MenuBarProps) {
+export default function MenuBar({ start, pause, stop, select }: MenuBarProps) {
   const [open, setOpen] = useState(false);
 
-  const items = ['variable', 'robot', 'direction', 'decision']
+  const items = buildTypes;
 
   const handleDrawerOpen = () => { setOpen(true); };
   const handleDrawerClose = () => { setOpen(false); };
 
-  const startClick = () => { start.notifyObservers(false); };
-  const pauseClick = () => { pause.notifyObservers(false); };
-  const stopClick = () => { stop.notifyObservers(false); };
+  const startClick = () => { start.notifyObservers(null); };
+  const pauseClick = () => { pause.notifyObservers(null); };
+  const stopClick = () => { stop.notifyObservers(null); };
 
   const onButtonPress = (type: string) => {
     console.log(type);
+    select.notifyObservers(type as BuildState);
+
     setOpen(false);
   };
 
@@ -58,7 +62,6 @@ export default function MenuBar({ start, pause, stop }: MenuBarProps) {
                 edge="start"
                 color="inherit"
                 onClick={pauseClick}
-                // onClick={pauseProgram}
               >
                 <Pause />
               </IconButton>
@@ -67,7 +70,6 @@ export default function MenuBar({ start, pause, stop }: MenuBarProps) {
                 edge="start"
                 color="inherit"
                 onClick={stopClick}
-                // onClick={stopProgram}
               >
                 <Stop />
               </IconButton>

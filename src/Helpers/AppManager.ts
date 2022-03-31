@@ -3,7 +3,7 @@ import CommandBroker from "./CommandBroker";
 import KeyboardHandler from "./KeyboardHandler";
 import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
-import StateManager from "./StateManager";
+import StateManager, { BuildState } from "./StateManager";
 import WorldInformation from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
 import { Observable, Scene } from "@babylonjs/core";
@@ -37,10 +37,11 @@ export default class AppManager {
     keyboardHandler.onKeyboardInteraction();
   }
 
-  public setupObservers(start: Observable<any>, pause: Observable<any>, stop: Observable<any>) {
+  public setupObservers(start: Observable<null>, pause: Observable<null>, stop: Observable<null>, select: Observable<BuildState>) {
     start.add(() => this.startProgram());
     pause.add(() => this.pauseProgram());
     stop.add(() => this.stopProgram());
+    select.add((type) => this.changeSelectedObjectType(type));
   }
 
   public startProgram() {
@@ -64,7 +65,10 @@ export default class AppManager {
 
   public stopProgram() {
     //TODO: place the robot at the start position, reset all the variables?
+  }
 
+  private changeSelectedObjectType(type: BuildState) {
+    this.stateManager.setBuildState(type);
   }
 
   private updateLoop(delta: number) {

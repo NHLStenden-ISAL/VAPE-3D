@@ -7,19 +7,15 @@ export default class KeyboardHandler {
   private appManager: AppManager;
   private stateManager: StateManager;
 
-  private isRunning: boolean;
-
   constructor(worldInfo: WorldInformation, appManager: AppManager, stateManager: StateManager) {
     this.worldInfo = worldInfo;
     this.appManager = appManager;
     this.stateManager = stateManager;
-
-    this.isRunning = false;
   }
 
   public onKeyboardInteraction() {
     this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
-      if (this.isRunning === false) {
+      if (this.stateManager.getGameState() === 'build') {
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
             case 'c':
@@ -48,22 +44,6 @@ export default class KeyboardHandler {
               }
               break;
           }
-        }
-      }
-
-      if (kbInfo.type === 1) {
-        switch (kbInfo.event.key) {
-          case 'p':
-          case 'P':
-            if (this.stateManager.getGameState() === 'build') {
-              if (!this.isRunning)
-                this.appManager.startProgram();
-              this.isRunning = true;
-            } else {
-              this.appManager.pauseProgram();
-              this.isRunning = false;
-            }
-            break;
         }
       }
     });

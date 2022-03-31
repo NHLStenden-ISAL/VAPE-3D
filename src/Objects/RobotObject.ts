@@ -4,6 +4,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createCustomMesh } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
+import { GuiBoxRobot } from "../GUI/Components/GuiBoxes";
 
 export default class RobotObject extends BaseObject {
   private variableMap: Map<string, VariableData>;
@@ -77,4 +78,13 @@ export default class RobotObject extends BaseObject {
 
     return { value: '', isKnown: false };
   }
+
+  
+  public getGUIBox(): GuiBoxRobot {
+    return {
+      location: this.getPositionForGUI(),
+      direction: this.getDirection(),
+    }
+  }
+
 }

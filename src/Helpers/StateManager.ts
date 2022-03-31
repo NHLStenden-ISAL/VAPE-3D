@@ -1,5 +1,6 @@
+export const buildTypes = ['variable', 'robot', 'direction', 'decision'] as const;
+export type BuildState = typeof buildTypes[number];
 export type EditorState = 'wait' | 'transform' | 'delete' | 'create';
-export type BuildState = 'variable' | 'robot' | 'direction' | 'decision';
 export type GameState = 'build' | 'run' | 'reset';
 
 export default class StateManager {
@@ -17,7 +18,7 @@ export default class StateManager {
     return this.editorState;
   }
 
-  public setEditorState(state: EditorState) {
+  public setEditorState(state: EditorState): void {
     this.editorState = state;
   }
 
@@ -37,7 +38,7 @@ export default class StateManager {
     this.gameState = state;
   }
 
-  public loopGameState() {
+  public loopGameState(): void {
     switch (this.gameState) {
       case 'build':
         this.gameState = 'run';

@@ -1,5 +1,5 @@
-import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Divider, Drawer, IconButton, List, ListItem, ListItemText, styled } from "@mui/material";
+import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
 
 const DrawerHeader = styled('div')(({ }) => ({
   display: 'flex',
@@ -11,7 +11,7 @@ const DrawerHeader = styled('div')(({ }) => ({
 type PersistentDrawerProps = {
   anchor: "left" | "top" | "right" | "bottom",
   open: boolean,
-  itemArray: string[],
+  itemArray: readonly string[],
   closeFunc: () => void,
   onButtonPress: (itemName: string) => void
 }
@@ -40,6 +40,9 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
       <List>
         {itemArray.map((text) => (
           <ListItem button onClick={() => onButtonPress(text)} key={text}>
+            <ListItemIcon>
+              <AddBox/>
+            </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}

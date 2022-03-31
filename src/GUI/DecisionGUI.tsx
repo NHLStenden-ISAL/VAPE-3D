@@ -1,5 +1,5 @@
 import DisabledInputField from "./Components/DisabledInputField";
-import { DecisionObject } from "../Objects/DecisionObject";
+import DecisionObject from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
 import { FilterString, KeyGroup } from "./InputFilter";
 import { Grid, TextField, Typography } from "@mui/material";

@@ -2,7 +2,6 @@ import { Direction } from "../../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 
 export type GuiBoxVariable = {
-  objectType: 'variable';
   location: Vector2;
   direction: Direction;
 
@@ -12,7 +11,6 @@ export type GuiBoxVariable = {
 }
 
 export type GuiBoxDecision = {
-  objectType: 'decision';
   location: Vector2;
   direction: Direction;
 
@@ -20,7 +18,11 @@ export type GuiBoxDecision = {
 }
 
 export type GuiBoxDirection = {
-  objectType: 'direction';
+  location: Vector2;
+  direction: Direction;
+}
+
+export type GuiBoxRobot = {
   location: Vector2;
   direction: Direction;
 }

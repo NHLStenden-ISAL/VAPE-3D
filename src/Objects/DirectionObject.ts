@@ -33,7 +33,6 @@ export default class DirectionObject extends BaseObject {
 
   public getGUIBox(): GuiBoxDirection {
     return {
-      objectType: 'direction',
       location: this.getPositionForGUI(),
       direction: this.getDirection(),
     }

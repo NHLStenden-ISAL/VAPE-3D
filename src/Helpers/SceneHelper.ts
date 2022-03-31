@@ -76,22 +76,22 @@ export default class SceneHelper {
   }
 
   private addVariableObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'VariableObject');
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'variable');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addDirectionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'DirectionObject');
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'direction');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addDecisionObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'DecisionObject');
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'decision');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 
   private addRobotObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
-    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'RobotObject');
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'robot');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 }

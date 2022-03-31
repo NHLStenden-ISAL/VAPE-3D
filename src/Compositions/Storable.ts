@@ -3,7 +3,6 @@ import WorldInformation from "../Helpers/WorldInformation";
 import { VariableContainer } from "../VisualData/VariableContainer";
 
 export default class Storable {
-  //TODO: make it so this can be multliple
   private variable: VariableContainer;
   private worldInfo: WorldInformation;
 

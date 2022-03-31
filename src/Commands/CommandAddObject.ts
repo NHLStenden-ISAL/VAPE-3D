@@ -4,11 +4,10 @@ import ICommand from "./ICommand";
 import RobotObject from "../Objects/RobotObject";
 import VariableObject from "../Objects/VariableObject";
 import WorldInformation from "../Helpers/WorldInformation";
-import { DecisionObject } from "../Objects/DecisionObject";
+import DecisionObject  from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
-
-export type ObjectTypes = 'DecisionObject' | 'DirectionObject' | 'RobotObject' | 'VariableObject';
+import { BuildState } from "../Helpers/StateManager";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -16,9 +15,9 @@ export default class CommandAddObject implements ICommand {
   private direction: Direction;
 
   private object: BaseObject | undefined = undefined;
-  private objectType: ObjectTypes;
+  private objectType: BuildState;
 
-  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, objectType: ObjectTypes) {
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, objectType: BuildState) {
     this.worldInfo = worldInfo;
     this.gridPosition = gridPosition;
     this.direction = direction;
@@ -27,16 +26,16 @@ export default class CommandAddObject implements ICommand {
 
   execute(): void {
     switch (this.objectType) {
-      case 'VariableObject':
+      case 'variable':
         this.object = new VariableObject(this.worldInfo, this.gridPosition, this.direction);
         break;
-      case 'RobotObject':
+      case 'robot':
         this.object = new RobotObject(this.worldInfo, this.gridPosition, this.direction);
         break;
-      case 'DecisionObject':
+      case 'decision':
         this.object = new DecisionObject(this.worldInfo, this.gridPosition, this.direction);
         break;
-      case 'DirectionObject':
+      case 'direction':
         this.object = new DirectionObject(this.worldInfo, this.gridPosition, this.direction);
 
         break;

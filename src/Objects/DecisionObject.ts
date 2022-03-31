@@ -10,7 +10,7 @@ import { Direction } from "../Compositions/Transformable";
 import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
 import { VariableData } from "../VisualData/VariableContainer";
 
-export class DecisionObject extends BaseObject {
+export default class DecisionObject extends BaseObject {
   private variableMap: Map<string, VariableData>;
   private storable: Storable;
 
@@ -97,7 +97,6 @@ export class DecisionObject extends BaseObject {
 
   public getGUIBox(): GuiBoxDecision {
     return {
-      objectType: 'decision',
       location: this.getPositionForGUI(),
       direction: this.getDirection(),
       statement: this.storable.getValue()

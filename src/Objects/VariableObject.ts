@@ -62,7 +62,6 @@ export default class VariableObject extends BaseObject {
 
   public getGUIBox(): GuiBoxVariable {
     return {
-      objectType: 'variable',
       location: this.getPositionForGUI(),
       direction: this.getDirection(),
       isKnown: this.storable.getIsKnown(),
