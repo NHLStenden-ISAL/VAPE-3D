@@ -1,20 +1,25 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import PersistentDrawer from "./PersistentDrawer";
-import { AppBar, Grid, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
 import { Observable } from "@babylonjs/core";
 import { Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
 import { useState } from "react";
-import { BuildState, buildTypes } from '../../Helpers/StateManager';
+import { BuildState, buildTypes, EditorState, editorTypes } from '../../Helpers/StateManager';
+import IconButtonLarge from './IconButtonLarge';
+import DropDown from './DropDown';
+import ObserverManager from '../../Helpers/ObserverManager';
 
 type MenuBarProps = {
-  start: Observable<null>,
-  pause: Observable<null>,
-  stop: Observable<null>,
-  select: Observable<BuildState>,
+  observers: ObserverManager,
+  start: Observable<undefined>,
+  pause: Observable<undefined>,
+  stop: Observable<undefined>,
+  buildType: Observable<BuildState>,
+  editor: Observable<EditorState>,
 }
 
-export default function MenuBar({ start, pause, stop, select }: MenuBarProps) {
+export default function MenuBar({observers, start, pause, stop, buildType, editor }: MenuBarProps) {
   const [open, setOpen] = useState(false);
 
   const items = buildTypes;
@@ -22,16 +27,21 @@ export default function MenuBar({ start, pause, stop, select }: MenuBarProps) {
   const handleDrawerOpen = () => { setOpen(true); };
   const handleDrawerClose = () => { setOpen(false); };
 
-  const startClick = () => { start.notifyObservers(null); };
-  const pauseClick = () => { pause.notifyObservers(null); };
-  const stopClick = () => { stop.notifyObservers(null); };
+  const startClick = () => { start.notifyObservers(undefined); };
+  const pauseClick = () => { pause.notifyObservers(undefined); };
+  const stopClick = () => { stop.notifyObservers(undefined); };
 
   const onButtonPress = (type: string) => {
     console.log(type);
-    select.notifyObservers(type as BuildState);
+    buildType.notifyObservers(type as BuildState);
 
     setOpen(false);
   };
+
+  const onStateSelect = (state: string) => {
+    console.log(state);
+    editor.notifyObservers(state as EditorState);
+  }
 
   return (
     <Box>
@@ -39,49 +49,34 @@ export default function MenuBar({ start, pause, stop, select }: MenuBarProps) {
         <Toolbar>
           <Grid container justifyContent="space-between" alignContent="center" direction='row'>
             <Grid item >
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
+              <IconButtonLarge
                 onClick={handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
+                icon={<MenuIcon />}
+              />
             </Grid>
             <Grid item >
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
+              <IconButtonLarge
                 onClick={startClick}
-              >
-                <PlayArrow />
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
+                icon={<PlayArrow />}
+              />
+              <IconButtonLarge
                 onClick={pauseClick}
-              >
-                <Pause />
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
+                icon={<Pause />}
+              />
+              <IconButtonLarge
                 onClick={stopClick}
-              >
-                <Stop />
-              </IconButton>
+                icon={<Stop />}
+              />
+            </Grid>
+
+            <Grid item>
+              <DropDown itemArray={editorTypes} onSelect={onStateSelect} />
             </Grid>
             <Grid item >
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
+              <IconButtonLarge
+                onClick={undefined}
+                icon={<MenuIcon />}
+              />
             </Grid>
           </Grid>
         </Toolbar>

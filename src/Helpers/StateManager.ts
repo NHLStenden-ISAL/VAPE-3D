@@ -1,6 +1,7 @@
 export const buildTypes = ['variable', 'robot', 'direction', 'decision'] as const;
 export type BuildState = typeof buildTypes[number];
-export type EditorState = 'wait' | 'transform' | 'delete' | 'create';
+export const editorTypes = ['transform', 'create', 'delete', 'play'] as const;
+export type EditorState = typeof editorTypes[number];
 export type GameState = 'build' | 'run' | 'reset';
 
 export default class StateManager {

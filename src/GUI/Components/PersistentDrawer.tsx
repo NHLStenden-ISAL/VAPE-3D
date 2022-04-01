@@ -1,5 +1,6 @@
 import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
+import IconButtonLarge from "./IconButtonLarge";
 
 const DrawerHeader = styled('div')(({ }) => ({
   display: 'flex',
@@ -17,6 +18,13 @@ type PersistentDrawerProps = {
 }
 
 export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, onButtonPress }: PersistentDrawerProps) {
+  const iconMap: Map<string, any> = new Map<string, any>([
+    ['left', <ChevronLeft />],
+    ['right', <ChevronRight />],
+    ['bottom', <ExpandMore />],
+    ['top', <ExpandLess />],
+  ]);
+
   return (
     <Drawer
       variant="persistent"
@@ -24,24 +32,17 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
       open={open}
     >
       <DrawerHeader>
-        <IconButton 
+        <IconButtonLarge
           onClick={closeFunc}
-          size="large"
-          edge='start'
-          color="inherit"
-        >
-          {anchor === 'left' && <ChevronLeft/>}
-          {anchor === 'right' && <ChevronRight/>}
-          {anchor === 'bottom' && <ExpandMore/>}
-          {anchor === 'top' && <ExpandLess/>}
-        </IconButton>
+          icon={iconMap.get(anchor)}
+        />
       </DrawerHeader>
       <Divider />
       <List>
         {itemArray.map((text) => (
           <ListItem button onClick={() => onButtonPress(text)} key={text}>
             <ListItemIcon>
-              <AddBox/>
+              <AddBox />
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>

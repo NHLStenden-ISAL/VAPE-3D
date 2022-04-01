@@ -3,7 +3,7 @@ import CommandBroker from "./CommandBroker";
 import KeyboardHandler from "./KeyboardHandler";
 import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
-import StateManager, { BuildState } from "./StateManager";
+import StateManager, { BuildState, EditorState } from "./StateManager";
 import WorldInformation from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
 import { Observable, Scene } from "@babylonjs/core";
@@ -37,16 +37,22 @@ export default class AppManager {
     keyboardHandler.onKeyboardInteraction();
   }
 
-  public setupObservers(start: Observable<null>, pause: Observable<null>, stop: Observable<null>, select: Observable<BuildState>) {
+  public setupObservers(
+    start: Observable<undefined>,
+    pause: Observable<undefined>,
+    stop: Observable<undefined>,
+    buildType: Observable<BuildState>,
+    editorState: Observable<EditorState>
+  ) {
     start.add(() => this.startProgram());
     pause.add(() => this.pauseProgram());
     stop.add(() => this.stopProgram());
-    select.add((type) => this.changeSelectedObjectType(type));
+    buildType.add((type) => this.changeBuildType(type));
+    editorState.add((state) => this.changeEditorState(state));
   }
 
   public startProgram() {
-    if(this.stateManager.getGameState() === 'run') { return; }
-    this.stateManager.setEditorState('wait');
+    if (this.stateManager.getGameState() === 'run') { return; }
     this.stateManager.setGameState('run');
 
     console.log("Start the program");
@@ -54,9 +60,7 @@ export default class AppManager {
   }
 
   public pauseProgram() {
-    if(this.stateManager.getGameState() !== 'run') { return; }
-
-    this.stateManager.setEditorState('transform');
+    if (this.stateManager.getGameState() !== 'run') { return; }
     this.stateManager.setGameState('build');
 
     console.log("Pause the program");
@@ -67,8 +71,12 @@ export default class AppManager {
     //TODO: place the robot at the start position, reset all the variables?
   }
 
-  private changeSelectedObjectType(type: BuildState) {
+  private changeBuildType(type: BuildState) {
     this.stateManager.setBuildState(type);
+  }
+
+  public changeEditorState(state: EditorState) {
+    this.stateManager.setEditorState(state);
   }
 
   private updateLoop(delta: number) {
@@ -80,7 +88,7 @@ export default class AppManager {
       }
     }, delta);
   }
-  
+
   public undo() {
     this.commandBroker.undo();
   }

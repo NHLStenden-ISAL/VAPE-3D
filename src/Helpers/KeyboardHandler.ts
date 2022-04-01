@@ -20,17 +20,17 @@ export default class KeyboardHandler {
           switch (kbInfo.event.key) {
             case 'c':
             case 'C':
-              this.stateManager.setEditorState('create');
+              this.appManager.changeEditorState('create');
               console.log("Enter create state");
               break;
             case 'm':
             case 'M':
-              this.stateManager.setEditorState('transform');
+              this.appManager.changeEditorState('transform');
               console.log("Enter transform state");
               break;
             case 'd':
             case 'D':
-              this.stateManager.setEditorState('delete');
+              this.appManager.changeEditorState('delete');
               console.log("Enter delete state");
               break;
             case 'z':

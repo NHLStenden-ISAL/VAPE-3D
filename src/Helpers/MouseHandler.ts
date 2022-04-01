@@ -28,7 +28,7 @@ export default class MouseHandler {
 
   public onMouseInteraction() {
     this.worldInfo.getScene().onPointerObservable.add((pointerInfo) => {
-      if (this.stateManager.getEditorState() === 'wait') { return; }
+      if (this.stateManager.getGameState() !== 'build') { return; }
 
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERTAP:
