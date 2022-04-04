@@ -1,23 +1,29 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ObserverContainer from "../../Helpers/ObserverContainer";
+import { EditorState } from "../../Helpers/ProgramState";
 
 type DropDownProps = {
   itemArray: readonly string[],
-  onSelect: (itemName: string) => void
+  observerContainer: ObserverContainer,
 }
 
-export default function DropDown({itemArray, onSelect }: DropDownProps) {
+export default function DropDown({ itemArray, observerContainer }: DropDownProps) {
   const [editor, setEditor] = useState(itemArray[0]);
 
+  
   const onChange = (event: SelectChangeEvent) => {
     const state: string = event.target.value;
-    setEditor(state);
-    onSelect(state);
+    observerContainer.executeStateEditor(state as EditorState);
   }
+  
+  useEffect(() => {
+    observerContainer.subscribeStateEditor((state) => changeState(state));
+  }, [])
 
-  const changeValueText = (state: string) => {
+  const changeState = (state: EditorState) => {
+    console.log(state);
     setEditor(state);
-    onSelect(state);
   }
 
   return (

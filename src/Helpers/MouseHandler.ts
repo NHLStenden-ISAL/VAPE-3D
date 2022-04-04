@@ -1,34 +1,34 @@
 import BaseObject from "../Objects/BaseObject";
 import SceneHelper from "./SceneHelper";
-import StateManager from "./StateManager";
+import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 import { PointerEventTypes, Vector2 } from "@babylonjs/core";
 
 export default class MouseHandler {
   private worldInfo: WorldInformation;
   private sceneHelper: SceneHelper;
-  private stateManager: StateManager;
+  private programState: ProgramState;
 
   private mouseStartpoint: Vector2 | undefined;
   private clickedObject: BaseObject | undefined;
   private selectedObject: BaseObject | undefined;
 
-  private isDraging: boolean;
+  private isDragging: boolean;
 
-  constructor(worldInfo: WorldInformation, sceneHelper: SceneHelper, stateManager: StateManager) {
+  constructor(worldInfo: WorldInformation, sceneHelper: SceneHelper, programState: ProgramState) {
     this.worldInfo = worldInfo;
     this.sceneHelper = sceneHelper;
-    this.stateManager = stateManager;
+    this.programState = programState;
 
     this.mouseStartpoint = undefined;
     this.clickedObject = undefined;
     this.selectedObject = undefined;
-    this.isDraging = false;
+    this.isDragging = false;
   }
 
   public onMouseInteraction() {
     this.worldInfo.getScene().onPointerObservable.add((pointerInfo) => {
-      if (this.stateManager.getGameState() !== 'build') { return; }
+      if (this.programState.getGameState() !== 'build') { return; }
 
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERTAP:
@@ -60,7 +60,7 @@ export default class MouseHandler {
           this.resetClick();
           break;
         case PointerEventTypes.POINTERMOVE:
-          if (this.isDraging) {
+          if (this.isDragging) {
             this.onLeftPointerDrag();
           }
           break;
@@ -71,7 +71,7 @@ export default class MouseHandler {
   private onLeftPointerDown() {
     if (!this.clickedObject) { return; }
 
-    this.isDraging = true;
+    this.isDragging = true;
 
     this.clickedObject.onClickLeftExecute();
     this.sceneHelper.disableCameraControl();
@@ -80,14 +80,14 @@ export default class MouseHandler {
   private onLeftPointerUp() {
     if (!this.clickedObject) { return; }
 
-    this.isDraging = false;
+    this.isDragging = false;
 
     this.sceneHelper.enableCameraControl();
     this.clickedObject.onReleaseLeftExecute();
   }
 
   private onLeftPointerTap() {
-    switch (this.stateManager.getEditorState()) {
+    switch (this.programState.getEditorState()) {
       case 'transform':
         this.rotateOnTap();
         break;
@@ -112,7 +112,7 @@ export default class MouseHandler {
     if (this.clickedObject) { return; }
 
     if (this.mouseStartpoint) {
-      this.sceneHelper.addObject(this.mouseStartpoint, this.stateManager.getBuildState());
+      this.sceneHelper.addObject(this.mouseStartpoint, this.programState.getBuildState());
     }
   }
 
@@ -130,7 +130,7 @@ export default class MouseHandler {
   private onLeftPointerDrag() {
     if (!this.mouseStartpoint || !this.clickedObject) { return; }
 
-    if (this.stateManager.getEditorState() === 'transform') {
+    if (this.programState.getEditorState() === 'transform') {
       let mouseLocation = this.getMouseGridPosition();
 
       if (mouseLocation) {

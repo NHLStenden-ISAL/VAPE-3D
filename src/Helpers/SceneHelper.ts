@@ -4,7 +4,7 @@ import CommandDeleteObject from "../Commands/CommandDeleteObject";
 import GridObject from "../Objects/GridObject";
 import WorldInformation from "./WorldInformation";
 import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/core";
-import { BuildState } from "./StateManager";
+import { BuildTypes } from "./ProgramState";
 import { createCamera } from "./ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 
@@ -53,7 +53,7 @@ export default class SceneHelper {
     this.camera.attachControl(this.canvas, true);
   }
 
-  public addObject(gridPosition: Vector2, object: BuildState) {
+  public addObject(gridPosition: Vector2, object: BuildTypes) {
     switch (object) {
       case 'variable':
         this.addVariableObject(gridPosition);

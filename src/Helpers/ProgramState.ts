@@ -1,13 +1,13 @@
-export const buildTypes = ['variable', 'robot', 'direction', 'decision'] as const;
-export type BuildState = typeof buildTypes[number];
-export const editorTypes = ['transform', 'create', 'delete', 'play'] as const;
-export type EditorState = typeof editorTypes[number];
+export const buildTypesArray = ['variable', 'robot', 'direction', 'decision'] as const;
+export type BuildTypes = typeof buildTypesArray[number];
+export const editorTypesArray = ['transform', 'create', 'delete', 'play'] as const;
+export type EditorState = typeof editorTypesArray[number];
 export type GameState = 'build' | 'run' | 'reset';
 
-export default class StateManager {
+export default class ProgramState {
   private editorState: EditorState;
   private gameState: GameState;
-  private buildState: BuildState;
+  private buildState: BuildTypes;
 
   constructor() {
     this.editorState = 'transform';
@@ -23,11 +23,11 @@ export default class StateManager {
     this.editorState = state;
   }
 
-  public getBuildState(): BuildState {
+  public getBuildState(): BuildTypes {
     return this.buildState;
   }
 
-  public setBuildState(state: BuildState): void {
+  public setBuildState(state: BuildTypes): void {
     this.buildState = state;
   }
 

@@ -1,27 +1,26 @@
 import { Observable } from "@babylonjs/core";
-import { BuildState, EditorState } from "./StateManager";
+import { BuildTypes, EditorState } from "./ProgramState";
 
-export default class ObserverManager {
+export default class ObserverContainer {
   private gameStartObservable: Observable<undefined>;
   private gamePauseObservable: Observable<undefined>;
   private gameStopObservable: Observable<undefined>;
 
-  private buildTypeObservable: Observable<BuildState>;
-  private editorStateObservable: Observable<EditorState>;
+  private stateBuildTypeObservable: Observable<BuildTypes>;
+  private stateEditorObservable: Observable<EditorState>;
 
   constructor() {
     this.gameStartObservable = new Observable();
     this.gamePauseObservable = new Observable();
     this.gameStopObservable = new Observable();
 
-    this.buildTypeObservable = new Observable();
-    this.editorStateObservable = new Observable();
+    this.stateBuildTypeObservable = new Observable();
+    this.stateEditorObservable = new Observable();
   }
 
   public subscribeGameStart(subscriber: ()=> void) {
     this.gameStartObservable.add(subscriber);
   }
-
   public executeGameStart() {
     this.gameStartObservable.notifyObservers(undefined);
   }
@@ -29,7 +28,6 @@ export default class ObserverManager {
   public subscribeGamePause(subscriber: ()=> void) {
     this.gamePauseObservable.add(subscriber);
   }
-
   public executeGamePause() {
     this.gamePauseObservable.notifyObservers(undefined);
   }
@@ -39,5 +37,19 @@ export default class ObserverManager {
   }
   public subscribeGameStop(subscriber: ()=> void) {
     this.gameStopObservable.add(subscriber);
+  }
+
+  public executeStateBuild(objType: BuildTypes) {
+    this.stateBuildTypeObservable.notifyObservers(objType);
+  }
+  public subscribeStateBuild(subscriber: (objType: BuildTypes) => void) {
+    this.stateBuildTypeObservable.add(subscriber);
+  }
+
+  public executeStateEditor(state: EditorState) {
+    this.stateEditorObservable.notifyObservers(state);
+  }
+  public subscribeStateEditor(subscriber: (state: EditorState) => void) {
+    this.stateEditorObservable.add(subscriber);
   }
 }

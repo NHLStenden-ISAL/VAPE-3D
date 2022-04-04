@@ -7,7 +7,7 @@ import WorldInformation from "../Helpers/WorldInformation";
 import DecisionObject  from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
-import { BuildState } from "../Helpers/StateManager";
+import { BuildTypes } from "../Helpers/ProgramState";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -15,9 +15,9 @@ export default class CommandAddObject implements ICommand {
   private direction: Direction;
 
   private object: BaseObject | undefined = undefined;
-  private objectType: BuildState;
+  private objectType: BuildTypes;
 
-  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, objectType: BuildState) {
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, objectType: BuildTypes) {
     this.worldInfo = worldInfo;
     this.gridPosition = gridPosition;
     this.direction = direction;

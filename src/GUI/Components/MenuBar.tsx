@@ -2,46 +2,35 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersistentDrawer from "./PersistentDrawer";
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import { Observable } from "@babylonjs/core";
 import { Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
 import { useState } from "react";
-import { BuildState, buildTypes, EditorState, editorTypes } from '../../Helpers/StateManager';
+import { BuildTypes, buildTypesArray, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
-import ObserverManager from '../../Helpers/ObserverManager';
+import ObserverContainer from '../../Helpers/ObserverContainer';
 
 type MenuBarProps = {
-  observers: ObserverManager,
-  start: Observable<undefined>,
-  pause: Observable<undefined>,
-  stop: Observable<undefined>,
-  buildType: Observable<BuildState>,
-  editor: Observable<EditorState>,
+  observerContainer: ObserverContainer,
 }
 
-export default function MenuBar({observers, start, pause, stop, buildType, editor }: MenuBarProps) {
+export default function MenuBar({observerContainer }: MenuBarProps) {
   const [open, setOpen] = useState(false);
 
-  const items = buildTypes;
+  const items = buildTypesArray;
 
   const handleDrawerOpen = () => { setOpen(true); };
   const handleDrawerClose = () => { setOpen(false); };
 
-  const startClick = () => { start.notifyObservers(undefined); };
-  const pauseClick = () => { pause.notifyObservers(undefined); };
-  const stopClick = () => { stop.notifyObservers(undefined); };
+  const startClick = () => { observerContainer.executeGameStart(); };
+  const pauseClick = () => { observerContainer.executeGamePause(); };
+  const stopClick = () => { observerContainer.executeGameStop(); };
 
   const onButtonPress = (type: string) => {
     console.log(type);
-    buildType.notifyObservers(type as BuildState);
+    observerContainer.executeStateBuild(type as BuildTypes);
 
     setOpen(false);
   };
-
-  const onStateSelect = (state: string) => {
-    console.log(state);
-    editor.notifyObservers(state as EditorState);
-  }
 
   return (
     <Box>
@@ -70,7 +59,7 @@ export default function MenuBar({observers, start, pause, stop, buildType, edito
             </Grid>
 
             <Grid item>
-              <DropDown itemArray={editorTypes} onSelect={onStateSelect} />
+              <DropDown itemArray={editorTypesArray} observerContainer={observerContainer} />
             </Grid>
             <Grid item >
               <IconButtonLarge

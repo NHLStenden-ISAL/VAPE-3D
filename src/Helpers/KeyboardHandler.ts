@@ -1,36 +1,36 @@
 import AppManager from "./AppManager";
-import StateManager from "./StateManager";
+import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 
 export default class KeyboardHandler {
   private worldInfo: WorldInformation;
   private appManager: AppManager;
-  private stateManager: StateManager;
+  private programState: ProgramState;
 
-  constructor(worldInfo: WorldInformation, appManager: AppManager, stateManager: StateManager) {
+  constructor(worldInfo: WorldInformation, appManager: AppManager, programState: ProgramState) {
     this.worldInfo = worldInfo;
     this.appManager = appManager;
-    this.stateManager = stateManager;
+    this.programState = programState;
   }
 
   public onKeyboardInteraction() {
     this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
-      if (this.stateManager.getGameState() === 'build') {
+      if (this.programState.getGameState() === 'build') {
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
             case 'c':
             case 'C':
-              this.appManager.changeEditorState('create');
+              this.appManager.getObserverContainer().executeStateEditor('create');
               console.log("Enter create state");
               break;
             case 'm':
             case 'M':
-              this.appManager.changeEditorState('transform');
+              this.appManager.getObserverContainer().executeStateEditor('transform');
               console.log("Enter transform state");
               break;
             case 'd':
             case 'D':
-              this.appManager.changeEditorState('delete');
+              this.appManager.getObserverContainer().executeStateEditor('delete');
               console.log("Enter delete state");
               break;
             case 'z':
