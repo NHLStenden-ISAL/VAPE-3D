@@ -11,7 +11,6 @@ type DropDownProps = {
 export default function DropDown({ itemArray, observerContainer }: DropDownProps) {
   const [editor, setEditor] = useState(itemArray[0]);
 
-  
   const onChange = (event: SelectChangeEvent) => {
     const state: string = event.target.value;
     observerContainer.executeStateEditor(state as EditorState);

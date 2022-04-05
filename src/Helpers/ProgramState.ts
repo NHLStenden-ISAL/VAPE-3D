@@ -12,7 +12,7 @@ export default class ProgramState {
   constructor() {
     this.editorState = 'transform';
     this.gameState = 'build';
-    this.buildState = 'variable';
+    this.buildState = buildTypesArray[0];
   }
 
   public getEditorState(): EditorState {

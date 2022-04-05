@@ -20,6 +20,8 @@ export default class AppManager {
   private worldInformation: WorldInformation;
   private observerContainer: ObserverContainer;
 
+  private updateTimeout: any;
+
   constructor(scene: Scene, canvas: any, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject) {
     this.canvas = canvas;
     this.observerContainer = observerContainer;
@@ -28,6 +30,7 @@ export default class AppManager {
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
+
   }
 
   public runApp() {
@@ -58,10 +61,11 @@ export default class AppManager {
   }
 
   public pauseProgram() {
-    if (this.programState.getGameState() !== 'run') { return; }
+    if (this.programState.getGameState() === 'build') { return; }
     this.programState.setGameState('build');
 
     console.log("Pause the program");
+    this.cancelUpdateLoop();
 
   }
 
@@ -78,13 +82,19 @@ export default class AppManager {
   }
 
   private updateLoop(delta: number) {
-    setTimeout(() => {
+    console.log("teste here");
+
+    this.updateTimeout = setTimeout(() => {
       if (this.programState.getGameState() === 'run') {
         this.sceneHelper.updateRobots();
 
         this.updateLoop(delta);
       }
     }, delta);
+  }
+
+  private cancelUpdateLoop() {
+    clearTimeout(this.updateTimeout);
   }
 
   public undo() {

@@ -23,8 +23,8 @@ export default class KeyboardHandler {
               this.appManager.getObserverContainer().executeStateEditor('create');
               console.log("Enter create state");
               break;
-            case 'm':
-            case 'M':
+            case 't':
+            case 'T':
               this.appManager.getObserverContainer().executeStateEditor('transform');
               console.log("Enter transform state");
               break;
