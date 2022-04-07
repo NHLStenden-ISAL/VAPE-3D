@@ -2,7 +2,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersistentDrawer from "./PersistentDrawer";
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import { Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle } from "@mui/icons-material";
+import { AddBox, Delete, Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle, Transform } from "@mui/icons-material";
 import { useState } from "react";
 import { BuildTypes, buildTypesArray, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
@@ -13,7 +13,7 @@ type MenuBarProps = {
   observerContainer: ObserverContainer,
 }
 
-export default function MenuBar({observerContainer }: MenuBarProps) {
+export default function MenuBar({ observerContainer }: MenuBarProps) {
   const [open, setOpen] = useState(false);
 
   const items = buildTypesArray;
@@ -41,6 +41,19 @@ export default function MenuBar({observerContainer }: MenuBarProps) {
               <IconButtonLarge
                 onClick={handleDrawerOpen}
                 icon={<MenuIcon />}
+              />
+
+              <IconButtonLarge
+                onClick={undefined}
+                icon={<Transform />}
+              />
+              <IconButtonLarge
+                onClick={undefined}
+                icon={<AddBox />}
+              />
+              <IconButtonLarge
+                onClick={undefined}
+                icon={<Delete />}
               />
             </Grid>
             <Grid item >
@@ -70,6 +83,7 @@ export default function MenuBar({observerContainer }: MenuBarProps) {
           </Grid>
         </Toolbar>
       </AppBar>
+
       <PersistentDrawer anchor="left" open={open} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
     </Box>
   );
