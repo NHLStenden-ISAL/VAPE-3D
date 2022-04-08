@@ -3,7 +3,7 @@ import CommandBroker from "./CommandBroker";
 import KeyboardHandler from "./KeyboardHandler";
 import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
-import ProgramState, { BuildTypes } from "./ProgramState";
+import ProgramState, { BuildTypes, GameState } from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
 import { Scene } from "@babylonjs/core";
@@ -44,12 +44,23 @@ export default class AppManager {
   }
 
   public setupObservers() {
-    this.observerContainer.subscribeGameStart(() => this.startProgram());
-    this.observerContainer.subscribeGamePause(() => this.pauseProgram());
-    this.observerContainer.subscribeGameStop(() => this.stopProgram());
-
+    this.observerContainer.subscribeStateGame((state) => this.changeGameState(state));
     this.observerContainer.subscribeStateBuild((type) => this.changeBuildType(type));
     this.observerContainer.subscribeStateEditor((state) => this.programState.setEditorState(state));
+  }
+
+  public changeGameState(state: GameState): void {
+    switch (state) {
+      case 'run':
+        this.startProgram();
+        break;
+      case 'build':
+        this.pauseProgram();
+        break;
+      case 'reset':
+        this.stopProgram();
+        break;
+    }
   }
 
   public startProgram() {
@@ -82,8 +93,6 @@ export default class AppManager {
   }
 
   private updateLoop(delta: number) {
-    console.log("teste here");
-
     this.updateTimeout = setTimeout(() => {
       if (this.programState.getGameState() === 'run') {
         this.sceneHelper.updateRobots();

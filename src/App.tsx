@@ -1,5 +1,5 @@
 import './App.css';
-import AppManager from './Helpers/AppManager'
+import AppManager, { SetSelectedObject } from './Helpers/AppManager'
 import BaseObject from './Objects/BaseObject';
 import DecisionGUI from './GUI/DecisionGUI';
 import DecisionObject from './Objects/DecisionObject';
@@ -12,23 +12,23 @@ import SceneComponent from './Objects/SceneComponent';
 import VariableGUI from './GUI/VariableGUI';
 import VariableObject from './Objects/VariableObject';
 import { Box } from '@mui/material';
-import { SetSelectedObject } from './Helpers/AppManager';
 import { useState } from "react";
 import ObserverContainer from './Helpers/ObserverContainer';
 
+const observerContainer: ObserverContainer = new ObserverContainer();
+
+const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject) => {
+  const canvas = scene.getEngine().getRenderingCanvas();
+  const appManager = new AppManager(scene, canvas, observerContainer, setSelectedObject);
+
+  appManager.setupObservers();
+  appManager.runApp();
+};
+
 export default function App() {
-  const observerContainer: ObserverContainer = new ObserverContainer();
 
   const [selectedObject, setSelectedObject] = useState<BaseObject | undefined>(undefined);
-
-  const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject) => {
-    const canvas = scene.getEngine().getRenderingCanvas();
-    const appManager = new AppManager(scene, canvas, observerContainer, setSelectedObject);
-
-    appManager.setupObservers();
-    appManager.runApp();
-  };
-
+  
   //TODO: Fix input, so when you press a button right after reload, the program does listen instead of needing to focus on the scene first
   return (
     <Box>

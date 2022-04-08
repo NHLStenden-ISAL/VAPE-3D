@@ -4,7 +4,7 @@ import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
 import { AddBox, Delete, Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle, Transform } from "@mui/icons-material";
 import { useState } from "react";
-import { BuildTypes, buildTypesArray, editorTypesArray } from '../../Helpers/ProgramState';
+import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
 import ObserverContainer from '../../Helpers/ObserverContainer';
@@ -21,9 +21,12 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const handleDrawerOpen = () => { setOpen(true); };
   const handleDrawerClose = () => { setOpen(false); };
 
-  const startClick = () => { observerContainer.executeGameStart(); };
-  const pauseClick = () => { observerContainer.executeGamePause(); };
-  const stopClick = () => { observerContainer.executeGameStop(); };
+  // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
+  const startClick = () => { observerContainer.executeStateGame('run'); };
+  const pauseClick = () => { observerContainer.executeStateGame('build'); };
+  const stopClick = () => { observerContainer.executeStateGame('reset'); };
+
+  const editorClick = (state: EditorState) => { observerContainer.executeStateEditor(state); };
 
   const onButtonPress = (type: string) => {
     console.log(type);
@@ -44,15 +47,15 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
               />
 
               <IconButtonLarge
-                onClick={undefined}
+                onClick={() => { editorClick('transform'); }}
                 icon={<Transform />}
               />
               <IconButtonLarge
-                onClick={undefined}
+                onClick={() => { editorClick('create'); }}
                 icon={<AddBox />}
               />
               <IconButtonLarge
-                onClick={undefined}
+                onClick={() => { editorClick('delete'); }}
                 icon={<Delete />}
               />
             </Grid>

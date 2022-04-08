@@ -1,42 +1,22 @@
 import { Observable } from "@babylonjs/core";
-import { BuildTypes, EditorState } from "./ProgramState";
+import { BuildTypes, EditorState, GameState } from "./ProgramState";
 
 export default class ObserverContainer {
-  private gameStartObservable: Observable<undefined>;
-  private gamePauseObservable: Observable<undefined>;
-  private gameStopObservable: Observable<undefined>;
-
+  private stateGameObservable: Observable<GameState>;
   private stateBuildTypeObservable: Observable<BuildTypes>;
   private stateEditorObservable: Observable<EditorState>;
 
   constructor() {
-    this.gameStartObservable = new Observable();
-    this.gamePauseObservable = new Observable();
-    this.gameStopObservable = new Observable();
-
+    this.stateGameObservable = new Observable();
     this.stateBuildTypeObservable = new Observable();
     this.stateEditorObservable = new Observable();
   }
 
-  public subscribeGameStart(subscriber: ()=> void) {
-    this.gameStartObservable.add(subscriber);
+  public executeStateGame(objType: GameState) {
+    this.stateGameObservable.notifyObservers(objType);
   }
-  public executeGameStart() {
-    this.gameStartObservable.notifyObservers(undefined);
-  }
-
-  public subscribeGamePause(subscriber: ()=> void) {
-    this.gamePauseObservable.add(subscriber);
-  }
-  public executeGamePause() {
-    this.gamePauseObservable.notifyObservers(undefined);
-  }
-
-  public executeGameStop() {
-    this.gameStopObservable.notifyObservers(undefined);
-  }
-  public subscribeGameStop(subscriber: ()=> void) {
-    this.gameStopObservable.add(subscriber);
+  public subscribeStateGame(subscriber: (objType: GameState) => void) {
+    this.stateGameObservable.add(subscriber);
   }
 
   public executeStateBuild(objType: BuildTypes) {
