@@ -5,16 +5,18 @@ export enum KeyGroup {
   SYMBOLIC,
   NUMBOLIC,
   SYMBALPHANUMERIC,
+  SYMBOLICOPERATORS,
+  ARITHMETIC,
   ALL
 }
 
 export function CheckForExpression(word: string, keyGroup: KeyGroup): boolean {
   const regexString = new RegExp(`${getKeygroup(keyGroup)}`, 'gi');
 
-  if ((word.match(regexString) || []).join('').length === word.length ) {
+  if ((word.toString().match(regexString)|| []).join('').length === word.length) {
     return true;
   }
-
+  
   return false;
 }
 
@@ -32,12 +34,16 @@ function getKeygroup(keyGroup: KeyGroup): string {
       return '[a-z]';
     case KeyGroup.ALPHANUMERIC:
       return getKeygroup(KeyGroup.NUMERIC) + "|" + getKeygroup(KeyGroup.ALPHABETIC);
+    case KeyGroup.SYMBOLICOPERATORS:
+      return '[+\-/*()% ]';
     case KeyGroup.SYMBOLIC:
       return '[!%*()+=/<>|& ]|\-';
     case KeyGroup.NUMBOLIC:
       return getKeygroup(KeyGroup.NUMERIC) + "|" + getKeygroup(KeyGroup.SYMBOLIC);
     case KeyGroup.SYMBALPHANUMERIC:
       return getKeygroup(KeyGroup.ALPHANUMERIC) + "|" + getKeygroup(KeyGroup.SYMBOLIC);
+    case KeyGroup.ARITHMETIC:
+      return getKeygroup(KeyGroup.ALPHANUMERIC) + "|" + getKeygroup(KeyGroup.SYMBOLICOPERATORS);
     default:
       return '';
   }

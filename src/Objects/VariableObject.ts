@@ -28,8 +28,6 @@ export default class VariableObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
-    if (!this.storable) { return; }
-
     if (this.storable.getName() === "") { return; }
 
     this.storable.changeIsKnown(true);
@@ -42,9 +40,7 @@ export default class VariableObject extends BaseObject {
 
   public delete(): void {
     this.interactedRobots.forEach(robot => {
-      if (this.storable) {
-        robot.removeVariable(this.storable.getContainer());
-      }
+      robot.removeVariable(this.storable.getContainer());
     });
 
     super.delete();
@@ -52,9 +48,7 @@ export default class VariableObject extends BaseObject {
 
   public restore(): void {
     this.interactedRobots.forEach(robot => {
-      if (this.storable) {
-        robot.addVariable(this.storable.getContainer());
-      }
+      robot.addVariable(this.storable.getContainer());
     });
 
     super.restore();

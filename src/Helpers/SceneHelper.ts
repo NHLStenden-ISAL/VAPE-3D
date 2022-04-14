@@ -37,6 +37,8 @@ export default class SceneHelper {
 
     this.addDecisionObject(new Vector2(-10, 9), Direction.SOUTH);
     this.addDecisionObject(new Vector2(-1, 9), Direction.WEST);
+
+    this.addCalculateObject(new Vector2(-1, 8));
   }
 
   public updateRobots() {
@@ -67,6 +69,9 @@ export default class SceneHelper {
       case 'decision':
         this.addDecisionObject(gridPosition);
         break;
+      case 'calculate':
+        this.addCalculateObject(gridPosition);
+        break;
     }
   }
 
@@ -92,6 +97,11 @@ export default class SceneHelper {
 
   private addRobotObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
     const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'robot');
+    this.worldInfo.getCommandBroker().executeCommand(command);
+  }
+
+  private addCalculateObject(gridPosition: Vector2, direction: Direction = Direction.NORTH) {
+    const command = new CommandAddObject(this.worldInfo, gridPosition, direction, 'calculate');
     this.worldInfo.getCommandBroker().executeCommand(command);
   }
 }

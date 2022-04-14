@@ -8,10 +8,8 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
-import { VariableData } from "../VisualData/VariableContainer";
 
 export default class DecisionObject extends BaseObject {
-  private variableMap: Map<string, VariableData>;
   private storable: Storable;
 
   private condition: boolean;
@@ -26,7 +24,6 @@ export default class DecisionObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.storable = new Storable(this.worldInfo);
 
-    this.variableMap = new Map();
     this.condition = false;
   }
 
@@ -37,7 +34,7 @@ export default class DecisionObject extends BaseObject {
   private checkForVariables(robotObject: RobotObject) {
     let statement = '';
 
-    let words = this.storable.getValue().split(/\s|(-\+\/)/g);
+    let words = this.storable.getValue().split(/\s|(\+|-|\*|\/|%|!=|\(|\)|==|<=|>=|<|>|!)/g);
 
     words.forEach((word) => {
       if (word === undefined || word === '') { return; }
@@ -50,7 +47,6 @@ export default class DecisionObject extends BaseObject {
         else {
           statement += `"${variable.value}" `;
         }
-        this.variableMap.set(word, variable);
       }
       else {
         if (CheckForExpression(word, KeyGroup.NUMBOLIC)) {

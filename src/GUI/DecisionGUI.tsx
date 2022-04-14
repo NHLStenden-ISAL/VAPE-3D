@@ -1,9 +1,9 @@
-import DisabledInputField from "./Components/DisabledInputField";
 import DecisionObject from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
 import { FilterString, KeyGroup } from "./InputFilter";
 import { Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import PositionArea from "./Components/PositionArea";
 
 export default function DecisionGUI({ selectedObject }: { selectedObject: DecisionObject }) {
   const guiBox = selectedObject.getGUIBox();
@@ -27,25 +27,21 @@ export default function DecisionGUI({ selectedObject }: { selectedObject: Decisi
           <Typography variant="body1">If</Typography>
         </Grid>
         <Grid item p={1}>
-            <TextField fullWidth
-              id="If"
-              value={statement}
-              onChange={(e) => setStatement(FilterString(e.target.value, KeyGroup.SYMBALPHANUMERIC))}
-              onBlur={(e) => onBlur(e.target)}
-            />
+          <TextField fullWidth
+            id="If"
+            value={statement}
+            onChange={(e) => setStatement(FilterString(e.target.value, KeyGroup.SYMBALPHANUMERIC))}
+            onBlur={(e) => onBlur(e.target)}
+          />
         </Grid>
         <Grid item >
           <Typography variant="body1">is true, turn {Direction[guiBox.direction].toLowerCase()}</Typography>
         </Grid>
       </Grid>
-      <Grid item container direction='row' justifyContent="space-around">
-        <Grid item xs={5}>
-          <DisabledInputField name="X" value={position.x.toString()} />
-        </Grid>
-        <Grid item xs={5}>
-          <DisabledInputField name="Y" value={position.y.toString()} />
-        </Grid>
+      <Grid item>
+        <PositionArea position={position} />
       </Grid>
+
     </Grid>
   );
 }

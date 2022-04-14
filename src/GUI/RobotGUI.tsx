@@ -1,6 +1,6 @@
-import DisabledInputField from "./Components/DisabledInputField";
 import RobotObject from "../Objects/RobotObject";
 import { Grid, Typography } from "@mui/material";
+import PositionArea from "./Components/PositionArea";
 
 export default function RobotGUI({ selectedObject }: { selectedObject: RobotObject }) {
   const guiBox = selectedObject.getGUIBox();
@@ -12,13 +12,8 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
       <Grid item alignSelf='center'>
         <Typography variant="h6" p={2}> Robot Object</Typography>
       </Grid>
-      <Grid item container direction='row' justifyContent="space-around">
-        <Grid item xs={5}>
-          <DisabledInputField name="X" value={position.x.toString()} />
-        </Grid>
-        <Grid item xs={5}>
-          <DisabledInputField name="Y" value={position.y.toString()} />
-        </Grid>
+      <Grid item>
+        <PositionArea position={position} />
       </Grid>
     </Grid>
   );

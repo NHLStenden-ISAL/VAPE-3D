@@ -26,3 +26,13 @@ export type GuiBoxRobot = {
   location: Vector2;
   direction: Direction;
 }
+
+export type GuiBoxCalculate = {
+  location: Vector2;
+  direction: Direction;
+
+  name: string;
+  value: string;
+  isKnown: boolean;
+  statement: string;
+}
