@@ -68,7 +68,7 @@ export default class AppManager {
     this.programState.setGameState('run');
 
     console.log("Start the program");
-    this.updateLoop(1000);
+    this.updateLoop(500);
   }
 
   public pauseProgram() {

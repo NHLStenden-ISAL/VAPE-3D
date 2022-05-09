@@ -48,7 +48,9 @@ export default function CalculateGUI({ selectedObject }: { selectedObject: Calcu
             onBlur={(e) => onBlur(e.target)}
           />
         </Grid>
-        <PositionArea position={position}/>
+        <Grid item>
+          <PositionArea position={position} />
+        </Grid>
         <Grid item xs={12}>
           <CheckBox name="IsKnown" value={false} />
         </Grid>

@@ -7,11 +7,11 @@ type DisabledInputFieldProps = {
 
 export default function DisabledInputField({ name, value }: DisabledInputFieldProps) {
   return (
-    <Grid container direction='row' justifyContent="space-between" alignItems="center">
-      <Grid item xs={3}>
-        <Typography variant="body1">{name}</Typography>
+    <Grid container direction='row' justifyContent="space-between" alignItems="center" pt={1}>
+      <Grid item xs={4}>
+        <Typography variant="body1" noWrap={true} marginBottom={0}>{name}</Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={8}>
         <TextField
           id={name}
           value={value}

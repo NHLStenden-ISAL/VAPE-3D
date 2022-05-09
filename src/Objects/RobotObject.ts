@@ -57,7 +57,7 @@ export default class RobotObject extends BaseObject {
     if (this.variableMap.has(variable.getName())) {
       console.log("Key already exist");
     } else {
-      //Only when the key doesn't exist yet
+      // Only when the key doesn't exist yet
       // this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
       console.log("added new variable");
     }
@@ -79,6 +79,9 @@ export default class RobotObject extends BaseObject {
     return { value: '', isKnown: false };
   }
 
+  public getVariables(): Map<string, VariableData> {
+    return this.variableMap;
+  }
   
   public getGUIBox(): GuiBoxRobot {
     return {
@@ -86,5 +89,4 @@ export default class RobotObject extends BaseObject {
       direction: this.getDirection(),
     }
   }
-
 }

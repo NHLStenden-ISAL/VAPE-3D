@@ -21,8 +21,6 @@ export default class Storable {
   }
 
   public changeName(name: string) {
-    if (this.getIsKnown()) return;
-
     this.previousVariable = this.variable.getContainer();
     this.variable.setName(name);
 
@@ -31,8 +29,6 @@ export default class Storable {
   }
 
   public changeValue(value: string) {
-    if (this.getIsKnown()) return;
-
     this.previousVariable = this.variable.getContainer();
     this.variable.setValue(value);
 

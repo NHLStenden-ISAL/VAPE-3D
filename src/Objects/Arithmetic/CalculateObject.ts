@@ -4,7 +4,7 @@ import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
 import { GuiBoxCalculate } from "../../GUI/Components/GuiBoxes";
 import { CheckForExpression, KeyGroup } from "../../GUI/InputFilter";
-import { createCustomMesh } from "../../Helpers/ObjectCreator";
+import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
@@ -19,18 +19,15 @@ export default class CalculateObject extends BaseObject {
     const objectColor = Color3.Red();
     super(worldInfo, gridpos, dir, objectColor);
 
-    this.statement = '1 + 1';
+    this.statement = '';
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.storable = new Storable(this.worldInfo);
     this.interactedRobots = [];
-
-    this.storable.changeName("testing");
-
   }
 
   protected createMesh(): Mesh {
-    return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Red(), "");
+    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Red(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

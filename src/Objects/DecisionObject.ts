@@ -76,6 +76,7 @@ export default class DecisionObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
+    if (this.storable.getValue() === '') { return; }
     this.checkForVariables(robotObject);
 
     if (this.checkCondition() === true) {

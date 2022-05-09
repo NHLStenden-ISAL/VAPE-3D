@@ -4,7 +4,7 @@ import RobotObject from "./RobotObject";
 import Storable from "../Compositions/Storable";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createCustomMesh } from "../Helpers/ObjectCreator";
+import { createBox, createCustomMesh } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { GuiBoxVariable } from "../GUI/Components/GuiBoxes";
 
@@ -24,7 +24,7 @@ export default class VariableObject extends BaseObject {
   }
 
   protected createMesh(): Mesh {
-    return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), "");
+    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
