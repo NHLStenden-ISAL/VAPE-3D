@@ -29,6 +29,7 @@ export default function DropDown({ itemArray, observerContainer }: DropDownProps
     <Select
       value={editor}
       onChange={onChange}
+      style={{color: "white"}}
     >
       {itemArray.map((text) => (
         <MenuItem key={text} value={text}>{text}</MenuItem>

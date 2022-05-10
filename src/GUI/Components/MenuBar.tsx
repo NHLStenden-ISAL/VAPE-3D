@@ -1,5 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import PersistentDrawer from "./PersistentDrawer";
+import PersistentConsole from "./PersistentConsole"
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
 import { AddBox, Delete, Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle, Transform } from "@mui/icons-material";
@@ -14,12 +15,16 @@ type MenuBarProps = {
 }
 
 export default function MenuBar({ observerContainer }: MenuBarProps) {
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [consoleOpen, setConsoleOpen] = useState(false);
 
   const items = buildTypesArray;
 
-  const handleDrawerOpen = () => { setOpen(true); };
-  const handleDrawerClose = () => { setOpen(false); };
+  const handleDrawerOpen = () => { setDrawerOpen(true); };
+  const handleDrawerClose = () => { setDrawerOpen(false); };
+
+  const handleConsoleOpen = () => { setConsoleOpen(true); }
+  const handleConsoleClose = () => { setConsoleOpen(false); }
 
   // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
   const startClick = () => { observerContainer.executeStateGame('run'); };
@@ -32,7 +37,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
     console.log(type);
     observerContainer.executeStateBuild(type as BuildTypes);
 
-    setOpen(false);
+    setDrawerOpen(false);
   };
 
   return (
@@ -79,7 +84,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
             </Grid>
             <Grid item >
               <IconButtonLarge
-                onClick={undefined}
+                onClick={handleConsoleOpen}
                 icon={<MenuIcon />}
               />
             </Grid>
@@ -87,7 +92,8 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
         </Toolbar>
       </AppBar>
 
-      <PersistentDrawer anchor="left" open={open} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
+      <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
+      <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
     </Box>
   );
 }

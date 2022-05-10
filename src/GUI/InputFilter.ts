@@ -10,6 +10,8 @@ export enum KeyGroup {
   ALL
 }
 
+export const keywords = Object.freeze(["true", "false"]);
+
 export function CheckForExpression(word: string, keyGroup: KeyGroup): boolean {
   const regexString = new RegExp(`${getKeygroup(keyGroup)}`, 'gi');
 

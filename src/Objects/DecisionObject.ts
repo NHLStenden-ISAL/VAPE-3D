@@ -3,7 +3,7 @@ import BaseObject from "./BaseObject";
 import RobotObject from "./RobotObject";
 import Storable from "../Compositions/Storable";
 import WorldInformation from "../Helpers/WorldInformation";
-import { CheckForExpression, KeyGroup } from "../GUI/InputFilter";
+import { CheckForExpression, KeyGroup, keywords } from "../GUI/InputFilter";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
@@ -50,6 +50,9 @@ export default class DecisionObject extends BaseObject {
       }
       else {
         if (CheckForExpression(word, KeyGroup.NUMBOLIC)) {
+          statement += `${word} `;
+        }
+        else if (keywords.indexOf(word) >= 0) {
           statement += `${word} `;
         }
         else {

@@ -48,6 +48,7 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
       open={open}
     >
       <DrawerHeader>
+      <b className="drawer-header">Toolbox</b>
         <IconButtonLarge
           onClick={closeFunc}
           icon={iconMap.get(anchor)}

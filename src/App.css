@@ -15,3 +15,11 @@
   padding: 10px 10px 20px 20px;
   background-color: white;
 }
+
+.console-header {
+  padding-right:74%;
+}
+
+.drawer-header {
+  padding-right:6%;
+}
