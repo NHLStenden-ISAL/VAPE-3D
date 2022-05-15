@@ -8,6 +8,7 @@ import WorldInformation from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
 import { Scene } from "@babylonjs/core";
 import ObserverContainer from "./ObserverContainer";
+import downloadTextFile from "./DownloadHelper";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -30,7 +31,7 @@ export default class AppManager {
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-
+    this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); } );
   }
 
   public runApp() {

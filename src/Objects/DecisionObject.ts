@@ -9,6 +9,8 @@ import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
 
+//TODO: Strings are not quite working yet. When a variable has the same name or the string has spaces. Quotes are needed.
+
 export default class DecisionObject extends BaseObject {
   private storable: Storable;
 

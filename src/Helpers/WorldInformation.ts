@@ -77,4 +77,12 @@ export default class WorldInformation {
   public turnOffHighLight(mesh: Mesh): void {
     this.highLightLayer.removeMesh(mesh);
   }
+
+  public programAsJSONObject() : any[] {
+    let jsonArray : any[] = [];
+    this.sceneObjects.forEach(object => {
+      jsonArray.push(object.serialize());
+    });
+    return jsonArray;
+  }
 }
