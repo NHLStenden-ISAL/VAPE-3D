@@ -6,8 +6,9 @@ import { createBox } from "../Helpers/ObjectCreator";
 import { Direction, Transformable } from "../Compositions/Transformable";
 import { Vector3, Vector2, AbstractMesh, Mesh, Color3 } from "@babylonjs/core";
 import { v4 as uuidv4 } from 'uuid';
+import { BaseDataContainer } from "./DataContainers";
 
-export default class BaseObject {
+export default abstract class BaseObject {
   protected transformable: Transformable;
   protected interactable: Interactable | undefined;
   
@@ -164,4 +165,6 @@ export default class BaseObject {
   public getInteractable(): Interactable | undefined {
     return this.interactable;
   }
+
+  public abstract getDataContainer(): BaseDataContainer;
 }

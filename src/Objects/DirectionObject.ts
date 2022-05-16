@@ -5,7 +5,7 @@ import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
-import { GuiBoxDirection } from "../GUI/Components/GuiBoxes";
+import { DirectionDataContainer } from "./DataContainers";
 
 export default class DirectionObject extends BaseObject {
 
@@ -31,10 +31,10 @@ export default class DirectionObject extends BaseObject {
     super.restore();
   }
 
-  public getGUIBox(): GuiBoxDirection {
-    return {
-      location: this.getPositionForGUI(),
-      direction: this.getDirection(),
-    }
+  public getDataContainer(): DirectionDataContainer {
+    return new DirectionDataContainer(
+      this.getPositionForGUI(),
+      this.getDirection()
+    )
   }
 }

@@ -8,7 +8,7 @@ import { useState } from "react";
 import PositionArea from "./Components/PositionArea";
 
 export default function VariableGUI({ selectedObject }: { selectedObject: VariableObject }) {
-  const guiBox = selectedObject.getGUIBox();
+  const guiBox = selectedObject.getDataContainer();
 
   const [name, setName] = useState(guiBox.name);
   const [value, setValue] = useState(guiBox.value);

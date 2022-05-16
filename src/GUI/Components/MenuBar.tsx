@@ -1,4 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SaveIcon from '@mui/icons-material/Save';
 import PersistentDrawer from "./PersistentDrawer";
 import PersistentConsole from "./PersistentConsole"
 import { AppBar, Grid, Toolbar } from "@mui/material";
@@ -9,6 +11,7 @@ import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../.
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
 import ObserverContainer from '../../Helpers/ObserverContainer';
+import { uploadTextFile } from '../../Helpers/DownloadHelper';
 
 type MenuBarProps = {
   observerContainer: ObserverContainer,
@@ -27,7 +30,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const handleConsoleClose = () => { setConsoleOpen(false); }
 
   // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
-  const startClick = () => { observerContainer.executeStateGame('run'); };
+  const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
   const stopClick = () => { observerContainer.executeStateGame('reset'); };
 
@@ -45,12 +48,25 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
       <AppBar position="sticky">
         <Toolbar>
           <Grid container justifyContent="space-between" alignContent="center" direction='row'>
-            <Grid item >
+            <Grid item>
               <IconButtonLarge
                 onClick={handleDrawerOpen}
                 icon={<MenuIcon />}
               />
-
+            </Grid>
+            <Grid item>
+              <IconButtonLarge
+                onClick={() => { uploadTextFile((contents: string) => {
+                  observerContainer.uploadProgram(contents);
+                }); }}
+                icon={<UploadFileIcon />}
+              />
+              <IconButtonLarge
+                onClick={() => { observerContainer.downloadProgram(); }}
+                icon={<SaveIcon />}
+              />
+            </Grid>
+            <Grid item >
               <IconButtonLarge
                 onClick={() => { editorClick('transform'); }}
                 icon={<Transform />}
