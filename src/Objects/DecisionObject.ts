@@ -7,7 +7,7 @@ import { CheckForExpression, KeyGroup, keywords } from "../GUI/InputFilter";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
-import { GuiBoxDecision } from "../GUI/Components/GuiBoxes";
+import { DecisionDataContainer } from "./DataContainers";
 
 //TODO: Strings are not quite working yet. When a variable has the same name or the string has spaces. Quotes are needed.
 
@@ -97,12 +97,12 @@ export default class DecisionObject extends BaseObject {
     return this.condition;
   }
 
-  public getGUIBox(): GuiBoxDecision {
-    return {
-      location: this.getPositionForGUI(),
-      direction: this.getDirection(),
-      statement: this.storable.getValue()
-    }
+  public override getDataContainer(): DecisionDataContainer {
+    return new DecisionDataContainer(
+      this.getPositionForGUI(),
+      this.getDirection(),
+      this.storable.getValue()
+    );
   }
 
   public getStorable(): Storable {

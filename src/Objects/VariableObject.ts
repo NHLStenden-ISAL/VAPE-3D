@@ -6,8 +6,7 @@ import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createBox, createCustomMesh } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
-import { GuiBoxVariable } from "../GUI/Components/GuiBoxes";
-import SeVariableObject from "../Serialize/SeVariableObject";
+import { VariableDataContainer } from "./DataContainers";
 
 export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
@@ -22,10 +21,6 @@ export default class VariableObject extends BaseObject {
     this.interactedRobots = [];
 
     this.storable = new Storable(this.worldInfo);
-  }
-
-  public serialize(): any {
-    return new SeVariableObject(super.serialize(), this.storable.getName(), this.storable.getValue());
   }
 
   protected createMesh(): Mesh {
@@ -59,14 +54,14 @@ export default class VariableObject extends BaseObject {
     super.restore();
   }
 
-  public getGUIBox(): GuiBoxVariable {
-    return {
-      location: this.getPositionForGUI(),
-      direction: this.getDirection(),
-      isKnown: this.storable.getIsKnown(),
-      name: this.storable.getName(),
-      value: this.storable.getValue()
-    };
+  public getDataContainer(): VariableDataContainer {
+    return new VariableDataContainer(
+      this.getPositionForGUI(),
+      this.getDirection(),
+      this.storable.getName(),
+      this.storable.getValue(),
+      this.storable.getIsKnown()
+    );
   }
 
   public getStorable(): Storable {

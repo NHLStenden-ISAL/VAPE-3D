@@ -4,7 +4,7 @@ import PositionArea from "./Components/PositionArea";
 import DisabledInputField from "./Components/DisabledInputField";
 
 export default function RobotGUI({ selectedObject }: { selectedObject: RobotObject }) {
-  const guiBox = selectedObject.getGUIBox();
+  const guiBox = selectedObject.getDataContainer();
 
   const position = guiBox.location;
   const variableArray = selectedObject.getVariables();

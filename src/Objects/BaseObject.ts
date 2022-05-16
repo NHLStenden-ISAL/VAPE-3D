@@ -6,9 +6,9 @@ import { createBox } from "../Helpers/ObjectCreator";
 import { Direction, Transformable } from "../Compositions/Transformable";
 import { Vector3, Vector2, AbstractMesh, Mesh, Color3 } from "@babylonjs/core";
 import { v4 as uuidv4 } from 'uuid';
-import SeBaseObject from '../Serialize/SeBaseObject'
+import { BaseDataContainer } from "./DataContainers";
 
-export default class BaseObject {
+export default abstract class BaseObject {
   protected transformable: Transformable;
   protected interactable: Interactable | undefined;
   
@@ -60,20 +60,6 @@ export default class BaseObject {
   public onClickLeftExecute(): void {
     this.startPosition = this.gridPosition;
     this.turnOnHighlight();
-  }
-
-  public serialize(): any {
-    return new SeBaseObject(
-      {
-        x: this.gridPosition.x,
-        y: this.gridPosition.y
-      },
-      this.direction,
-      {
-        r: this.highlightColor.r,
-        g: this.highlightColor.g,
-        b: this.highlightColor.b
-      });
   }
 
   public onClickRightExecute(): void {
@@ -179,4 +165,6 @@ export default class BaseObject {
   public getInteractable(): Interactable | undefined {
     return this.interactable;
   }
+
+  public abstract getDataContainer(): BaseDataContainer;
 }

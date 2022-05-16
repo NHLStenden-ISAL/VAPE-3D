@@ -81,7 +81,7 @@ export default class WorldInformation {
   public programAsJSONObject() : any[] {
     let jsonArray : any[] = [];
     this.sceneObjects.forEach(object => {
-      jsonArray.push(object.serialize());
+      jsonArray.push(object.getDataContainer());
     });
     return jsonArray;
   }

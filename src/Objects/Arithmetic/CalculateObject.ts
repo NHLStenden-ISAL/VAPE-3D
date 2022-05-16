@@ -2,7 +2,7 @@ import { Vector2, Color3, Mesh } from "@babylonjs/core";
 import Interactable from "../../Compositions/Interactable";
 import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
-import { GuiBoxCalculate } from "../../GUI/Components/GuiBoxes";
+import { CalculateDataContainer } from "../DataContainers";
 import { CheckForExpression, KeyGroup } from "../../GUI/InputFilter";
 import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
@@ -43,15 +43,15 @@ export default class CalculateObject extends BaseObject {
     this.interactedRobots.push(robotObject);
   }
   
-  public getGUIBox(): GuiBoxCalculate {
-    return {
-      location: this.getPositionForGUI(),
-      direction: this.getDirection(),
-      name: this.storable.getName(),
-      value: this.storable.getValue(),
-      isKnown: this.storable.getIsKnown(),
-      statement: this.statement,
-    }
+  public getDataContainer(): CalculateDataContainer {
+    return new CalculateDataContainer(
+      this.getPositionForGUI(),
+      this.getDirection(),
+      this.storable.getName(),
+      this.storable.getValue(),
+      this.storable.getIsKnown(),
+      this.statement,
+    );
   }
 
   private checkForVariables(robotObject: RobotObject) {
