@@ -3,6 +3,12 @@ import CommandBroker from "./CommandBroker";
 import RobotObject from "../Objects/RobotObject";
 import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene } from "@babylonjs/core";
 import { SetSelectedObject } from "./AppManager";
+import { BaseDataContainer } from "../Objects/DataContainers";
+
+export type VAPLProgram = {
+  name: string;
+  units: BaseDataContainer[];
+}
 
 export default class WorldInformation {
   private scene: Scene;
@@ -37,6 +43,12 @@ export default class WorldInformation {
     if (!this.sceneObjects.has(object.getUUID())) { return; }
 
     this.sceneObjects.delete(object.getUUID());
+  }
+
+  public removeAllSceneObjects(): void {
+    this.sceneObjects.forEach((value: BaseObject) => {
+      value.delete();
+    });
   }
 
   public addRobotObject(object: RobotObject): void {
@@ -78,11 +90,11 @@ export default class WorldInformation {
     this.highLightLayer.removeMesh(mesh);
   }
 
-  public programAsJSONObject() : any[] {
+  public programAsJSONObject() : VAPLProgram {
     let jsonArray : any[] = [];
     this.sceneObjects.forEach(object => {
       jsonArray.push(object.getDataContainer());
     });
-    return jsonArray;
+    return { name:"NOT IMPLEMENTED", units: jsonArray };
   }
 }

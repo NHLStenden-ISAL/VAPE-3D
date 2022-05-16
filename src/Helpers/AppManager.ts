@@ -4,11 +4,17 @@ import KeyboardHandler from "./KeyboardHandler";
 import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
 import ProgramState, { BuildTypes, GameState } from "./ProgramState";
-import WorldInformation from "./WorldInformation";
+import WorldInformation, { VAPLProgram } from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
 import { Scene } from "@babylonjs/core";
 import ObserverContainer from "./ObserverContainer";
 import downloadTextFile from "./DownloadHelper";
+import VariableObject from "../Objects/VariableObject";
+import { CalculateDataContainer, DecisionDataContainer, DirectionDataContainer, RobotDataContainer, VariableDataContainer } from "../Objects/DataContainers";
+import RobotObject from "../Objects/RobotObject";
+import DecisionObject from "../Objects/DecisionObject";
+import DirectionObject from "../Objects/DirectionObject";
+import CalculateObject from "../Objects/Arithmetic/CalculateObject";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -31,7 +37,45 @@ export default class AppManager {
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
+
+    const worldInfo = this.worldInformation;
     this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); } );
+    this.observerContainer.setUploadProgram((program: string) => { 
+      let pProgram = JSON.parse(program) as VAPLProgram;
+      if(pProgram.units) {
+        worldInfo.removeAllSceneObjects();
+        pProgram.units.forEach(unit => {
+          switch (unit.type) {
+            case 'variable': {
+              const vUnit = unit as VariableDataContainer;
+              const vObject = new VariableObject(worldInfo, vUnit.location, vUnit.direction);
+              vObject.getStorable().changeName(vUnit.name);
+              vObject.getStorable().changeValue(vUnit.value);
+              break; }
+            case 'robot': {
+              const rUnit = unit as RobotDataContainer;
+              new RobotObject(worldInfo, rUnit.location, rUnit.direction);
+              break; }
+            case 'decision': {
+              const dUnit = unit as DecisionDataContainer;
+              const dObject = new DecisionObject(worldInfo, dUnit.location, dUnit.direction);
+              dObject.getStorable().changeValue(dUnit.statement);
+              break; }
+            case 'direction': {
+              const dUnit = unit as DirectionDataContainer;
+              new DirectionObject(worldInfo, dUnit.location, dUnit.direction);
+              break; }
+            case 'calculate': {
+              const cUnit = unit as CalculateDataContainer;
+              const cObject = new CalculateObject(worldInfo, cUnit.location, cUnit.direction);
+              cObject.getStorable().changeName(cUnit.name);
+              cObject.getStorable().changeValue(cUnit.value);
+              cObject.changeStatement(cUnit.statement);
+              break; }
+          }
+        });
+      }
+     });
   }
 
   public runApp() {

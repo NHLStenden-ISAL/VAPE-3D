@@ -8,8 +8,8 @@ export default class ObserverContainer {
   private stateBuildTypeObservable: Observable<BuildTypes>;
   private stateEditorObservable: Observable<EditorState>;
 
-  private downloadProgramFunc: Function;
-  private uploadProgramFunc: Function;
+  private downloadProgramFunc: () => void;
+  private uploadProgramFunc: (program: string) => void;
 
   constructor() {
     this.stateGameObservable = new Observable();
@@ -41,11 +41,11 @@ export default class ObserverContainer {
     this.stateEditorObservable.add(subscriber);
   }
 
-  public setDownloadProgram(f : Function) {
+  public setDownloadProgram(f : () => void) {
     this.downloadProgramFunc = f;
   }
 
-  public setUploadProgram(f : Function) {
+  public setUploadProgram(f : (program: string) => void) {
     this.uploadProgramFunc = f;
   }
 
@@ -53,7 +53,7 @@ export default class ObserverContainer {
     this.downloadProgramFunc();
   }
 
-  public uploadProgram() : void {
-    this.uploadProgramFunc();
+  public uploadProgram(program: string) : void {
+    this.uploadProgramFunc(program);
   }
 }

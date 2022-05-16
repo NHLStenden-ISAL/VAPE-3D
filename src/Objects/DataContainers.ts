@@ -1,13 +1,15 @@
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
+import { BuildTypes } from "../Helpers/ProgramState";
 
+//TODO: These should be moved to their respective accompanying object classes
 export class BaseDataContainer {
   public readonly type;
 
   public location: Vector2;
   public direction: Direction;
 
-  constructor(type: string, location: Vector2, direction: Direction) {
+  constructor(type: BuildTypes, location: Vector2, direction: Direction) {
     this.type = type;
     this.location = location;
     this.direction = direction;
@@ -20,7 +22,7 @@ export class VariableDataContainer extends BaseDataContainer {
   public isKnown: boolean;
 
   constructor(location: Vector2, direction: Direction, name: string, value: string, isKnown: boolean) {
-    super("Variable", location, direction);
+    super('variable', location, direction);
     this.name = name;
     this.value = value;
     this.isKnown = isKnown;
@@ -31,7 +33,7 @@ export class DecisionDataContainer extends BaseDataContainer {
   public statement: string;
 
   constructor(location: Vector2, direction: Direction, statement: string) {
-    super("Decision", location, direction);
+    super('decision', location, direction);
     this.statement = statement;
   }
 }
@@ -39,14 +41,14 @@ export class DecisionDataContainer extends BaseDataContainer {
 export class DirectionDataContainer extends BaseDataContainer {
 
   constructor(location: Vector2, direction: Direction) {
-    super("Direction", location, direction);
+    super('direction', location, direction);
   }
 }
 
 export class RobotDataContainer extends BaseDataContainer {
 
   constructor(location: Vector2, direction: Direction) {
-    super("Robot", location, direction);
+    super('robot', location, direction);
   }
 }
 
@@ -57,7 +59,7 @@ export class CalculateDataContainer extends BaseDataContainer {
   public statement: string;
 
   constructor(location: Vector2, direction: Direction, name: string, value: string, isKnown: boolean, statement: string) {
-    super("Calculate", location, direction);
+    super('calculate', location, direction);
     this.name = name;
     this.value = value;
     this.isKnown = isKnown;

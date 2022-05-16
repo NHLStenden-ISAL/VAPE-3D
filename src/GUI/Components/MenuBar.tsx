@@ -11,6 +11,7 @@ import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../.
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
 import ObserverContainer from '../../Helpers/ObserverContainer';
+import { uploadTextFile } from '../../Helpers/DownloadHelper';
 
 type MenuBarProps = {
   observerContainer: ObserverContainer,
@@ -55,7 +56,9 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
             </Grid>
             <Grid item>
               <IconButtonLarge
-                onClick={() => { observerContainer.uploadProgram(); }}
+                onClick={() => { uploadTextFile((contents: string) => {
+                  observerContainer.uploadProgram(contents);
+                }); }}
                 icon={<UploadFileIcon />}
               />
               <IconButtonLarge
