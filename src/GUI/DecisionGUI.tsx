@@ -30,7 +30,7 @@ export default function DecisionGUI({ selectedObject }: { selectedObject: Decisi
           <TextField fullWidth
             id="If"
             value={statement}
-            onChange={(e) => setStatement(FilterString(e.target.value, KeyGroup.SYMBALPHANUMERIC))}
+            onChange={(e) => setStatement(e.target.value)}
             onBlur={(e) => onBlur(e.target)}
           />
         </Grid>

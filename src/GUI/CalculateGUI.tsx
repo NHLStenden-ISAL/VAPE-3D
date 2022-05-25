@@ -44,7 +44,7 @@ export default function CalculateGUI({ selectedObject }: { selectedObject: Calcu
           <TextField fullWidth
             id='Statement'
             value={statement}
-            onChange={(e) => setStatement(FilterString(e.target.value, KeyGroup.ARITHMETIC))}
+            onChange={(e) => setStatement(e.target.value)}
             onBlur={(e) => onBlur(e.target)}
           />
         </Grid>

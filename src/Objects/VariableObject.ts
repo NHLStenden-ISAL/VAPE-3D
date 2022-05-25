@@ -33,8 +33,6 @@ export default class VariableObject extends BaseObject {
     this.storable.changeIsKnown(true);
     robotObject.addVariable(this.storable.getContainer());
 
-    console.log(`Name: ${this.storable.getName()}, Value ${this.storable.getValue()}`);
-
     this.interactedRobots.push(robotObject);
   }
 

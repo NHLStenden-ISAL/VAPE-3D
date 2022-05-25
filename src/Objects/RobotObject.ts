@@ -6,8 +6,9 @@ import { Direction } from "../Compositions/Transformable";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
 import { RobotDataContainer } from "./DataContainers";
 
+
 export default class RobotObject extends BaseObject {
-  private variableMap: Map<string, VariableData>;
+  private scope: any;
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Green();
@@ -15,7 +16,7 @@ export default class RobotObject extends BaseObject {
     super(worldInfo, gridPos, dir, objectColor);
     worldInfo.getRobotObjects().push(this);
 
-    this.variableMap = new Map();
+    this.scope = {};
   }
 
   protected createMesh(): Mesh {
@@ -51,38 +52,31 @@ export default class RobotObject extends BaseObject {
     super.restore();
   }
 
+  public getScope(): any {
+    return this.scope;
+  }
+
   public addVariable(variable: VariableContainer) {
     if (variable.getName() === "") { return; }
 
-    if (this.variableMap.has(variable.getName())) {
-      console.log("Key already exist");
-    } else {
-      // Only when the key doesn't exist yet
-      // this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
-      console.log("added new variable");
-    }
+    console.log("added new variable");
+    this.scope[variable.getName()] = variable.getValue();
 
-    this.variableMap.set(variable.getName(), { value: variable.getValue(), isKnown: true });
   }
 
   public removeVariable(variable: VariableContainer) {
-    this.variableMap.delete(variable.getName());
+    this.scope[variable.getName()] = undefined;
+    // this.variableMap.delete(variable.getName());
   }
 
-  public checkVariable(variableName: string): VariableData {
-    if (variableName === "") { return { value: '', isKnown: false }; }
-
-    if (this.variableMap.has(variableName)) {
-      return this.variableMap.get(variableName) as VariableData;
-    }
-
-    return { value: '', isKnown: false };
+  public getVariables(): any {
+    Object.keys(this.scope).forEach(variable => {
+      console.log("Testing " + variable);
+    });
+    
+    return this.scope;    
   }
 
-  public getVariables(): Map<string, VariableData> {
-    return this.variableMap;
-  }
-  
   public getDataContainer(): RobotDataContainer {
     return new RobotDataContainer(
       this.getPositionForGUI(),

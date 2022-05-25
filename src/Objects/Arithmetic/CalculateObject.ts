@@ -3,16 +3,16 @@ import Interactable from "../../Compositions/Interactable";
 import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
 import { CalculateDataContainer } from "../DataContainers";
-import { CheckForExpression, KeyGroup } from "../../GUI/InputFilter";
 import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
+import { parse } from "mathjs";
 
 export default class CalculateObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
-
+  
   private statement: string;
 
   constructor(worldInfo: WorldInformation, gridpos: Vector2, dir: Direction) {
@@ -33,12 +33,10 @@ export default class CalculateObject extends BaseObject {
   private onIntersectExecute(robotObject: RobotObject) {
     if (this.storable.getName() === "") { return; }
 
-    this.checkForVariables(robotObject);
+    this.executeStatement(robotObject, this.statement);
 
     this.storable.changeIsKnown(true);
     robotObject.addVariable(this.storable.getContainer());
-
-    console.log(`Name: ${this.storable.getName()}, Value ${this.storable.getValue()}`);
 
     this.interactedRobots.push(robotObject);
   }
@@ -54,39 +52,11 @@ export default class CalculateObject extends BaseObject {
     );
   }
 
-  private checkForVariables(robotObject: RobotObject) {
-    let statement = '';
+  private executeStatement(robotObject: RobotObject, statement: string) {
+    const parsedStatement = parse(statement);
+    const compiledStatement = parsedStatement.compile();
 
-    let words = this.statement.split(/\s|(\+|-|\*|\/|%|!=|\(|\)|==|<=|>=|<|>|!)/g);
-
-    words.forEach((word) => {
-      if (word === undefined || word === '') { return; }
-
-      const variable = robotObject.checkVariable(word);
-      if (variable.isKnown) {
-        if (CheckForExpression(variable.value, KeyGroup.NUMERIC)) {
-          statement += `${variable.value} `;
-        }
-        else {
-          statement += `"${variable.value}" `;
-        }
-      }
-      else {
-        if (CheckForExpression(word, KeyGroup.NUMBOLIC)) {
-          statement += `${word} `;
-        }
-        else {
-          statement += `"${word}" `;
-        }
-      }
-    });
-
-    this.executeStatement(statement);
-  }
-
-  private executeStatement(statement: string): void {
-    const result = eval(statement);
-    this.storable.changeValue(result.toString());
+    this.storable.changeValue(compiledStatement.evaluate(robotObject.getScope()));
   }
 
   public getStorable(): Storable {
