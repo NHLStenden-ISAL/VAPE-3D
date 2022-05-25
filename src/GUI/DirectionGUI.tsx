@@ -3,7 +3,7 @@ import { Grid, Typography } from "@mui/material";
 import PositionArea from "./Components/PositionArea";
 
 export default function DirectionGUI({ selectedObject }: { selectedObject: DirectionObject }) {
-  const guiBox = selectedObject.getGUIBox();
+  const guiBox = selectedObject.getDataContainer();
 
   const position = guiBox.location;
 

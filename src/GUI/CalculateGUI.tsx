@@ -8,7 +8,7 @@ import CheckBox from "./Components/CheckBox";
 import PositionArea from "./Components/PositionArea";
 
 export default function CalculateGUI({ selectedObject }: { selectedObject: CalculateObject }) {
-  const guiBox = selectedObject.getGUIBox();
+  const guiBox = selectedObject.getDataContainer();
 
   const [statement, setStatement] = useState(guiBox.statement);
   const [name, setName] = useState(guiBox.name);

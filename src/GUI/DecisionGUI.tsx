@@ -6,7 +6,7 @@ import { useState } from "react";
 import PositionArea from "./Components/PositionArea";
 
 export default function DecisionGUI({ selectedObject }: { selectedObject: DecisionObject }) {
-  const guiBox = selectedObject.getGUIBox();
+  const guiBox = selectedObject.getDataContainer();
 
   const [statement, setStatement] = useState(guiBox.statement);
   const position = guiBox.location;
