@@ -7,7 +7,7 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
   const guiBox = selectedObject.getDataContainer();
 
   const position = guiBox.location;
-  const variableArray = selectedObject.getVariables();
+  const variables = selectedObject.getVariables();
 
   const variableIntro = (name: string, value: string) => {
     return <Grid container direction='row' justifyContent="space-between" alignItems="center">
@@ -19,6 +19,7 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
       </Grid>
     </Grid>
   }
+
   return (
     <Grid container spacing={1} direction='column'>
       <Grid item alignSelf='center'>
@@ -26,17 +27,11 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
       </Grid>
       <Grid item p={2}>
         {variableIntro('Name', 'Value')}
-        {
-          Object.keys(variableArray).forEach(variable => {
-            console.log("Testing" + variable);
-            const value = variableArray[variable] || "";
-            return <DisabledInputField key={variable} name={variable} value={value} />
-          })
-          // Array.from(variableArray.keys()).map((key) => {
-          //   const value = variableArray.get(key)?.value || "";
-          //   return <DisabledInputField key={key} name={key} value={value} />
-          // })
+        { Object.keys(variables).map((key) => {
+          const value = variables[key] || "";
+          return <DisabledInputField key={key} name={key} value={value} />
         }
+        )}
       </Grid>
       <Grid item>
         <PositionArea position={position} />

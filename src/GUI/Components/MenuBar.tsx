@@ -5,7 +5,7 @@ import PersistentDrawer from "./PersistentDrawer";
 import PersistentConsole from "./PersistentConsole"
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import { AddBox, Delete, Pause, PauseCircle, PlayArrow, PlayCircle, Stop, StopCircle, Transform } from "@mui/icons-material";
+import { AddBox, Delete, Pause, PlayArrow, Stop, Transform } from "@mui/icons-material";
 import { useState } from "react";
 import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';

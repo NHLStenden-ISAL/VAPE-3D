@@ -70,11 +70,7 @@ export default class RobotObject extends BaseObject {
   }
 
   public getVariables(): any {
-    Object.keys(this.scope).forEach(variable => {
-      console.log("Testing " + variable);
-    });
-    
-    return this.scope;    
+    return this.scope;
   }
 
   public getDataContainer(): RobotDataContainer {
