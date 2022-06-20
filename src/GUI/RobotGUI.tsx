@@ -27,11 +27,11 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
       </Grid>
       <Grid item p={2}>
         {variableIntro('Name', 'Value')}
-        { Object.keys(variables).map((key) => {
-          const value = variables[key] || "";
-          return <DisabledInputField key={key} name={key} value={value} />
+        { Array.from(variables.keys()).map((key) => {
+          const value = variables.get(key) || "";
+          return <DisabledInputField key={key} name={key} value={value}/>
+          })
         }
-        )}
       </Grid>
       <Grid item>
         <PositionArea position={position} />
