@@ -5,6 +5,7 @@
   "dependencies": {
     "@babylonjs/core": "^4.2.1",
     "@babylonjs/gui": "^4.2.1",
+    "@babylonjs/loaders": "^5.11.0",
     "@babylonjs/materials": "^4.2.1",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",

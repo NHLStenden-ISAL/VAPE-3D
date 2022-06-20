@@ -31,7 +31,6 @@ export default function App() {
 
   const [selectedObject, setSelectedObject] = useState<BaseObject | undefined>(undefined);
   
-  //TODO: Fix input, so when you press a button right after reload, the program does listen instead of needing to focus on the scene first
   return (
     <Box>
       <SceneComponent antialias onSceneReady={onSceneReady} id="my-canvas" setSelectedObject={setSelectedObject} />

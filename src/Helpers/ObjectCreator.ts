@@ -1,5 +1,8 @@
+import "@babylonjs/loaders";
 import { GridMaterial } from "@babylonjs/materials";
-import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
+import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space, SceneLoader } from "@babylonjs/core";
+
+
 
 export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
   const camera: ArcRotateCamera = new ArcRotateCamera(
@@ -58,8 +61,26 @@ export function createDirection(scene: Scene, name: string, color: Color3, size:
 }
 
 export function createCustomMesh(scene: Scene, name: string, color: Color3, objAddress: string): Mesh {
+  var root = MeshBuilder.CreateBox(name, {size: 0.01}, scene);
+  var temp = SceneLoader.Append("./Models/", "Arrow_one.babylon", scene, function(scene) {
+    console.log("Append");
+    
+    scene.meshes[scene.meshes.length - 1].material!.backFaceCulling = false;
+    scene.meshes[scene.meshes.length - 1].rotate(new Vector3(0,0, 1), Math.PI);
+    // return meshes[0];
+  });
 
-  return createBox(scene, name, color);
+  //   var temp = SceneLoader.ImportMesh(name, "./Models/", "Arrow_one.babylon", scene, function(meshes) {
+  //   console.log("Import");
+  //   console.log(meshes);
+  //   // return meshes[0];
+  // });
+  //temp.then
+
+  //console.log("hier dan");
+  // return createBox(scene, name, color);
   //https://www.babylonjs-playground.com/#0SHBCK#13
   //alert("Missing functionality, can't create custom mesh");
+
+  return root;
 }

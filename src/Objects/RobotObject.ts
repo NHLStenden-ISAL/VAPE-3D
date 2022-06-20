@@ -8,7 +8,7 @@ import { RobotDataContainer } from "./DataContainers";
 
 
 export default class RobotObject extends BaseObject {
-  private scope: any;
+  private scope: Map<string, string>;
 
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Green();
@@ -16,7 +16,7 @@ export default class RobotObject extends BaseObject {
     super(worldInfo, gridPos, dir, objectColor);
     worldInfo.getRobotObjects().push(this);
 
-    this.scope = {};
+    this.scope = new Map<string, string>();
   }
 
   protected createMesh(): Mesh {
@@ -60,16 +60,17 @@ export default class RobotObject extends BaseObject {
     if (variable.getName() === "") { return; }
 
     console.log("added new variable");
-    this.scope[variable.getName()] = variable.getValue();
+    this.scope.set(variable.getName(), variable.getValue());
 
   }
 
   public removeVariable(variable: VariableContainer) {
-    this.scope[variable.getName()] = undefined;
+    // this.scope[variable.getName()] = undefined;
+    this.scope.delete(variable.getName());
     // this.variableMap.delete(variable.getName());
   }
 
-  public getVariables(): any {
+  public getVariables(): Map<string, string> {
     return this.scope;
   }
 

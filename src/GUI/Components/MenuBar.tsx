@@ -109,7 +109,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
       </AppBar>
 
       <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
-      <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
+      {/* <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} /> */}
     </Box>
   );
 }

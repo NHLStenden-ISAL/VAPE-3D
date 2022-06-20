@@ -3,7 +3,7 @@ import Interactable from "../Compositions/Interactable";
 import RobotObject from "./RobotObject";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createDirection } from "../Helpers/ObjectCreator";
+import { createCustomMesh, createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { DirectionDataContainer } from "./DataContainers";
 
@@ -20,7 +20,9 @@ export default class DirectionObject extends BaseObject {
   }
 
   protected createMesh(): Mesh {
-    return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Purple(), 0.8);
+    return createCustomMesh(this.worldInfo.getScene(), 'direction', Color3.Purple(), 'Arrow_one.babylon');
+
+    //return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Purple(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
