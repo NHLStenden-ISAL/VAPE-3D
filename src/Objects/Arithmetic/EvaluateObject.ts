@@ -2,14 +2,14 @@ import { Vector2, Color3, Mesh } from "@babylonjs/core";
 import Interactable from "../../Compositions/Interactable";
 import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
-import { CalculateDataContainer } from "../DataContainers";
+import { EvaluateDataContainer } from "../DataContainers";
 import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
 import { parse } from "mathjs";
 
-export default class CalculateObject extends BaseObject {
+export default class EvaluateObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
   
@@ -41,8 +41,8 @@ export default class CalculateObject extends BaseObject {
     this.interactedRobots.push(robotObject);
   }
   
-  public getDataContainer(): CalculateDataContainer {
-    return new CalculateDataContainer(
+  public getDataContainer(): EvaluateDataContainer {
+    return new EvaluateDataContainer(
       this.getPositionForGUI(),
       this.getDirection(),
       this.storable.getName(),

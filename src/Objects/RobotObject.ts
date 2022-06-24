@@ -59,7 +59,8 @@ export default class RobotObject extends BaseObject {
   public addVariable(variable: VariableContainer) {
     if (variable.getName() === "") { return; }
 
-    console.log("added new variable");
+    // console.log("Variable name: " + variable.getName() + " variable value: " + variable.getValue());
+    // console.log("added new variable");
     this.scope.set(variable.getName(), variable.getValue());
 
   }

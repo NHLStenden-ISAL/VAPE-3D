@@ -2,13 +2,14 @@ import BaseObject from "../Objects/BaseObject";
 import DirectionObject from "../Objects/DirectionObject";
 import ICommand from "./ICommand";
 import RobotObject from "../Objects/RobotObject";
-import CalculateObject from "../Objects/Arithmetic/CalculateObject";
+import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import VariableObject from "../Objects/VariableObject";
 import WorldInformation from "../Helpers/WorldInformation";
 import DecisionObject from "../Objects/DecisionObject";
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
+import PrintObject from "../Objects/PrintObject";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -39,8 +40,11 @@ export default class CommandAddObject implements ICommand {
       case 'direction':
         this.object = new DirectionObject(this.worldInfo, this.gridPosition, this.direction);
         break;
-      case 'calculate':
-        this.object = new CalculateObject(this.worldInfo, this.gridPosition, this.direction);
+      case 'evaluate':
+        this.object = new EvaluateObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'print':
+        this.object = new PrintObject(this.worldInfo, this.gridPosition, this.direction);
         break;
     }
   }

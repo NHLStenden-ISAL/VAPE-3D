@@ -52,17 +52,26 @@ export class RobotDataContainer extends BaseDataContainer {
   }
 }
 
-export class CalculateDataContainer extends BaseDataContainer {
+export class EvaluateDataContainer extends BaseDataContainer {
   public name: string;
   public value: string;
   public isKnown: boolean;
   public statement: string;
 
   constructor(location: Vector2, direction: Direction, name: string, value: string, isKnown: boolean, statement: string) {
-    super('calculate', location, direction);
+    super('evaluate', location, direction);
     this.name = name;
     this.value = value;
     this.isKnown = isKnown;
     this.statement = statement;
   }
+}
+
+export class PrintDataContainer extends BaseDataContainer {
+    public statement: string;
+
+    constructor(location: Vector2, direction: Direction, statement: string) {
+      super('print', location, direction);
+      this.statement = statement;
+    }
 }

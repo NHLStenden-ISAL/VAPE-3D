@@ -14,8 +14,10 @@ import VariableObject from './Objects/VariableObject';
 import { Box } from '@mui/material';
 import { useState } from "react";
 import ObserverContainer from './Helpers/ObserverContainer';
-import CalculateObject from './Objects/Arithmetic/CalculateObject';
-import CalculateGUI from './GUI/CalculateGUI';
+import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
+import EvaluateGUI from './GUI/CalculateGUI';
+import PrintObject from './Objects/PrintObject';
+import PrintGUI from './GUI/PrintGUI';
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
@@ -43,7 +45,8 @@ export default function App() {
           {selectedObject instanceof DecisionObject && <DecisionGUI selectedObject={selectedObject} />}
           {selectedObject instanceof DirectionObject && <DirectionGUI selectedObject={selectedObject} />}
           {selectedObject instanceof RobotObject && <RobotGUI selectedObject={selectedObject} />}
-          {selectedObject instanceof CalculateObject && <CalculateGUI selectedObject={selectedObject} />}
+          {selectedObject instanceof EvaluateObject && <EvaluateGUI selectedObject={selectedObject} />}
+          {selectedObject instanceof PrintObject && <PrintGUI selectedObject={selectedObject} />}
         </Box>
       }
     </Box>
