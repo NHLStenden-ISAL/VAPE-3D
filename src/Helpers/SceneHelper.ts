@@ -7,7 +7,6 @@ import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/
 import { BuildTypes } from "./ProgramState";
 import { createCamera } from "./ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
-import PrintObject from "../Objects/PrintObject";
 
 export default class SceneHelper {
   private worldInfo: WorldInformation;

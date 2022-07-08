@@ -1,5 +1,3 @@
-import { Direction } from "../Compositions/Transformable";
-import { FilterString, KeyGroup } from "./InputFilter";
 import { Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import PositionArea from "./Components/PositionArea";

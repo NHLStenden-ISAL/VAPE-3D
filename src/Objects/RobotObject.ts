@@ -52,7 +52,7 @@ export default class RobotObject extends BaseObject {
     super.restore();
   }
 
-  public getScope(): any {
+  public getScope(): Map<string, string> {
     return this.scope;
   }
 

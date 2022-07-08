@@ -15,7 +15,7 @@ import { Box } from '@mui/material';
 import { useState } from "react";
 import ObserverContainer from './Helpers/ObserverContainer';
 import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
-import EvaluateGUI from './GUI/CalculateGUI';
+import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
 
