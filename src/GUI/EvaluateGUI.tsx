@@ -1,7 +1,7 @@
 import { useState } from "react";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import { Grid, TextField, Typography } from "@mui/material";
-import { FilterString, KeyGroup } from "./InputFilter";
+import { KeyGroup } from "./InputFilter";
 import DisabledInputField from "./Components/DisabledInputField";
 import InputField from "./Components/InputField";
 import CheckBox from "./Components/CheckBox";

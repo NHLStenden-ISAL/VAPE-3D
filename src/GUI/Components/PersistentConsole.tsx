@@ -1,6 +1,5 @@
-import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, Padding } from "@mui/icons-material";
-import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled, TextareaAutosize } from "@mui/material";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Divider, Drawer, styled } from "@mui/material";
 import IconButtonLarge from "./IconButtonLarge";
 import { addConsoleListener, removeConsoleListener } from "./../../Helpers/Logger"
 import React from "react";
