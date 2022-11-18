@@ -4,6 +4,8 @@ VAPE-3D is the product of a research project with the aim of creating a 3D visua
 
 The VAPE-3D environment can be used directly from this GitHub repository. [Please use the following link](https://nhlstenden-isal.github.io/VAPE-3D/).
 
+![VAPE-3D Example](https://raw.githubusercontent.com/NHLStenden-ISAL/VAPE-3D/main/tool-example-setting.png)
+
 ---
 
 ## Development environment
