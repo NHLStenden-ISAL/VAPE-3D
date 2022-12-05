@@ -10,6 +10,8 @@ import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
 import PrintObject from "../Objects/PrintObject";
+import GridObject from "../Objects/GridObject";
+import LayerObject from "../Objects/LayerObject";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -45,6 +47,9 @@ export default class CommandAddObject implements ICommand {
         break;
       case 'print':
         this.object = new PrintObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'grid':
+        this.object = new LayerObject(this.worldInfo, this.gridPosition, this.direction);
         break;
     }
   }

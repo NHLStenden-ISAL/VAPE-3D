@@ -12,7 +12,7 @@ export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
   );
 
   camera.attachControl(canvas, true);
-  camera.setPosition(new Vector3(-7, 7, -7));
+  camera.setPosition(new Vector3(50, 40, 20));
 
   return camera;
 }
@@ -23,14 +23,30 @@ export function createGrid(scene: Scene, planeSize: number, gridRatio: number): 
   gridMaterial.lineColor = Color3.Teal();
   gridMaterial.mainColor = new Color3(0.2, 0.2, 0.25);
 
-  const gridObject: Mesh = createGround(scene, planeSize);
+  const gridObject: Mesh = createGround(scene, planeSize, 0);
   gridObject.material = gridMaterial;
 
   return gridObject;
 }
 
-function createGround(scene: Scene, size: number): Mesh {
-  return MeshBuilder.CreateGround('ground', { width: size, height: size }, scene);
+export function createLayer(scene: Scene, planeSize: number, gridRatio: number, layer: number): Mesh {
+  const gridMaterial = new GridMaterial('grid', scene);
+  gridMaterial.gridRatio = gridRatio;
+  gridMaterial.lineColor = Color3.Teal();
+  gridMaterial.mainColor = new Color3(0.2, 0.2, 0.25);
+
+  const gridObject: Mesh = createGround(scene, planeSize, layer);
+  gridObject.material = gridMaterial;
+
+  return gridObject;
+}
+
+function createGround(scene: Scene, size: number, layer: number): Mesh {
+  const plane = MeshBuilder.CreatePlane("plane", {height: size, width: size, sideOrientation: Mesh.DOUBLESIDE});
+  plane.rotation.x = Math.PI / 2;
+  plane.position.y = layer;
+  return plane;
+  // return MeshBuilder.CreateGround('ground', { width: size, height: size }, scene);
 }
 
 export function createBox(scene: Scene, name: string, color: Color3 = Color3.White(), size: number = 1): Mesh {
@@ -40,14 +56,17 @@ export function createBox(scene: Scene, name: string, color: Color3 = Color3.Whi
 
   box.material = boxMaterial;
 
+  // box.position.y = 1;
+
   return box;
 }
 
 export function createDirection(scene: Scene, name: string, color: Color3, size: number = 1): Mesh {
   const sphere = createBox(scene, name, color, size);
+  sphere.position = new Vector3(sphere.position.x, 0, sphere.position.z);
 
-  const triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3 }, scene);
-  triangle.position = new Vector3(triangle.position.x, 0.51, triangle.position.z);
+  const triangle = MeshBuilder.CreateDisc('arrow', { tessellation: 3, sideOrientation: Mesh.DOUBLESIDE }, scene);
+  triangle.position = new Vector3(sphere.position.x, 0.5, sphere.position.z);
   triangle.rotate(Vector3.Right(), Math.PI / 2, Space.LOCAL);
   triangle.rotate(Vector3.Forward(), Math.PI / 2, Space.LOCAL);
 

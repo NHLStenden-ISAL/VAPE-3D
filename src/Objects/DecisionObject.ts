@@ -37,7 +37,7 @@ export default class DecisionObject extends BaseObject {
     if (this.storable.getValue() === '') { return; }
     this.executeStatement(robotObject, this.storable.getValue());
 
-    if (this.checkCondition() === true) {
+    if (this.checkCondition()) {
       console.log(this.storable.getValue());
       robotObject.rotateToward(this.transformable.getDirection());
     }
