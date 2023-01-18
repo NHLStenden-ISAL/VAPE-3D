@@ -18,12 +18,12 @@ import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
 import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
+import { SceneManager } from "./Objects/SceneComponent";
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
-const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject) => {
-  const canvas = scene.getEngine().getRenderingCanvas();
-  const appManager = new AppManager(scene, canvas, observerContainer, setSelectedObject);
+const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject, sceneManager: SceneManager) => {
+  const appManager = new AppManager(scene, observerContainer, setSelectedObject, sceneManager);
 
   appManager.setupObservers();
   appManager.runApp();
@@ -52,4 +52,3 @@ export default function App() {
     </Box>
   );
 }
-

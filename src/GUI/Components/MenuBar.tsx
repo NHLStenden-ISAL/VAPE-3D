@@ -29,6 +29,8 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const handleConsoleOpen = () => { setConsoleOpen(true); }
   const handleConsoleClose = () => { setConsoleOpen(false); }
 
+  // const newScene = () => { observerContainer.manageScenes(); }
+
   // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
   const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
@@ -65,6 +67,10 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
                 onClick={() => { observerContainer.downloadProgram(); }}
                 icon={<SaveIcon />}
               />
+              {/*<IconButtonLarge*/}
+              {/*    onClick={() => { newScene() }}*/}
+              {/*    icon={<AddBox />}*/}
+              {/*/>*/}
             </Grid>
             <Grid item >
               <IconButtonLarge

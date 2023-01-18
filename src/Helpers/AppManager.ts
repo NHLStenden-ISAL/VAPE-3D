@@ -16,6 +16,7 @@ import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
+import { SceneManager } from "../Objects/SceneComponent";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -23,23 +24,28 @@ export default class AppManager {
   private canvas: any;
 
   private sceneHelper: SceneHelper;
+  private sceneManager: SceneManager;
   private programState: ProgramState;
   private commandBroker: CommandBroker;
   private worldInformation: WorldInformation;
   private observerContainer: ObserverContainer;
+  private setSelectedObject: SetSelectedObject;
 
   private updateTimeout: any;
 
-  constructor(scene: Scene, canvas: any, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject) {
-    this.canvas = canvas;
+  constructor(scene: Scene, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject, sceneManager: SceneManager) {
+    this.canvas = scene.getEngine().getRenderingCanvas();
     this.observerContainer = observerContainer;
+    this.setSelectedObject = setSelectedObject;
 
     this.programState = new ProgramState();
     this.commandBroker = new CommandBroker();
-    this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
+    this.worldInformation = new WorldInformation(scene, this.commandBroker, this.setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
+    this.sceneManager = sceneManager;
 
     const worldInfo = this.worldInformation;
+    // this.observerContainer.manageScenes(this.sceneManager);
     this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); });
     this.observerContainer.setUploadProgram((program: string) => {
       let pProgram = JSON.parse(program) as VAPLProgram;
@@ -121,23 +127,35 @@ export default class AppManager {
   }
 
   public startProgram() {
-    if (this.programState.getGameState() === 'run') { return; }
-    this.programState.setGameState('run');
+    let newScene = new Scene(this.sceneManager.engine);
 
-    console.log("Start the program");
-    this.updateLoop(500);
+
+    let c = newScene.getEngine().getRenderingCanvas();
+    let cb = new CommandBroker();
+    let wi = new WorldInformation(newScene, cb, this.setSelectedObject);
+    let ch = new SceneHelper(wi, c);
+    ch.createScene();
+    this.sceneManager.SceneAdd("second", newScene);
+    console.log(this.sceneManager.scenes);
+    // if (this.programState.getGameState() === 'run') { return; }
+    // this.programState.setGameState('run');
+    //
+    // console.log("Start the program");
+    // this.updateLoop(500);
   }
 
   public pauseProgram() {
-    if (this.programState.getGameState() === 'build') { return; }
-    this.programState.setGameState('build');
-
-    console.log("Pause the program");
-    this.cancelUpdateLoop();
+    this.sceneManager.SceneSwitch("main");
+    // if (this.programState.getGameState() === 'build') { return; }
+    // this.programState.setGameState('build');
+    //
+    // console.log("Pause the program");
+    // this.cancelUpdateLoop();
 
   }
 
   public stopProgram() {
+    this.sceneManager.SceneSwitch("second");
     //TODO: place the robot at the start position, reset all the variables?
   }
 

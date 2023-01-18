@@ -9,40 +9,70 @@ type CanvasProps = {
   setSelectedObject: SetSelectedObject,
 }
 
+export class SceneManager {
+  engine: Engine;
+  scenes = new Map<string, Scene>();
+  activeScene = "";
+
+  constructor(engine: Engine) {
+    this.engine = engine;
+
+    const self = this;
+
+    engine.runRenderLoop(() => {
+      let currentScene = self.CurrentScene();
+      if(currentScene !== undefined) {
+        currentScene.render();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      engine.resize();
+    });
+  }
+
+  public CurrentScene() {
+    return this.scenes.get(this.activeScene);
+  }
+
+  public SceneAddName(name: string) {
+    let scene = new Scene(this.engine);
+    this.scenes.set(name, scene);
+  }
+
+  public SceneAdd(name: string, scene: Scene) {
+    this.scenes.set(name, scene);
+  }
+
+  public SceneSwitch(name: string) {
+    this.activeScene = name;
+    console.log(name);
+  }
+}
+
 export default function CreateCanvas({ antialias, onSceneReady, id, setSelectedObject }: CanvasProps) {
   const rectCanvas = useRef(null);
 
   useEffect(() => {
     if (rectCanvas.current) {
-      const engine = new Engine(rectCanvas.current, antialias);
-      const scene = new Scene(engine);
+      let sm = new SceneManager(new Engine(rectCanvas.current, antialias));
+      let scene = new Scene(sm.engine);
+      sm.SceneAdd("main", scene);
+      sm.SceneSwitch("main");
       if (scene.isReady()) {
-        onSceneReady(scene, setSelectedObject);
+        onSceneReady(scene, setSelectedObject, sm);
       } else {
         scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
       }
 
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-
-      const resize = () => {
-        scene.getEngine().resize();
-      }
-
-      if (window) {
-        window.addEventListener("resize", resize);
-      }
-
       return () => {
-        scene.getEngine().dispose();
+        // scene.getEngine().dispose();
 
-        if (window) {
-          window.removeEventListener("resize", resize);
-        }
+        // if (window) {
+        //   window.removeEventListener("resize", resize);
+        // }
       };
     }
   }, [rectCanvas]);
-
   return <canvas ref={rectCanvas} id={id} />;
 };

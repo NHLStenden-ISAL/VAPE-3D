@@ -27,7 +27,7 @@ export default class SceneHelper {
     light.intensity = 0.7;
 
     new GridObject(this.worldInfo.getScene(), 60);
-    this.addObject(new Vector2(0, 0), 'grid');
+    // this.addObject(new Vector2(0, 0), 'grid');
 
     // this.addLayer(1);
 
