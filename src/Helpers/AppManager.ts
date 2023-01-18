@@ -128,15 +128,16 @@ export default class AppManager {
 
   public startProgram() {
     let newScene = new Scene(this.sceneManager.engine);
-
-
-    let c = newScene.getEngine().getRenderingCanvas();
-    let cb = new CommandBroker();
-    let wi = new WorldInformation(newScene, cb, this.setSelectedObject);
-    let ch = new SceneHelper(wi, c);
-    ch.createScene();
+    this.canvas = newScene.getEngine().getRenderingCanvas();
+    this.commandBroker = new CommandBroker();
+    this.worldInformation = new WorldInformation(newScene, this.commandBroker, this.setSelectedObject);
+    this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
+    this.sceneHelper.createScene();
+    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
+    mouseHandler.onMouseInteraction();
+    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
+    keyboardHandler.onKeyboardInteraction();
     this.sceneManager.SceneAdd("second", newScene);
-    console.log(this.sceneManager.scenes);
     // if (this.programState.getGameState() === 'run') { return; }
     // this.programState.setGameState('run');
     //
@@ -151,11 +152,11 @@ export default class AppManager {
     //
     // console.log("Pause the program");
     // this.cancelUpdateLoop();
-
   }
 
   public stopProgram() {
     this.sceneManager.SceneSwitch("second");
+    // this.setCamAngle();
     //TODO: place the robot at the start position, reset all the variables?
   }
 

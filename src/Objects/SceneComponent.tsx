@@ -35,18 +35,30 @@ export class SceneManager {
     return this.scenes.get(this.activeScene);
   }
 
-  public SceneAddName(name: string) {
-    let scene = new Scene(this.engine);
-    this.scenes.set(name, scene);
-  }
-
   public SceneAdd(name: string, scene: Scene) {
     this.scenes.set(name, scene);
   }
 
   public SceneSwitch(name: string) {
+    this.attachControl();
     this.activeScene = name;
+    this.detachControl();
+    console.log(this.scenes);
     console.log(name);
+  }
+
+  private attachControl() {
+    let curScene = this.CurrentScene();
+    if(curScene !== undefined) {
+      curScene.detachControl();
+    }
+  }
+
+  private detachControl() {
+    let curScene = this.CurrentScene();
+    if(curScene !== undefined) {
+      curScene.attachControl(true, true, true);
+    }
   }
 }
 
