@@ -1,6 +1,11 @@
 import {Observable, Scene} from "@babylonjs/core";
 import { BuildTypes, EditorState, GameState } from "./ProgramState";
 import { SceneManager } from "../Objects/SceneComponent";
+import CommandBroker from "./CommandBroker";
+import WorldInformation from "./WorldInformation";
+import SceneHelper from "./SceneHelper";
+import MouseHandler from "./MouseHandler";
+import KeyboardHandler from "./KeyboardHandler";
 
 //TODO: a command pattern needs to be inserted between these observers and their actions
 
@@ -60,10 +65,11 @@ export default class ObserverContainer {
     this.uploadProgramFunc(program);
   }
 
-  public manageScenes(sceneManager: SceneManager) : void {
-    let newScene = new Scene(sceneManager.engine);
-    sceneManager.SceneAdd("second", newScene);
-    sceneManager.SceneSwitch("second");
+  public manageScenes() : void {
+    console.log('clcik');
+    // let sceneCount = SceneManager.scenes.size;
+    // SceneManager.SceneAddClean("Layer " + sceneCount);
+    // SceneManager.SceneSwitch("Layer " + sceneCount);
     this.sceneFunc();
   }
 }

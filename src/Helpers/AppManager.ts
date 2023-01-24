@@ -21,15 +21,15 @@ import { SceneManager } from "../Objects/SceneComponent";
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
 export default class AppManager {
-  private canvas: any;
+  public canvas: any;
 
-  private sceneHelper: SceneHelper;
-  private sceneManager: SceneManager;
-  private programState: ProgramState;
-  private commandBroker: CommandBroker;
-  private worldInformation: WorldInformation;
-  private observerContainer: ObserverContainer;
-  private setSelectedObject: SetSelectedObject;
+  public sceneHelper: SceneHelper;
+  // private sceneManager: SceneManager;
+  public programState: ProgramState;
+  public commandBroker: CommandBroker;
+  public worldInformation: WorldInformation;
+  public observerContainer: ObserverContainer;
+  public setSelectedObject: SetSelectedObject;
 
   private updateTimeout: any;
 
@@ -42,9 +42,11 @@ export default class AppManager {
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, this.setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-    this.sceneManager = sceneManager;
+    // this.sceneManager = sceneManager;
 
     const worldInfo = this.worldInformation;
+    SceneManager.setApp(this);
+    // SceneManager.setWorldInfo(this.canvas, this.observerContainer, this.setSelectedObject, this.programState, this.commandBroker, this.worldInformation, this.sceneHelper);
     // this.observerContainer.manageScenes(this.sceneManager);
     this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); });
     this.observerContainer.setUploadProgram((program: string) => {
@@ -127,7 +129,8 @@ export default class AppManager {
   }
 
   public startProgram() {
-    let newScene = new Scene(this.sceneManager.engine);
+    let sceneCount = SceneManager.scenes.size;
+    let newScene = new Scene(SceneManager.engine);
     this.canvas = newScene.getEngine().getRenderingCanvas();
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(newScene, this.commandBroker, this.setSelectedObject);
@@ -137,7 +140,8 @@ export default class AppManager {
     mouseHandler.onMouseInteraction();
     const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
     keyboardHandler.onKeyboardInteraction();
-    this.sceneManager.SceneAdd("second", newScene);
+    SceneManager.SceneAdd("Layer " + sceneCount, newScene);
+    SceneManager.SceneSwitch("Layer " + sceneCount);
     // if (this.programState.getGameState() === 'run') { return; }
     // this.programState.setGameState('run');
     //
@@ -145,17 +149,16 @@ export default class AppManager {
     // this.updateLoop(500);
   }
 
+
   public pauseProgram() {
-    this.sceneManager.SceneSwitch("main");
-    // if (this.programState.getGameState() === 'build') { return; }
-    // this.programState.setGameState('build');
-    //
-    // console.log("Pause the program");
-    // this.cancelUpdateLoop();
+    if (this.programState.getGameState() === 'build') { return; }
+    this.programState.setGameState('build');
+
+    console.log("Pause the program");
+    this.cancelUpdateLoop();
   }
 
   public stopProgram() {
-    this.sceneManager.SceneSwitch("second");
     // this.setCamAngle();
     //TODO: place the robot at the start position, reset all the variables?
   }

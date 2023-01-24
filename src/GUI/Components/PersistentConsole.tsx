@@ -63,7 +63,8 @@ export default class PersistentConsole extends React.Component<PersistentConsole
         open={this.props.open}
         PaperProps={{ sx: {width:"400px"} }}
       >
-        <DrawerHeader>
+        <DrawerHeader
+            onClick={this.props.closeFunc}>
           <IconButtonLarge
             onClick={this.props.closeFunc}
             icon={iconMap.get(this.props.anchor)}

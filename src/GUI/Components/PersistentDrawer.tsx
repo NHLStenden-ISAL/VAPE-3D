@@ -47,7 +47,8 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
       anchor={anchor}
       open={open}
     >
-      <DrawerHeader>
+      <DrawerHeader
+          onClick={closeFunc}>
       <b className="drawer-header">Toolbox</b>
         <IconButtonLarge
           onClick={closeFunc}
