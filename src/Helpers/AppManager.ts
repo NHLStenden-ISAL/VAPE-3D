@@ -37,17 +37,12 @@ export default class AppManager {
     this.canvas = scene.getEngine().getRenderingCanvas();
     this.observerContainer = observerContainer;
     this.setSelectedObject = setSelectedObject;
-
     this.programState = new ProgramState();
     this.commandBroker = new CommandBroker();
     this.worldInformation = new WorldInformation(scene, this.commandBroker, this.setSelectedObject);
     this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-    // this.sceneManager = sceneManager;
-
     const worldInfo = this.worldInformation;
     SceneManager.setApp(this);
-    // SceneManager.setWorldInfo(this.canvas, this.observerContainer, this.setSelectedObject, this.programState, this.commandBroker, this.worldInformation, this.sceneHelper);
-    // this.observerContainer.manageScenes(this.sceneManager);
     this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); });
     this.observerContainer.setUploadProgram((program: string) => {
       let pProgram = JSON.parse(program) as VAPLProgram;
@@ -129,24 +124,11 @@ export default class AppManager {
   }
 
   public startProgram() {
-    let sceneCount = SceneManager.scenes.size;
-    let newScene = new Scene(SceneManager.engine);
-    this.canvas = newScene.getEngine().getRenderingCanvas();
-    this.commandBroker = new CommandBroker();
-    this.worldInformation = new WorldInformation(newScene, this.commandBroker, this.setSelectedObject);
-    this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-    this.sceneHelper.createScene();
-    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
-    mouseHandler.onMouseInteraction();
-    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
-    keyboardHandler.onKeyboardInteraction();
-    SceneManager.SceneAdd("Layer " + sceneCount, newScene);
-    SceneManager.SceneSwitch("Layer " + sceneCount);
-    // if (this.programState.getGameState() === 'run') { return; }
-    // this.programState.setGameState('run');
-    //
-    // console.log("Start the program");
-    // this.updateLoop(500);
+    if (this.programState.getGameState() === 'run') { return; }
+    this.programState.setGameState('run');
+
+    console.log("Start the program");
+    this.updateLoop(500);
   }
 
 

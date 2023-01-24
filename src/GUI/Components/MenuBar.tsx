@@ -36,10 +36,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const handleConsoleOpen = () => { setConsoleOpen(true); }
   const handleConsoleClose = () => { setConsoleOpen(false); }
 
-  // const newScene = () => { SceneManager.SceneAddClean(); }
-
-  // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
-  const startClick = () => {  };
+  const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
   const stopClick = () => { observerContainer.executeStateGame('reset'); };
 
@@ -133,7 +130,6 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
       </AppBar>
 
       <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
-      {/*<PersistentLayer anchor="bottom" open={layersOpen} closeFunc={handleLayersClose} onButtonPress={onButtonPress} />*/}
       <PersistentLayer anchor="bottom" open={layersOpen} closeFunc={handleLayersClose} />
       <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
     </Box>
