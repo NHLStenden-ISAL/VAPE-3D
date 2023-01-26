@@ -22,7 +22,7 @@ export default class SceneHelper {
     this.camera = createCamera(this.worldInfo.getScene(), canvas);
   }
 
-  public createScene() {
+  public createScene(clean: boolean) {
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), this.worldInfo.getScene());
     light.intensity = 0.7;
 
@@ -31,18 +31,20 @@ export default class SceneHelper {
 
     // this.addLayer(1);
 
-    this.addObject(new Vector2(2, 3), 'variable');
-    this.addObject(new Vector2(10, 5), 'variable');
+    if (!clean) {
+      this.addObject(new Vector2(2, 3), 'variable');
+      this.addObject(new Vector2(10, 5), 'variable');
 
-    this.addObject(new Vector2(-1, 0), 'direction', Direction.NORTH);
-    this.addObject(new Vector2(-10, 0), 'direction', Direction.EAST);
+      this.addObject(new Vector2(-1, 0), 'direction', Direction.NORTH);
+      this.addObject(new Vector2(-10, 0), 'direction', Direction.EAST);
 
-    this.addObject(new Vector2(0, 0), 'robot');
+      this.addObject(new Vector2(0, 0), 'robot');
 
-    this.addObject(new Vector2(-10, 9), 'decision', Direction.SOUTH);
-    this.addObject(new Vector2(-1, 9), 'decision', Direction.WEST);
+      this.addObject(new Vector2(-10, 9), 'decision', Direction.SOUTH);
+      this.addObject(new Vector2(-1, 9), 'decision', Direction.WEST);
 
-    this.addObject(new Vector2(-1, 8), 'evaluate');
+      this.addObject(new Vector2(-1, 8), 'evaluate');
+    }
   }
 
   public updateRobots() {

@@ -94,7 +94,7 @@ export default class AppManager {
   }
 
   public runApp() {
-    this.sceneHelper.createScene();
+    this.sceneHelper.createScene(false);
 
     const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
     mouseHandler.onMouseInteraction();

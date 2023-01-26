@@ -86,7 +86,7 @@ export class SceneManager {
     SceneManager.appMan.commandBroker = new CommandBroker();
     SceneManager.appMan.worldInformation = new WorldInformation(newScene, SceneManager.appMan.commandBroker, SceneManager.appMan.setSelectedObject);
     SceneManager.appMan.sceneHelper = new SceneHelper(SceneManager.appMan.worldInformation, SceneManager.appMan.canvas);
-    SceneManager.appMan.sceneHelper.createScene();
+    SceneManager.appMan.sceneHelper.createScene(true);
     const mouseHandler = new MouseHandler(SceneManager.appMan.worldInformation, SceneManager.appMan.sceneHelper, SceneManager.appMan.programState);
     mouseHandler.onMouseInteraction();
     const keyboardHandler = new KeyboardHandler(SceneManager.appMan.worldInformation, SceneManager.appMan, SceneManager.appMan.programState);
