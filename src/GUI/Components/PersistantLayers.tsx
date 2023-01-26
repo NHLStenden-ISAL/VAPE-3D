@@ -1,4 +1,4 @@
-import {AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore} from "@mui/icons-material";
+import {AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
 import {Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled} from "@mui/material";
 import IconButtonLarge from "./IconButtonLarge";
 import React, {useState} from "react";
@@ -33,9 +33,9 @@ const onClick = (text: string) => {
 
 function addItemIcon(text: string) {
     if (text === SceneManager.activeScene) {
-        return <AddBox color="primary"/>
+        return <RadioButtonChecked color="primary"/>
     } else {
-        return <AddBox color="inherit"/>
+        return <RadioButtonUnchecked color="inherit"/>
     }
 }
 
@@ -96,7 +96,7 @@ export default class PersistentLayers extends React.Component<PersistentLayersPr
                 variant="persistent"
                 anchor={this.props.anchor}
                 open={this.props.open}
-                PaperProps={{ sx: {width:"400px"} }}
+                PaperProps={{ sx: {width:"300px"} }}
             >
                 <DrawerHeader
                     onClick={this.props.closeFunc}>

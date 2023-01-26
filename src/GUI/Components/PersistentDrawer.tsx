@@ -1,4 +1,4 @@
-import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
 import { useState } from "react";
 import IconButtonLarge from "./IconButtonLarge";
@@ -35,9 +35,9 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
 
   function addItemIcon(text: string) {
     if (text === object) {
-      return <AddBox color="primary"/>
+      return <RadioButtonChecked color="primary"/>
     } else {
-      return <AddBox color="inherit"/>
+      return <RadioButtonUnchecked color="inherit"/>
     }
   }
 
