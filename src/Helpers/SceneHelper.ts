@@ -19,7 +19,13 @@ export default class SceneHelper {
     this.worldInfo = worldInfo;
 
     this.canvas = canvas;
-    this.camera = createCamera(this.worldInfo.getScene(), canvas);
+
+    console.log('createCamera');
+    this.camera = createCamera(this.worldInfo.getScene(), this.canvas);
+  }
+
+  public resetCam() {
+    // this.camera = createCamera(this.worldInfo.getScene(), this.canvas);
   }
 
   public createScene(clean: boolean) {

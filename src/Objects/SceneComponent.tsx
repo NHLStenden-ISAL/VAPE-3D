@@ -8,6 +8,7 @@ import WorldInformation from "../Helpers/WorldInformation";
 import SceneHelper from "../Helpers/SceneHelper";
 import MouseHandler from "../Helpers/MouseHandler";
 import KeyboardHandler from "../Helpers/KeyboardHandler";
+import VapeScene from "../VapeScene";
 
 type CanvasProps = {
   antialias: boolean,
@@ -18,25 +19,18 @@ type CanvasProps = {
 
 export class SceneManager {
   static engine: Engine;
-  static scenes = new Map<string, Scene>();
+  static setSelectedObject: SetSelectedObject;
+  static scenes = new Map<string, VapeScene>();
   static activeScene = "";
   static sceneListenerCount = 0;
   static sceneListeners : any = {};
-
-
   static canvas: any;
-  static sceneHelper: SceneHelper;
-  static programState: ProgramState;
-  static commandBroker: CommandBroker;
-  static worldInformation: WorldInformation;
-  static observerContainer: ObserverContainer;
-  static setSelectedObject: SetSelectedObject;
   static appMan: AppManager;
+
+  static runTime: VapeScene | undefined;
 
   constructor(engine: Engine) {
     SceneManager.engine = engine;
-
-    const self = this;
 
     engine.runRenderLoop(() => {
       let currentScene = SceneManager.CurrentScene();
@@ -50,16 +44,6 @@ export class SceneManager {
     });
   }
 
-  public static setWorldInfo(canvas: any, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject, programState: ProgramState, commandBroker: CommandBroker, worldInformation: WorldInformation, sceneHelper: SceneHelper) {
-    this.canvas = canvas;
-    this.observerContainer = observerContainer;
-    this.setSelectedObject = setSelectedObject;
-    this.programState = programState;
-    this.commandBroker = commandBroker;
-    this.worldInformation = worldInformation;
-    this.sceneHelper = sceneHelper;
-  }
-
   public static addSceneListener(listener : any) {
     console.log(SceneManager.sceneListeners);
     let id = SceneManager.sceneListenerCount++;
@@ -71,8 +55,18 @@ export class SceneManager {
     delete SceneManager.sceneListeners[id];
   }
 
-  public static CurrentScene() {
+  public static CurrentVapeScene() {
     return SceneManager.scenes.get(this.activeScene);
+  }
+
+  public static CurrentScene() {
+    if(SceneManager.runTime !== undefined) {
+      return SceneManager.runTime.scene;
+    }
+
+    let vScene = SceneManager.scenes.get(this.activeScene);
+    if (vScene !== undefined)
+      return vScene.scene;
   }
 
   public static setApp(param: AppManager) {
@@ -80,22 +74,24 @@ export class SceneManager {
   }
 
   public static SceneAddClean() {
+    console.log('add?');
+    // SceneManager.e
     let sceneCount = SceneManager.scenes.size;
-    let newScene = new Scene(SceneManager.engine);
-    SceneManager.appMan.canvas = newScene.getEngine().getRenderingCanvas();
-    SceneManager.appMan.commandBroker = new CommandBroker();
-    SceneManager.appMan.worldInformation = new WorldInformation(newScene, SceneManager.appMan.commandBroker, SceneManager.appMan.setSelectedObject);
-    SceneManager.appMan.sceneHelper = new SceneHelper(SceneManager.appMan.worldInformation, SceneManager.appMan.canvas);
-    SceneManager.appMan.sceneHelper.createScene(true);
-    const mouseHandler = new MouseHandler(SceneManager.appMan.worldInformation, SceneManager.appMan.sceneHelper, SceneManager.appMan.programState);
-    mouseHandler.onMouseInteraction();
-    const keyboardHandler = new KeyboardHandler(SceneManager.appMan.worldInformation, SceneManager.appMan, SceneManager.appMan.programState);
-    keyboardHandler.onKeyboardInteraction();
-    SceneManager.scenes.set("Layer " + sceneCount, newScene);
+    // let newScene = new Scene(SceneManager.engine);
+    // SceneManager.appMan.canvas = newScene.getEngine().getRenderingCanvas();
+    // SceneManager.appMan.commandBroker = new CommandBroker();
+    // SceneManager.appMan.worldInformation = new WorldInformation(newScene, SceneManager.appMan.commandBroker, SceneManager.appMan.setSelectedObject);
+    // SceneManager.appMan.sceneHelper = new SceneHelper(SceneManager.appMan.worldInformation, SceneManager.appMan.canvas);
+    // SceneManager.appMan.sceneHelper.createScene(true);
+    // const mouseHandler = new MouseHandler(SceneManager.appMan.worldInformation, SceneManager.appMan.sceneHelper, SceneManager.appMan.programState);
+    // mouseHandler.onMouseInteraction();
+    // const keyboardHandler = new KeyboardHandler(SceneManager.appMan.worldInformation, SceneManager.appMan, SceneManager.appMan.programState);
+    // keyboardHandler.onKeyboardInteraction();
+    SceneManager.scenes.set("Layer " + sceneCount, new VapeScene(SceneManager.engine, this.setSelectedObject));
     SceneManager.SceneSwitch("Layer " + sceneCount);
   }
 
-  public static SceneAdd(name: string, scene: Scene) {
+  public static SceneAdd(name: string, scene: VapeScene) {
     SceneManager.scenes.set(name, scene);
   }
 
@@ -112,8 +108,13 @@ export class SceneManager {
     this.attachControl();
     this.activeScene = name;
     this.detachControl();
-    console.log(SceneManager.scenes);
-    console.log(name);
+    console.log('-> ' + name);
+  }
+
+  public static ResetCamCurrentScene() {
+    let vScene = SceneManager.CurrentVapeScene();
+    if(vScene !== undefined)
+      vScene.sceneHelper.resetCam();
   }
 
   private static attachControl() {
@@ -136,12 +137,18 @@ export default function CreateCanvas({ antialias, onSceneReady, id, setSelectedO
 
   useEffect(() => {
     if (rectCanvas.current) {
-      let sm = new SceneManager(new Engine(rectCanvas.current, antialias));
-      let scene = new Scene(SceneManager.engine);
+      let engine = new Engine(rectCanvas.current, antialias);
+      new SceneManager(engine);
+      SceneManager.engine = engine;
+
+      console.log('new VapeScene');
+      let scene = new VapeScene(SceneManager.engine, setSelectedObject);
+      console.log(scene);
       SceneManager.SceneAdd("Main", scene);
       SceneManager.SceneSwitch("Main");
+      console.log(SceneManager.scenes);
       if (scene.isReady()) {
-        onSceneReady(scene, setSelectedObject, sm);
+        onSceneReady(scene, setSelectedObject);
       } else {
         scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
       }

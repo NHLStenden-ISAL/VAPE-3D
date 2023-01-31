@@ -1,10 +1,19 @@
-import { Engine, Scene } from "@babylonjs/core";
-import { useEffect, useRef } from "react";
-import AppManager, { SetSelectedObject } from "../Helpers/AppManager";
-import ObserverContainer from "../Helpers/ObserverContainer";
-import ProgramState from "../Helpers/ProgramState";
-import CommandBroker from "../Helpers/CommandBroker";
-import WorldInformation from "../Helpers/WorldInformation";
-import SceneHelper from "../Helpers/SceneHelper";
-import MouseHandler from "../Helpers/MouseHandler";
-import KeyboardHandler from "../Helpers/KeyboardHandler";
+import CommandBroker from "./CommandBroker";
+import KeyboardHandler from "./KeyboardHandler";
+import MouseHandler from "./MouseHandler";
+import SceneHelper from "./SceneHelper";
+import WorldInformation, { VAPLProgram } from "./WorldInformation";
+import { Scene } from "@babylonjs/core";
+import { SceneManager } from "../Objects/SceneComponent";
+
+export class RunTimeManager {
+    public static runVAPE() {
+        console.log('forest');
+    }
+
+    public static stopVAPE() {
+        console.log("stopVAPE");
+        // SceneManager.runTime = undefined;
+    }
+}
+

@@ -18,12 +18,12 @@ import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
 import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
-import { SceneManager } from "./Objects/SceneComponent";
+import VapeScene from "./VapeScene";
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
-const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject, sceneManager: SceneManager) => {
-  const appManager = new AppManager(scene, observerContainer, setSelectedObject, sceneManager);
+const onSceneReady = (scene: VapeScene, setSelectedObject: SetSelectedObject) => {
+  const appManager = new AppManager(scene, observerContainer, setSelectedObject);
 
   appManager.setupObservers();
   appManager.runApp();

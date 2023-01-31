@@ -26,9 +26,6 @@ const iconMap: Map<string, any> = new Map<string, any>([
 
 const onClick = (text: string) => {
     SceneManager.SceneSwitch(text);
-    console.log('SceneSwitch -> ' + text);
-    // onButtonPress(text);
-    // setObject(text);
 }
 
 function addItemIcon(text: string) {

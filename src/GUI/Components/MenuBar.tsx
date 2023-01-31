@@ -5,7 +5,7 @@ import PersistentDrawer from "./PersistentDrawer";
 import PersistentConsole from "./PersistentConsole"
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import {AddBox, Delete, IndeterminateCheckBox, Layers, Pause, PlayArrow, Stop, Transform} from "@mui/icons-material";
+import {AddBox, Delete, IndeterminateCheckBox, Layers, Pause, PlayArrow, Stop, Transform, Cameraswitch } from "@mui/icons-material";
 import { useState } from "react";
 import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
@@ -85,6 +85,10 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
               <IconButtonLarge
                 onClick={() => { observerContainer.downloadProgram(); }}
                 icon={<SaveIcon />}
+              />
+              <IconButtonLarge
+                  onClick={() => { SceneManager.ResetCamCurrentScene(); }}
+                  icon={<Cameraswitch  />}
               />
             </Grid>
             <Grid item >
