@@ -1,13 +1,13 @@
 import { Engine, Scene } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import AppManager, { SetSelectedObject } from "../Helpers/AppManager";
-import ObserverContainer from "../Helpers/ObserverContainer";
-import ProgramState from "../Helpers/ProgramState";
-import CommandBroker from "../Helpers/CommandBroker";
+// import ObserverContainer from "../Helpers/ObserverContainer";
+// import ProgramState from "../Helpers/ProgramState";
+// import CommandBroker from "../Helpers/CommandBroker";
 import WorldInformation from "../Helpers/WorldInformation";
-import SceneHelper from "../Helpers/SceneHelper";
-import MouseHandler from "../Helpers/MouseHandler";
-import KeyboardHandler from "../Helpers/KeyboardHandler";
+// import SceneHelper from "../Helpers/SceneHelper";
+// import MouseHandler from "../Helpers/MouseHandler";
+// import KeyboardHandler from "../Helpers/KeyboardHandler";
 import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
 
@@ -50,8 +50,7 @@ export class SceneManager {
     if(SceneManager.runTime?.scene === undefined)
       return;
     const newWorldInfo = new WorldInformation(SceneManager.runTime?.scene, SceneManager.runTime?.commandBroker, SceneManager.runTime?.setSelectedObject);
-    if (foundScene?.worldInformation instanceof WorldInformation)
-      newWorldInfo.copy(foundScene.worldInformation);
+    foundScene?.worldInformation.copy(newWorldInfo);
     SceneManager.runTime?.pushGrid(newWorldInfo);
   }
 

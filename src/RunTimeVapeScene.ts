@@ -5,12 +5,14 @@ import SceneHelper from "./Helpers/SceneHelper";
 import {SetSelectedObject} from "./Helpers/AppManager";
 import {Engine} from "@babylonjs/core/Engines/engine";
 import {Nullable} from "@babylonjs/core/types";
-import {SceneManager} from "./Objects/SceneComponent";
-import MouseHandler from "./Helpers/MouseHandler";
-import KeyboardHandler from "./Helpers/KeyboardHandler";
+// import {SceneManager} from "./Objects/SceneComponent";
+// import MouseHandler from "./Helpers/MouseHandler";
+// import KeyboardHandler from "./Helpers/KeyboardHandler";
 import ProgramState from "./Helpers/ProgramState";
 import Stack from "./Stack";
 import {createGrid} from "./Helpers/ObjectCreator";
+import BaseObject from "./Objects/BaseObject";
+// import BaseObject from "./Objects/BaseObject";
 
 type GridCombo = {
     grid: Mesh,
@@ -44,7 +46,6 @@ export default class RunTimeVapeScene extends Scene {
         // mouseHandler.onMouseInteraction();
         // const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, this.programState);
         // keyboardHandler.onKeyboardInteraction();
-
     }
 
     get sceneHelper(): SceneHelper {
@@ -52,18 +53,14 @@ export default class RunTimeVapeScene extends Scene {
     }
 
     public pushGrid(worldInfo: WorldInformation) {
-        //De binnenkomde worldInfo is een kopie van een laag
-        //Maak nieuw grid aan boven de huidige -> Mesh
         const grid = createGrid(this.scene, 60, 1);
-        //Zet de y-waarde van de grid correct
-        grid.position.y = this.gridStack.count() * 15;
-
-        //Voeg alle elementen uit nieuwe worldinfo toe aan nieuw grid (voeg ze toe aan de scene en zet de y waarde correct
-        console.log("_----------------------------------------_");
+        const height = this.gridStack.count() * 15;
+        grid.position.y = height;
         console.log(worldInfo);
-        console.log("|||||||||||||||||||||||||||||||||||||||||");
-        console.log(this.gridStack);
-        console.log("_----------------------------------------_");
+        worldInfo.getSceneObjects().forEach((val: BaseObject, key: string) => {
+            // @ts-ignore
+            val.setHeight(height + val.getMesh().getBoundingInfo().boundingBox.extendSize.y);
+        });
 
         this.gridStack.push({
             "grid": grid,
@@ -73,8 +70,6 @@ export default class RunTimeVapeScene extends Scene {
     }
 
     public popGrid() {
-        //Verwijder de bovenste grid van de stack
-        //Verwijder mesh
         this.gridStack.pop();
     }
 }

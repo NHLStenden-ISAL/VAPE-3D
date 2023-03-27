@@ -28,11 +28,23 @@ export default class WorldInformation {
   }
 
   public copy(worldInfo: WorldInformation) {
-    for (const sceneObjectsKey in this.sceneObjects) {
-      const val = this.sceneObjects.get(sceneObjectsKey);
-      if(val != undefined)
+    this.sceneObjects.forEach((val: BaseObject, key: string) => {
+      if(val !== undefined){
+        val.getStartDirection()
         worldInfo.addSceneObject(val.copy(worldInfo));
-    }
+      }
+    });
+    // for (const sceneObjectsKey in this.sceneObjects.keys()) {
+    //   const val = this.sceneObjects.get(sceneObjectsKey);
+    //   if(val != undefined)
+    //     worldInfo.addSceneObject(val.copy(worldInfo));
+    // }
+
+    // for (let sceneObjectsKey in worldInfo.sceneObjects) {
+    //   let val = worldInfo.sceneObjects.get(sceneObjectsKey);
+    //   if(val !== undefined)
+    //     this.addSceneObject(val.copy(worldInfo));
+    // }
   }
 
   public getScene(): Scene {

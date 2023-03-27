@@ -134,6 +134,12 @@ export default class AppManager {
     console.log("Run the program");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
     SceneManager.callByName("Main");
+    try {
+      SceneManager.callByName("Layer 1");
+    } catch (e){}
+    try {
+      SceneManager.callByName("Layer 2");
+    } catch (e){}
     this.updateLoop(500);
   }
 

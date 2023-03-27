@@ -33,6 +33,7 @@ export default abstract class BaseObject {
     worldInfo.addSceneObject(this);
     
     this.mesh = this.createMesh();
+
     this.height = this.mesh.getBoundingInfo().boundingBox.extendSize.y;
 
     this.gridPosition = gridPos;
@@ -127,6 +128,11 @@ export default abstract class BaseObject {
     return this.startDirection;
   }
 
+  public setHeight(height: number){
+    this.height = height;
+    this.mesh.position = this.updateMeshPosition();
+  }
+
   public move(position: Vector2): void {
     this.gridPosition = this.transformable.move(position);
     this.mesh.position = this.updateMeshPosition()
@@ -169,4 +175,5 @@ export default abstract class BaseObject {
   }
 
   public abstract getDataContainer(): BaseDataContainer;
+
 }
