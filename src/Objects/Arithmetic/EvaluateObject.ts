@@ -26,6 +26,10 @@ export default class EvaluateObject extends BaseObject {
     this.interactedRobots = [];
   }
 
+  public copy(worldInfo: WorldInformation): EvaluateObject {
+    return new EvaluateObject(worldInfo, this.gridPosition, this.direction);
+  }
+
   protected createMesh(): Mesh {
     return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Red(), 0.8);
   }

@@ -19,6 +19,7 @@ import PrintObject from "../Objects/PrintObject";
 import { SceneManager } from "../Objects/SceneComponent";
 import {RunTimeManager} from "./RunTimeManager";
 import VapeScene from "../VapeScene";
+import RunTimeVapeScene from "../RunTimeVapeScene";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -131,7 +132,8 @@ export default class AppManager {
     if (this.programState.getGameState() === 'run') { return; }
     this.programState.setGameState('run');
     console.log("Run the program");
-    SceneManager.runTime = new VapeScene(SceneManager.engine, this.setSelectedObject);
+    SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
+    SceneManager.callByName("Main");
     this.updateLoop(500);
   }
 

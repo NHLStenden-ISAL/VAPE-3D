@@ -49,6 +49,8 @@ export default abstract class BaseObject {
     this.move(this.gridPosition);
   }
 
+  public abstract copy(worldInfo: WorldInformation): BaseObject;
+
   public getUUID(): string {
     return this.objectUUID;
   }

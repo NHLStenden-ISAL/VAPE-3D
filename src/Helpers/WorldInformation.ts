@@ -27,8 +27,20 @@ export default class WorldInformation {
     this.highLightLayer = new HighlightLayer('highlight', this.scene);
   }
 
+  public copy(worldInfo: WorldInformation) {
+    for (const sceneObjectsKey in this.sceneObjects) {
+      const val = this.sceneObjects.get(sceneObjectsKey);
+      if(val != undefined)
+        worldInfo.addSceneObject(val.copy(worldInfo));
+    }
+  }
+
   public getScene(): Scene {
     return this.scene;
+  }
+
+  public setScene(newScene: Scene) {
+    this.scene = newScene;
   }
 
   public addSceneObject(object: BaseObject): void {

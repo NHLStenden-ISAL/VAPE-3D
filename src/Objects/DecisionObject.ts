@@ -29,6 +29,11 @@ export default class DecisionObject extends BaseObject {
     this.condition = false;
   }
 
+  public copy(worldInfo: WorldInformation): DecisionObject {
+    return new DecisionObject(worldInfo, this.gridPosition, this.direction);
+  }
+
+
   protected createMesh(): Mesh {
     return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Blue(), 0.8);
   }

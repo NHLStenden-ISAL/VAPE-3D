@@ -9,6 +9,7 @@ import SceneHelper from "../Helpers/SceneHelper";
 import MouseHandler from "../Helpers/MouseHandler";
 import KeyboardHandler from "../Helpers/KeyboardHandler";
 import VapeScene from "../VapeScene";
+import RunTimeVapeScene from "../RunTimeVapeScene";
 
 type CanvasProps = {
   antialias: boolean,
@@ -27,7 +28,7 @@ export class SceneManager {
   static canvas: any;
   static appMan: AppManager;
 
-  static runTime: VapeScene | undefined;
+  static runTime: RunTimeVapeScene | undefined;
 
   constructor(engine: Engine) {
     SceneManager.engine = engine;
@@ -42,6 +43,24 @@ export class SceneManager {
     window.addEventListener("resize", () => {
       engine.resize();
     });
+  }
+
+  public static callByName(name: string){
+    const foundScene = SceneManager.scenes.get(name);
+    if(SceneManager.runTime?.scene === undefined)
+      return;
+    const newWorldInfo = new WorldInformation(SceneManager.runTime?.scene, SceneManager.runTime?.commandBroker, SceneManager.runTime?.setSelectedObject);
+    if (foundScene?.worldInformation instanceof WorldInformation)
+      newWorldInfo.copy(foundScene.worldInformation);
+    SceneManager.runTime?.pushGrid(newWorldInfo);
+  }
+
+  public static return() {
+    //TODO: check if this was the last layer. If so stop runtime
+    try {
+      // @ts-ignore
+      this.runTime.popGrid();
+    } catch (e){}
   }
 
   public static addSceneListener(listener : any) {

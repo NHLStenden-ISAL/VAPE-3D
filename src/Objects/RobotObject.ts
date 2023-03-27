@@ -19,6 +19,10 @@ export default class RobotObject extends BaseObject {
     this.scope = new Map<string, string>();
   }
 
+  public copy(worldInfo: WorldInformation): RobotObject {
+    return new RobotObject(worldInfo, this.gridPosition, this.direction);
+  }
+
   protected createMesh(): Mesh {
     return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Green(), "");
   }

@@ -23,6 +23,10 @@ export default class VariableObject extends BaseObject {
     this.storable = new Storable(this.worldInfo);
   }
 
+  public copy(worldInfo: WorldInformation): VariableObject {
+    return new VariableObject(worldInfo, this.gridPosition, this.direction);
+  }
+
   protected createMesh(): Mesh {
     return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), 0.8);
   }

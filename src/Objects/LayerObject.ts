@@ -12,6 +12,10 @@ export default class LayerObject extends BaseObject {
         super(worldInfo, gridPos, dir, objectColor);
     }
 
+    public copy(worldInfo: WorldInformation): LayerObject {
+        return new LayerObject(worldInfo, this.gridPosition, this.direction);
+    }
+
     protected createMesh(): Mesh {
         return createLayer(this.worldInfo.getScene(), 60, 1, 1);
     }

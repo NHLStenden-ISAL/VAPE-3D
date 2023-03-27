@@ -25,6 +25,10 @@ export default class PrintObject extends BaseObject {
 
   }
 
+  public copy(worldInfo: WorldInformation): PrintObject {
+    return new PrintObject(worldInfo, this.gridPosition, this.direction);
+  }
+
   protected createMesh(): Mesh {
     return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.White(), 0.8);
   }
