@@ -10,7 +10,7 @@ import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
 import PrintObject from "../Objects/PrintObject";
-import GridObject from "../Objects/GridObject";
+import ReturnObject from "../Objects/ReturnObject";
 import LayerObject from "../Objects/LayerObject";
 import CallObject from "../Objects/CallObject";
 
@@ -33,6 +33,9 @@ export default class CommandAddObject implements ICommand {
     switch (this.objectType) {
       case 'call':
         this.object = new CallObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'return':
+        this.object = new ReturnObject(this.worldInfo, this.gridPosition, this.direction);
         break;
       case 'variable':
         this.object = new VariableObject(this.worldInfo, this.gridPosition, this.direction);

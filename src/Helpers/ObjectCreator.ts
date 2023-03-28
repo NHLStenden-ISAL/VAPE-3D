@@ -61,6 +61,21 @@ export function createBox(scene: Scene, name: string, color: Color3 = Color3.Whi
   return box;
 }
 
+export function createReturn(scene: Scene, name: string, color: Color3, size: number = 1): Mesh {
+  const sphere = createBox(scene, name, color, size);
+  sphere.position = new Vector3(sphere.position.x, 0, sphere.position.z);
+
+  const dot = MeshBuilder.CreateDisc('dot', {radius: 0.3, tessellation: 64, sideOrientation: Mesh.DOUBLESIDE }, scene);
+  dot.position = new Vector3(sphere.position.x, 0.5, sphere.position.z);
+  dot.rotate(Vector3.Right(), Math.PI / 2, Space.LOCAL);
+  dot.rotate(Vector3.Forward(), Math.PI / 2, Space.LOCAL);
+
+  sphere.addChild(dot);
+
+  return sphere;
+
+}
+
 export function createDirection(scene: Scene, name: string, color: Color3, size: number = 1): Mesh {
   const sphere = createBox(scene, name, color, size);
   sphere.position = new Vector3(sphere.position.x, 0, sphere.position.z);

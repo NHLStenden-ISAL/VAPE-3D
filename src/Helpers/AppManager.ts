@@ -16,7 +16,7 @@ import {
   PrintDataContainer,
   RobotDataContainer,
   VariableDataContainer,
-  CallDataContainer
+  CallDataContainer, ReturnDataContainer
 } from "../Objects/DataContainers";
 import RobotObject from "../Objects/RobotObject";
 import DecisionObject from "../Objects/DecisionObject";
@@ -27,6 +27,7 @@ import { SceneManager } from "../Objects/SceneComponent";
 import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
 import CallObject from "../Objects/CallObject";
+import ReturnObject from "../Objects/ReturnObject";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -64,6 +65,11 @@ export default class AppManager {
               const cUnit = unit as CallDataContainer;
               const cObject = new CallObject(worldInfo, cUnit.location, cUnit.direction);
               cObject.getStorable().changeValue(cUnit.call);
+              break;
+            }
+            case 'return': {
+              const dUnit = unit as ReturnDataContainer;
+              new ReturnObject(worldInfo, dUnit.location, dUnit.direction);
               break;
             }
             case 'variable': {

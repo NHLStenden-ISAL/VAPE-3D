@@ -1,4 +1,4 @@
-export const buildTypesArray = ['call', 'grid', 'variable', 'robot', 'direction', 'decision', 'evaluate', 'print'] as const;
+export const buildTypesArray = ['call', 'return', 'grid', 'variable', 'robot', 'direction', 'decision', 'evaluate', 'print'] as const;
 export type BuildTypes = typeof buildTypesArray[number];
 export const editorTypesArray = ['transform', 'create', 'delete', 'play'] as const;
 export type EditorState = typeof editorTypesArray[number];

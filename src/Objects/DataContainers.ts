@@ -1,6 +1,7 @@
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
+import ReturnGUI from "../GUI/ReturnGUI";
 
 //TODO: These should be moved to their respective accompanying object classes
 export class BaseDataContainer {
@@ -44,6 +45,13 @@ export class DecisionDataContainer extends BaseDataContainer {
   constructor(location: Vector2, direction: Direction, statement: string) {
     super('decision', location, direction);
     this.statement = statement;
+  }
+}
+
+export class ReturnDataContainer extends BaseDataContainer {
+
+  constructor(location: Vector2, direction: Direction) {
+    super('return', location, direction);
   }
 }
 
