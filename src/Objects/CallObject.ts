@@ -7,12 +7,13 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import {CallDataContainer} from "./DataContainers";
+import {SceneManager} from "./SceneComponent";
 
 export default class CallObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
 
-  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, stored?: Storable) {
     const objectColor = Color3.Gray();
 
     super(worldInfo, gridPosition, direction, objectColor);
@@ -20,11 +21,14 @@ export default class CallObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    this.storable = new Storable(this.worldInfo);
+    if(typeof stored == 'undefined')
+      this.storable = new Storable(worldInfo);
+    else
+      this.storable = stored;
   }
 
   public copy(worldInfo: WorldInformation): CallObject {
-    return new CallObject(worldInfo, this.gridPosition, this.direction);
+    return new CallObject(worldInfo, this.gridPosition, this.direction, this.storable);
   }
 
   protected createMesh(): Mesh {
@@ -32,8 +36,7 @@ export default class CallObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
-    console.log(this.storable.getName());
-    console.log(this.storable.getValue());
+    SceneManager.callByName(this.storable.getValue());
   }
 
   public delete(): void {

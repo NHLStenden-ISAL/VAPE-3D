@@ -1,7 +1,7 @@
-import {AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
+import {ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
 import {Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled} from "@mui/material";
 import IconButtonLarge from "./IconButtonLarge";
-import React, {useState} from "react";
+import React from "react";
 import {SceneManager} from "../../Objects/SceneComponent";
 
 const DrawerHeader = styled('div')(({ }) => ({
@@ -47,36 +47,13 @@ export default class PersistentLayers extends React.Component<PersistentLayersPr
 
         const self = this;
 
-
         this.listenerID = SceneManager.addSceneListener((message : string) => {
             self.layers = Array.from(SceneManager.scenes, ([name, value]) => ({name, value}));
             if (self.mounted) {
                 self.forceUpdate();
             }
         });
-
-        // window.addEventListener('keydown', (event) => {
-        //     self.layers = Array.from(SceneManager.scenes, ([name, value]) => ({name, value}));
-        //     if (self.mounted) {
-        //         self.forceUpdate();
-        //     }
-        // });
     }
-
-    // onClick = (text: string) => {
-    //     console.log('' + text);
-    //     // onButtonPress(text);
-    //     // setObject(text);
-    // }
-    //
-    // addItemIcon(text: string) {
-    //     return <AddBox color="primary"/>
-    //     // if (text === object) {
-    //     //     return <AddBox color="primary"/>
-    //     // } else {
-    //     //     return <AddBox color="inherit"/>
-    //     // }
-    // }
 
     componentDidMount() {
         this.mounted = true;
