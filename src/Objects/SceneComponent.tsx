@@ -57,8 +57,7 @@ export class SceneManager {
   public static return() {
     //TODO: check if this was the last layer. If so stop runtime
     try {
-      // @ts-ignore
-      this.runTime.popGrid();
+      this.runTime?.popGrid();
     } catch (e){}
   }
 
@@ -93,18 +92,7 @@ export class SceneManager {
 
   public static SceneAddClean() {
     console.log('add?');
-    // SceneManager.e
     let sceneCount = SceneManager.scenes.size;
-    // let newScene = new Scene(SceneManager.engine);
-    // SceneManager.appMan.canvas = newScene.getEngine().getRenderingCanvas();
-    // SceneManager.appMan.commandBroker = new CommandBroker();
-    // SceneManager.appMan.worldInformation = new WorldInformation(newScene, SceneManager.appMan.commandBroker, SceneManager.appMan.setSelectedObject);
-    // SceneManager.appMan.sceneHelper = new SceneHelper(SceneManager.appMan.worldInformation, SceneManager.appMan.canvas);
-    // SceneManager.appMan.sceneHelper.createScene(true);
-    // const mouseHandler = new MouseHandler(SceneManager.appMan.worldInformation, SceneManager.appMan.sceneHelper, SceneManager.appMan.programState);
-    // mouseHandler.onMouseInteraction();
-    // const keyboardHandler = new KeyboardHandler(SceneManager.appMan.worldInformation, SceneManager.appMan, SceneManager.appMan.programState);
-    // keyboardHandler.onKeyboardInteraction();
     SceneManager.scenes.set("Layer " + sceneCount, new VapeScene(SceneManager.engine, this.setSelectedObject));
     SceneManager.SceneSwitch("Layer " + sceneCount);
   }

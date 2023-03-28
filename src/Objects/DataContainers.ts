@@ -16,6 +16,15 @@ export class BaseDataContainer {
   }
 }
 
+export class CallDataContainer extends BaseDataContainer {
+  public call: string;
+
+  constructor(location: Vector2, direction: Direction, statement: string) {
+    super('call', location, direction);
+    this.call = statement;
+  }
+}
+
 export class VariableDataContainer extends BaseDataContainer {
   public name: string;
   public value: string;

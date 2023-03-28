@@ -18,7 +18,9 @@ import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
 import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
+import CallGUI from './GUI/CallGUI';
 import VapeScene from "./VapeScene";
+import CallObject from "./Objects/CallObject";
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
@@ -41,6 +43,7 @@ export default function App() {
 
       {selectedObject &&
         <Box id="selection">
+          {selectedObject instanceof CallObject && <CallGUI selectedObject={selectedObject} />}
           {selectedObject instanceof VariableObject && <VariableGUI selectedObject={selectedObject} />}
           {selectedObject instanceof DecisionObject && <DecisionGUI selectedObject={selectedObject} />}
           {selectedObject instanceof DirectionObject && <DirectionGUI selectedObject={selectedObject} />}

@@ -31,7 +31,7 @@ export default class VapeScene extends Scene {
         this.sceneHelper.createScene(false);
         const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
         mouseHandler.onMouseInteraction();
-        // const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, this.programState);
-        // keyboardHandler.onKeyboardInteraction();
+         const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, this.programState);
+         keyboardHandler.onKeyboardInteraction();
     }
 }

@@ -12,6 +12,7 @@ import { BuildTypes } from "../Helpers/ProgramState";
 import PrintObject from "../Objects/PrintObject";
 import GridObject from "../Objects/GridObject";
 import LayerObject from "../Objects/LayerObject";
+import CallObject from "../Objects/CallObject";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -30,6 +31,9 @@ export default class CommandAddObject implements ICommand {
 
   execute(): void {
     switch (this.objectType) {
+      case 'call':
+        this.object = new CallObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
       case 'variable':
         this.object = new VariableObject(this.worldInfo, this.gridPosition, this.direction);
         break;

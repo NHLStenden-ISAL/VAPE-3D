@@ -6,20 +6,27 @@ import SceneHelper from "./SceneHelper";
 import ProgramState, { BuildTypes, GameState } from "./ProgramState";
 import WorldInformation, { VAPLProgram } from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
-import { Scene } from "@babylonjs/core";
 import ObserverContainer from "./ObserverContainer";
 import downloadTextFile from "./DownloadHelper";
 import VariableObject from "../Objects/VariableObject";
-import { EvaluateDataContainer, DecisionDataContainer, DirectionDataContainer, PrintDataContainer, RobotDataContainer, VariableDataContainer } from "../Objects/DataContainers";
+import {
+  EvaluateDataContainer,
+  DecisionDataContainer,
+  DirectionDataContainer,
+  PrintDataContainer,
+  RobotDataContainer,
+  VariableDataContainer,
+  CallDataContainer
+} from "../Objects/DataContainers";
 import RobotObject from "../Objects/RobotObject";
 import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
 import { SceneManager } from "../Objects/SceneComponent";
-import {RunTimeManager} from "./RunTimeManager";
 import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
+import CallObject from "../Objects/CallObject";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -27,7 +34,6 @@ export default class AppManager {
   public canvas: any;
 
   private sceneHelper: SceneHelper;
-  // private sceneManager: SceneManager;
   private programState: ProgramState;
   private commandBroker: CommandBroker;
   private worldInformation: WorldInformation;
@@ -54,6 +60,12 @@ export default class AppManager {
         worldInfo.removeAllSceneObjects();
         pProgram.units.forEach(unit => {
           switch (unit.type) {
+            case 'call': {
+              const cUnit = unit as CallDataContainer;
+              const cObject = new CallObject(worldInfo, cUnit.location, cUnit.direction);
+              cObject.getStorable().changeValue(cUnit.call);
+              break;
+            }
             case 'variable': {
               const vUnit = unit as VariableDataContainer;
               const vObject = new VariableObject(worldInfo, vUnit.location, vUnit.direction);
@@ -99,13 +111,13 @@ export default class AppManager {
 
   public runApp() {
     console.log('runApp');
-    // this.sceneHelper.createScene(false);
-    //
-    // const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
-    // mouseHandler.onMouseInteraction();
-    //
-    // const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
-    // keyboardHandler.onKeyboardInteraction();
+    // this.sceneHelper.createScene(true);
+
+    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
+    mouseHandler.onMouseInteraction();
+
+    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
+    keyboardHandler.onKeyboardInteraction();
   }
 
   public setupObservers() {
@@ -134,12 +146,12 @@ export default class AppManager {
     console.log("Run the program");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
     SceneManager.callByName("Main");
-    try {
-      SceneManager.callByName("Layer 1");
-    } catch (e){}
-    try {
-      SceneManager.callByName("Layer 2");
-    } catch (e){}
+    // try {
+    //   SceneManager.callByName("Layer 1");
+    // } catch (e){}
+    // try {
+    //   SceneManager.callByName("Layer 2");
+    // } catch (e){}
     this.updateLoop(500);
   }
 
