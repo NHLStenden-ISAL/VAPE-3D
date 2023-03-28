@@ -22,7 +22,7 @@ export default class CallObject extends BaseObject {
     this.interactedRobots = [];
 
     if(typeof stored == 'undefined')
-      this.storable = new Storable(worldInfo);
+      this.storable = new Storable(this.worldInfo);
     else
       this.storable = stored;
   }

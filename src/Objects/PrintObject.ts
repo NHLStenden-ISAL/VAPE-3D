@@ -13,7 +13,7 @@ import { PrintDataContainer } from "./DataContainers";
 export default class PrintObject extends BaseObject {
   private storable: Storable;
 
-  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction, stored?: Storable) {
     const objectColor = Color3.White();
 
     super(worldInfo, gridPos, dir, objectColor);
@@ -21,12 +21,16 @@ export default class PrintObject extends BaseObject {
     this.mesh.rotation = this.transformable.rotateToward(dir);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
-    this.storable = new Storable(this.worldInfo);
+
+    if(typeof stored == 'undefined')
+      this.storable = new Storable(this.worldInfo);
+    else
+      this.storable = stored;
 
   }
 
   public copy(worldInfo: WorldInformation): PrintObject {
-    return new PrintObject(worldInfo, this.gridPosition, this.direction);
+    return new PrintObject(worldInfo, this.gridPosition, this.direction, this.storable);
   }
 
   protected createMesh(): Mesh {

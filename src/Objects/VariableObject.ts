@@ -4,7 +4,7 @@ import RobotObject from "./RobotObject";
 import Storable from "../Compositions/Storable";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createBox, createCustomMesh } from "../Helpers/ObjectCreator";
+import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { VariableDataContainer } from "./DataContainers";
 
@@ -12,7 +12,7 @@ export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
 
-  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction) {
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, stored?: Storable) {
     const objectColor = Color3.Magenta();
 
     super(worldInfo, gridPosition, direction, objectColor);
@@ -20,11 +20,15 @@ export default class VariableObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-    this.storable = new Storable(this.worldInfo);
+
+    if(typeof stored == 'undefined')
+      this.storable = new Storable(this.worldInfo);
+    else
+      this.storable = stored;
   }
 
   public copy(worldInfo: WorldInformation): VariableObject {
-    return new VariableObject(worldInfo, this.gridPosition, this.direction);
+    return new VariableObject(worldInfo, this.gridPosition, this.direction, this.storable);
   }
 
   protected createMesh(): Mesh {

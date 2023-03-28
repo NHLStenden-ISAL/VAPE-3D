@@ -1,15 +1,11 @@
 import InputField from "./Components/InputField";
 import CallObject from "../Objects/CallObject";
-import {Grid, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, Typography} from "@mui/material";
+import {Grid, List, ListItem, ListItemText, Typography} from "@mui/material";
 import { KeyGroup } from "./InputFilter";
 import React, { useState } from "react";
 import PositionArea from "./Components/PositionArea";
-import DropDown from "./Components/DropDown";
-import {editorTypesArray} from "../Helpers/ProgramState";
 import {SceneManager} from "../Objects/SceneComponent";
 import {RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
-import BaseObject from "../Objects/BaseObject";
-import VapeScene from "../VapeScene";
 
 export default function CallGUI({ selectedObject }: { selectedObject: CallObject }) {
     const guiBox = selectedObject.getDataContainer();

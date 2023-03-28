@@ -16,7 +16,7 @@ export default class DecisionObject extends BaseObject {
 
   private condition: boolean;
 
-  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction, stored?: Storable) {
     const objectColor = Color3.Blue();
 
     super(worldInfo, gridPos, dir, objectColor);
@@ -24,13 +24,18 @@ export default class DecisionObject extends BaseObject {
     this.mesh.rotation = this.transformable.rotateToward(dir);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
-    this.storable = new Storable(this.worldInfo);
+
+
+    if(typeof stored == 'undefined')
+      this.storable = new Storable(this.worldInfo);
+    else
+      this.storable = stored;
 
     this.condition = false;
   }
 
   public copy(worldInfo: WorldInformation): DecisionObject {
-    return new DecisionObject(worldInfo, this.gridPosition, this.direction);
+    return new DecisionObject(worldInfo, this.gridPosition, this.direction, this.storable);
   }
 
 
