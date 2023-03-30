@@ -72,6 +72,9 @@ export default class RunTimeVapeScene extends Scene {
     }
 
     public popGrid() {
+        const gridItem = this.gridStack.peek();
+        gridItem.grid.dispose();
+        gridItem.worldInfo.removeAllSceneObjects();
         this.gridStack.pop();
     }
 }

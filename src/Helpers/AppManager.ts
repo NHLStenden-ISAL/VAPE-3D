@@ -118,13 +118,6 @@ export default class AppManager {
 
   public runApp() {
     console.log('runApp');
-    // this.sceneHelper.createScene(true);
-
-    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, SceneManager.programState);
-    mouseHandler.onMouseInteraction();
-
-    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, SceneManager.programState);
-    keyboardHandler.onKeyboardInteraction();
   }
 
   public setupObservers() {
