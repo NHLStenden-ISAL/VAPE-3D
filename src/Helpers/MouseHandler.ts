@@ -3,6 +3,7 @@ import SceneHelper from "./SceneHelper";
 import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 import { PointerEventTypes, Vector2 } from "@babylonjs/core";
+import {SceneManager} from "../Objects/SceneComponent";
 
 export default class MouseHandler {
   private worldInfo: WorldInformation;
@@ -28,7 +29,7 @@ export default class MouseHandler {
 
   public onMouseInteraction() {
     this.worldInfo.getScene().onPointerObservable.add((pointerInfo) => {
-      if (this.programState.getGameState() !== 'build') { return; }
+      if (SceneManager.programState.getGameState() !== 'build') { return; }
 
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERTAP:
@@ -87,7 +88,7 @@ export default class MouseHandler {
   }
 
   private onLeftPointerTap() {
-    switch (this.programState.getEditorState()) {
+    switch (SceneManager.programState.getEditorState()) {
       case 'transform':
         this.rotateOnTap();
         break;
@@ -112,7 +113,7 @@ export default class MouseHandler {
     if (this.clickedObject) { return; }
 
     if (this.mouseStartpoint) {
-      this.sceneHelper.addObject(this.mouseStartpoint, this.programState.getBuildState());
+      this.sceneHelper.addObject(this.mouseStartpoint, SceneManager.programState.getBuildState());
     }
   }
 
@@ -130,7 +131,7 @@ export default class MouseHandler {
   private onLeftPointerDrag() {
     if (!this.mouseStartpoint || !this.clickedObject) { return; }
 
-    if (this.programState.getEditorState() === 'transform') {
+    if (SceneManager.programState.getEditorState() === 'transform') {
       let mouseLocation = this.getMouseGridPosition();
 
       if (mouseLocation) {

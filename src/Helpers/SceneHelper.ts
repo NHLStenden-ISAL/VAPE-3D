@@ -50,6 +50,9 @@ export default class SceneHelper {
       this.addObject(new Vector2(-1, 9), 'decision', Direction.WEST);
 
       this.addObject(new Vector2(-1, 8), 'evaluate');
+
+      this.addObject(new Vector2(0, 5), 'return');
+      this.addObject(new Vector2(0, 10), 'call');
     }
   }
 

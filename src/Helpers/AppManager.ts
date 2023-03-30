@@ -48,7 +48,8 @@ export default class AppManager {
     this.observerContainer = observerContainer;
     this.setSelectedObject = setSelectedObject;
     this.setSelectedObject = vapeScene.setSelectedObject;
-    this.programState = new ProgramState();
+    this.programState = SceneManager.programState;
+    // this.programState = new ProgramState();
     this.commandBroker = vapeScene.commandBroker;
     this.worldInformation = vapeScene.worldInformation;
     this.sceneHelper = vapeScene.sceneHelper;
@@ -119,17 +120,17 @@ export default class AppManager {
     console.log('runApp');
     // this.sceneHelper.createScene(true);
 
-    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
+    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, SceneManager.programState);
     mouseHandler.onMouseInteraction();
 
-    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
+    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, SceneManager.programState);
     keyboardHandler.onKeyboardInteraction();
   }
 
   public setupObservers() {
     this.observerContainer.subscribeStateGame((state) => this.changeGameState(state));
     this.observerContainer.subscribeStateBuild((type) => this.changeBuildType(type));
-    this.observerContainer.subscribeStateEditor((state) => this.programState.setEditorState(state));
+    this.observerContainer.subscribeStateEditor((state) => SceneManager.programState.setEditorState(state));
   }
 
   public changeGameState(state: GameState): void {
@@ -147,8 +148,8 @@ export default class AppManager {
   }
 
   public startProgram() {
-    if (this.programState.getGameState() === 'run') { return; }
-    this.programState.setGameState('run');
+    if (SceneManager.programState.getGameState() === 'run') { return; }
+    SceneManager.programState.setGameState('run');
     console.log("Run the program");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
     SceneManager.callByName("Main");
@@ -162,15 +163,15 @@ export default class AppManager {
   }
 
   public pauseProgram() {
-    if (this.programState.getGameState() === 'build') { return; }
-    this.programState.setGameState('build');
+    if (SceneManager.programState.getGameState() === 'build') { return; }
+    SceneManager.programState.setGameState('build');
     console.log("Pause the program");
     this.cancelUpdateLoop();
   }
 
   public stopProgram() {
-    if (this.programState.getGameState() === 'reset') { return; }
-    this.programState.setGameState('reset');
+    if (SceneManager.programState.getGameState() === 'reset') { return; }
+    SceneManager.programState.setGameState('reset');
     console.log("Stop the program");
     this.cancelUpdateLoop();
 
@@ -178,6 +179,7 @@ export default class AppManager {
     SceneManager.activeScene = SceneManager.scenes.entries().next().value[0];
     SceneManager.SceneSwitch(SceneManager.activeScene);
     //TODO: place the robot at the start position, reset all the variables?
+    SceneManager.programState.setGameState('build');
   }
 
   public getObserverContainer(): ObserverContainer {
@@ -185,12 +187,12 @@ export default class AppManager {
   }
 
   private changeBuildType(type: BuildTypes) {
-    this.programState.setBuildState(type);
+    SceneManager.programState.setBuildState(type);
   }
 
   private updateLoop(delta: number) {
     this.updateTimeout = setTimeout(() => {
-      if (this.programState.getGameState() === 'run') {
+      if (SceneManager.programState.getGameState() === 'run') {
         if(SceneManager.runTime !== undefined) {
           SceneManager.runTime.sceneHelper.updateRobots();
           this.updateLoop(delta);

@@ -23,15 +23,15 @@ export default class VapeScene extends Scene {
         super(engine);
         this.scene = new Scene(engine);
         this.setSelectedObject = setSelectedObject;
-        this.programState = new ProgramState();
+        this.programState = SceneManager.programState;
         this.canvas = this.getEngine().getRenderingCanvas();
         this.commandBroker = new CommandBroker();
         this.worldInformation = new WorldInformation(this.scene, this.commandBroker, this.setSelectedObject);
         this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
         this.sceneHelper.createScene(false);
-        const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
+        const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, SceneManager.programState);
         mouseHandler.onMouseInteraction();
-         const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, this.programState);
+         const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, SceneManager.programState);
          keyboardHandler.onKeyboardInteraction();
     }
 }

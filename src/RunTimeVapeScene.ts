@@ -13,6 +13,7 @@ import Stack from "./Stack";
 import {createGrid} from "./Helpers/ObjectCreator";
 import BaseObject from "./Objects/BaseObject";
 import MouseHandler from "./Helpers/MouseHandler";
+import {SceneManager} from "./Objects/SceneComponent";
 // import BaseObject from "./Objects/BaseObject";
 
 type GridCombo = {
@@ -37,15 +38,15 @@ export default class RunTimeVapeScene extends Scene {
         this.gridStack = new Stack<GridCombo>();
         this.scene = new Scene(engine);
         this.setSelectedObject = setSelectedObject;
-        this.programState = new ProgramState();
+        this.programState = SceneManager.programState;
         this.canvas = this.getEngine().getRenderingCanvas();
         this.commandBroker = new CommandBroker();
         this.worldInformation = new WorldInformation(this.scene, this.commandBroker, this.setSelectedObject);
         this.sceneHelp = new SceneHelper(this.worldInformation, this.canvas);
         this.sceneHelp.createScene(true);
-        // const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelp, this.programState);
+        // const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelp, SceneManager.programState);
         // mouseHandler.onMouseInteraction();
-        // const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, this.programState);
+        // const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, SceneManager.programState);
         // keyboardHandler.onKeyboardInteraction();
     }
 

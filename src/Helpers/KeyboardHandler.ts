@@ -1,6 +1,7 @@
 import AppManager from "./AppManager";
 import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
+import {SceneManager} from "../Objects/SceneComponent";
 
 export default class KeyboardHandler {
   private worldInfo: WorldInformation;
@@ -10,12 +11,12 @@ export default class KeyboardHandler {
   constructor(worldInfo: WorldInformation, appManager: AppManager, programState: ProgramState) {
     this.worldInfo = worldInfo;
     this.appManager = appManager;
-    this.programState = programState;
+    this.programState = SceneManager.programState;
   }
 
   public onKeyboardInteraction() {
     this.worldInfo.getScene().onKeyboardObservable.add((kbInfo) => {
-      if (this.programState.getGameState() === 'build') {
+      if (SceneManager.programState.getGameState() === 'build') {
         if (kbInfo.type === 1) {
           switch (kbInfo.event.key) {
             case 'c':

@@ -2,7 +2,7 @@ import { Engine, Scene } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import AppManager, { SetSelectedObject } from "../Helpers/AppManager";
 // import ObserverContainer from "../Helpers/ObserverContainer";
-// import ProgramState from "../Helpers/ProgramState";
+import ProgramState from "../Helpers/ProgramState";
 // import CommandBroker from "../Helpers/CommandBroker";
 import WorldInformation from "../Helpers/WorldInformation";
 // import SceneHelper from "../Helpers/SceneHelper";
@@ -27,6 +27,7 @@ export class SceneManager {
   static sceneListeners : any = {};
   static canvas: any;
   static appMan: AppManager;
+  static programState = new ProgramState();
 
   static runTime: RunTimeVapeScene | undefined;
 
