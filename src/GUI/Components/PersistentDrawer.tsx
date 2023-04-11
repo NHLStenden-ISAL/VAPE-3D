@@ -1,9 +1,9 @@
-import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
 import { useState } from "react";
 import IconButtonLarge from "./IconButtonLarge";
 
-const DrawerHeader = styled('div')(({ }) => ({
+const DrawerHeader = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: 1,

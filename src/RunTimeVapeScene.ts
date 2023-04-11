@@ -12,7 +12,6 @@ import ProgramState from "./Helpers/ProgramState";
 import Stack from "./Stack";
 import {createGrid} from "./Helpers/ObjectCreator";
 import BaseObject from "./Objects/BaseObject";
-import MouseHandler from "./Helpers/MouseHandler";
 import {SceneManager} from "./Objects/SceneComponent";
 // import BaseObject from "./Objects/BaseObject";
 

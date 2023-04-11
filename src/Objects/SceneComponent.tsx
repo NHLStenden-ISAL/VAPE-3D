@@ -1,4 +1,4 @@
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import AppManager, { SetSelectedObject } from "../Helpers/AppManager";
 // import ObserverContainer from "../Helpers/ObserverContainer";
@@ -168,6 +168,6 @@ export default function CreateCanvas({ antialias, onSceneReady, id, setSelectedO
         // }
       };
     }
-  }, [rectCanvas]);
+  }, [antialias, onSceneReady, rectCanvas, setSelectedObject]);
   return <canvas ref={rectCanvas} id={id} />;
 };

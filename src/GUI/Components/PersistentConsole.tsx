@@ -4,7 +4,7 @@ import IconButtonLarge from "./IconButtonLarge";
 import { addConsoleListener, removeConsoleListener } from "./../../Helpers/Logger"
 import React from "react";
 
-const DrawerHeader = styled('div')(({ }) => ({
+const DrawerHeader = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: 1,

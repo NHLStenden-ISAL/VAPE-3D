@@ -4,7 +4,7 @@ import IconButtonLarge from "./IconButtonLarge";
 import React from "react";
 import {SceneManager} from "../../Objects/SceneComponent";
 
-const DrawerHeader = styled('div')(({ }) => ({
+const DrawerHeader = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
     padding: 1,

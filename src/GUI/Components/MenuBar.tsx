@@ -25,7 +25,6 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const [consoleOpen, setConsoleOpen] = useState(false);
 
   const items = buildTypesArray;
-  const layers = SceneManager.scenes;
 
   const handleDrawerOpen = () => { setDrawerOpen(true); };
   const handleDrawerClose = () => { setDrawerOpen(false); };

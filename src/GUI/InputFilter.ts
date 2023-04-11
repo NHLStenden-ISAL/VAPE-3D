@@ -37,9 +37,9 @@ function getKeygroup(keyGroup: KeyGroup): string {
     case KeyGroup.ALPHANUMERIC:
       return getKeygroup(KeyGroup.NUMERIC) + "|" + getKeygroup(KeyGroup.ALPHABETIC);
     case KeyGroup.SYMBOLICOPERATORS:
-      return '[+\-/*()% ]';
+      return '[+-/*()% ]';
     case KeyGroup.SYMBOLIC:
-      return '[\!%*()+=/<>|& ]|\-';
+      return '[!%*()+=/<>|& ]|-';
     case KeyGroup.NUMBOLIC:
       return getKeygroup(KeyGroup.NUMERIC) + "|" + getKeygroup(KeyGroup.SYMBOLIC);
     case KeyGroup.SYMBALPHANUMERIC:

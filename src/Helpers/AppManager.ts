@@ -1,7 +1,5 @@
 import BaseObject from "../Objects/BaseObject";
 import CommandBroker from "./CommandBroker";
-import KeyboardHandler from "./KeyboardHandler";
-import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
 import ProgramState, { BuildTypes, GameState } from "./ProgramState";
 import WorldInformation, { VAPLProgram } from "./WorldInformation";

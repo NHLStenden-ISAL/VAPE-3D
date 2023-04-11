@@ -1,7 +1,6 @@
 import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
-import ReturnGUI from "../GUI/ReturnGUI";
 
 //TODO: These should be moved to their respective accompanying object classes
 export class BaseDataContainer {

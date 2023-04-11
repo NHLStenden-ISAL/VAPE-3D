@@ -1,11 +1,5 @@
-import {Observable, Scene} from "@babylonjs/core";
+import {Observable} from "@babylonjs/core";
 import { BuildTypes, EditorState, GameState } from "./ProgramState";
-import { SceneManager } from "../Objects/SceneComponent";
-import CommandBroker from "./CommandBroker";
-import WorldInformation from "./WorldInformation";
-import SceneHelper from "./SceneHelper";
-import MouseHandler from "./MouseHandler";
-import KeyboardHandler from "./KeyboardHandler";
 
 //TODO: a command pattern needs to be inserted between these observers and their actions
 
