@@ -1,15 +1,15 @@
 import { useState } from "react";
-import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import { Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { KeyGroup } from "./InputFilter";
 import InputField from "./Components/InputField";
 import PositionArea from "./Components/PositionArea";
+import PointerWriteObject from "../Objects/Arithmetic/PointerWriteObject";
 
-export default function EvaluateGUI({ selectedObject }: { selectedObject: EvaluateObject }) {
+export default function PointerWriteGUI({ selectedObject }: { selectedObject: PointerWriteObject }) {
   const guiBox = selectedObject.getDataContainer();
 
   const [statement, setStatement] = useState(guiBox.statement);
-  const [name, setName] = useState(guiBox.name);
+  const [name, setName] = useState(guiBox.pointer);
   const [index, setIndex] = useState(guiBox.index);
   const position = guiBox.location;
 
@@ -36,7 +36,7 @@ export default function EvaluateGUI({ selectedObject }: { selectedObject: Evalua
   return (
     <Grid container spacing={1} direction='column'>
       <Grid item alignSelf='center'>
-        <Typography variant='h6' p={2}> Evaluate Object</Typography>
+        <Typography variant='h6' p={2}> Write to Pointer</Typography>
       </Grid>
       <Grid item container direction='column'>
         <Grid item>

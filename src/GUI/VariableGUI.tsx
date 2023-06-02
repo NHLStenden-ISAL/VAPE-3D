@@ -1,19 +1,18 @@
-import CheckBox from "./Components/CheckBox";
-import DisabledInputField from "./Components/DisabledInputField";
 import InputField from "./Components/InputField";
 import VariableObject from "../Objects/VariableObject";
-import { Grid, Typography } from "@mui/material";
+import { Grid, MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from "@mui/material";
 import { KeyGroup } from "./InputFilter";
 import { useState } from "react";
 import PositionArea from "./Components/PositionArea";
+import { variableType, variableTypes } from "../MemoryManagement/memoryController";
 
 export default function VariableGUI({ selectedObject }: { selectedObject: VariableObject }) {
   const guiBox = selectedObject.getDataContainer();
 
   const [name, setName] = useState(guiBox.name);
-  const [value, setValue] = useState(guiBox.value);
+  const [size, setSize] = useState(guiBox.variableSize);
+  const [variableType, setVariableType] = useState(guiBox.variableType);
   const position = guiBox.location;
-  const isKnown = guiBox.isKnown;
 
   const onBlur = (target: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
     if (target.value.length <= 0) { return; }
@@ -21,9 +20,22 @@ export default function VariableGUI({ selectedObject }: { selectedObject: Variab
     if (target.id === "Name") {
       selectedObject.getStorable().changeName(target.value);
     }
-    else if (target.id === "Value") {
-      selectedObject.getStorable().changeValue(target.value);
+    else if (target.id === "Size") {
+      let sizeValue = parseInt(target.value);
+      console.log(sizeValue);
+      selectedObject.setVariableSize(sizeValue);
     }
+  }
+
+  const onSelect = (event: SelectChangeEvent) => {
+    setVariableType(event.target.value as variableType);
+    (selectedObject as VariableObject).setVariableType(event.target.value as variableType);
+  }
+
+  const handleNumber=(value:string)=>{
+    let number = parseInt(value);
+    if (number < 0) number = 0;
+    setSize(number);
   }
 
   return (
@@ -32,22 +44,28 @@ export default function VariableGUI({ selectedObject }: { selectedObject: Variab
         <Typography variant="h6" p={2}> Variable Object</Typography>
       </Grid>
       <Grid item >
-        {guiBox.isKnown
-          ? <DisabledInputField name="Name" value={name} />
-          : <InputField name="Name" value={name} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setName} onBlur={onBlur} />
-        }
+        <InputField name="Name" value={name} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setName} onBlur={onBlur} />
       </Grid>
       <Grid item >
-        {guiBox.isKnown
-          ? <DisabledInputField name="Value" value={value} />
-          : <InputField name="Value" value={value} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setValue} onBlur={onBlur} />
-        }
+        <Grid>
+          <Typography variant="body1">Variable type</Typography>
+          <Select onChange={onSelect} value={variableType}>
+            {
+              variableTypes.map((value)=>(
+                <MenuItem value={value} key={value}>{value}</MenuItem>
+              ))
+            }
+          </Select>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid>
+          <Tooltip title="When variable size is '0', it acts like a normal variable. When the size is 1 or greater, it means it's an array of so many elements"><Typography variant="body1">Variable size</Typography></Tooltip>
+        </Grid>
+        <TextField name="Size" id="Size" value={size} type="number" onChange={(e)=>handleNumber(e.target.value)} onBlur={(e)=>{onBlur(e.target)}}/>
       </Grid>
       <Grid item>
         <PositionArea position={position} />
-      </Grid>
-      <Grid item xs={12}>
-        <CheckBox name="IsKnown" value={isKnown} />
       </Grid>
     </Grid>
   );

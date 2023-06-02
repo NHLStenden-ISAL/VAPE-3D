@@ -2,21 +2,21 @@ import { Vector2, Color3, Mesh } from "@babylonjs/core";
 import Interactable from "../../Compositions/Interactable";
 import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
-import { EvaluateDataContainer } from "../DataContainers";
+import { PointerWriteDataContainer } from "../DataContainers";
 import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
 import { MemoryController } from "../../MemoryManagement/memoryController";
 
-export default class EvaluateObject extends BaseObject {
+export default class PointerWriteObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
   private index: string;
   private statement: string;
 
   constructor(worldInfo: WorldInformation, gridpos: Vector2, dir: Direction, stored?:Storable, statement?:string, index?:string) {
-    const objectColor = Color3.Red();
+    const objectColor = Color3.Teal();
     super(worldInfo, gridpos, dir, objectColor);
 
     this.statement = statement ?? '';
@@ -27,12 +27,12 @@ export default class EvaluateObject extends BaseObject {
     this.interactedRobots = [];
   }
 
-  public copy(worldInfo: WorldInformation): EvaluateObject {
-    return new EvaluateObject(worldInfo, this.gridPosition, this.direction, this.storable, this.statement, this.index);
+  public copy(worldInfo: WorldInformation): PointerWriteObject {
+    return new PointerWriteObject(worldInfo, this.gridPosition, this.direction, this.storable, this.statement, this.index);
   }
 
   protected createMesh(): Mesh {
-    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Red(), 0.8);
+    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Teal(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
@@ -46,17 +46,16 @@ export default class EvaluateObject extends BaseObject {
       index = parseInt(this.index);
     }
 
-    memoryController.assign(this.storable.getName(), this.statement, index);
+    memoryController.writeToPointer(this.storable.getName(), this.statement, index);
 
     this.interactedRobots.push(robotObject);
   }
   
-  public getDataContainer(): EvaluateDataContainer {
-    return new EvaluateDataContainer(
+  public getDataContainer(): PointerWriteDataContainer {
+    return new PointerWriteDataContainer(
       this.getPositionForGUI(),
       this.getDirection(),
       this.storable.getName(),
-      this.storable.getValue(),
       this.statement,
       this.index
     );

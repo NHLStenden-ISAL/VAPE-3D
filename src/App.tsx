@@ -21,6 +21,12 @@ import PrintGUI from './GUI/PrintGUI';
 import CallGUI from './GUI/CallGUI';
 import VapeScene from "./VapeScene";
 import CallObject from "./Objects/CallObject";
+import ReturnObject from './Objects/ReturnObject';
+import ReturnGUI from './GUI/ReturnGUI';
+import PointerWriteGUI from './GUI/PointerWriteGUI';
+import PointerWriteObject from './Objects/Arithmetic/PointerWriteObject';
+import FreeObject from './Objects/FreeObject';
+import FreeGUI from './GUI/FreeGUI';
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
@@ -43,13 +49,16 @@ export default function App() {
 
       {selectedObject &&
         <Box id="selection">
+          {selectedObject instanceof PointerWriteObject && <PointerWriteGUI selectedObject={selectedObject} />}
           {selectedObject instanceof CallObject && <CallGUI selectedObject={selectedObject} />}
+          {selectedObject instanceof ReturnObject&& <ReturnGUI selectedObject={selectedObject}/>}
           {selectedObject instanceof VariableObject && <VariableGUI selectedObject={selectedObject} />}
           {selectedObject instanceof DecisionObject && <DecisionGUI selectedObject={selectedObject} />}
           {selectedObject instanceof DirectionObject && <DirectionGUI selectedObject={selectedObject} />}
           {selectedObject instanceof RobotObject && <RobotGUI selectedObject={selectedObject} />}
           {selectedObject instanceof EvaluateObject && <EvaluateGUI selectedObject={selectedObject} />}
           {selectedObject instanceof PrintObject && <PrintGUI selectedObject={selectedObject} />}
+          {selectedObject instanceof FreeObject && <FreeGUI selectedObject={selectedObject} />}
         </Box>
       }
     </Box>

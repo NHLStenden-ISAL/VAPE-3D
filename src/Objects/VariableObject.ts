@@ -7,12 +7,15 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { VariableDataContainer } from "./DataContainers";
+import { MemoryController, variableType } from "../MemoryManagement/memoryController";
 
 export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
+  private variableType: variableType;
+  private variableSize: number;
 
-  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, stored?: Storable) {
+  constructor(worldInfo: WorldInformation, gridPosition: Vector2, direction: Direction, stored?: Storable, variableType?: variableType, variableSize?: number) {
     const objectColor = Color3.Magenta();
 
     super(worldInfo, gridPosition, direction, objectColor);
@@ -20,15 +23,13 @@ export default class VariableObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
     this.interactedRobots = [];
 
-
-    if(typeof stored == 'undefined')
-      this.storable = new Storable(this.worldInfo);
-    else
-      this.storable = stored;
+    this.variableType = variableType ?? "char";
+    this.variableSize = variableSize ?? 0;
+    this.storable = stored ?? new Storable(this.worldInfo);
   }
 
   public copy(worldInfo: WorldInformation): VariableObject {
-    return new VariableObject(worldInfo, this.gridPosition, this.direction, this.storable);
+    return new VariableObject(worldInfo, this.gridPosition, this.direction, this.storable, this.variableType, this.variableSize);
   }
 
   protected createMesh(): Mesh {
@@ -36,28 +37,27 @@ export default class VariableObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
+    const memoryController = MemoryController.getInstance();
     if (this.storable.getName() === "") { return; }
-
-    this.storable.changeIsKnown(true);
-    robotObject.addVariable(this.storable.getContainer());
+    memoryController.activateVariable(this.storable.getName());
 
     this.interactedRobots.push(robotObject);
   }
 
-  public delete(): void {
-    this.interactedRobots.forEach(robot => {
-      robot.removeVariable(this.storable.getContainer());
-    });
-
-    super.delete();
+  public getVariableType(){
+    return this.variableType;
   }
 
-  public restore(): void {
-    this.interactedRobots.forEach(robot => {
-      robot.addVariable(this.storable.getContainer());
-    });
+  public setVariableType(type: variableType){
+    this.variableType = type;
+  }
 
-    super.restore();
+  public getVariableSize(){
+    return this.variableSize;
+  }
+
+  public setVariableSize(size: number){
+    this.variableSize = size;
   }
 
   public getDataContainer(): VariableDataContainer {
@@ -66,7 +66,8 @@ export default class VariableObject extends BaseObject {
       this.getDirection(),
       this.storable.getName(),
       this.storable.getValue(),
-      this.storable.getIsKnown()
+      this.variableType,
+      this.variableSize
     );
   }
 

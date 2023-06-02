@@ -26,6 +26,7 @@ import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
 import CallObject from "../Objects/CallObject";
 import ReturnObject from "../Objects/ReturnObject";
+import { MemoryController, functionVariable } from "../MemoryManagement/memoryController";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -143,7 +144,28 @@ export default class AppManager {
     SceneManager.programState.setGameState('run');
     console.log("Run the program");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
+
+    //parse al layers to a map for all variables with sizes
+    let functionMap: Map<string, functionVariable[]> = new Map();
+    SceneManager.scenes.forEach((scene,name)=>{
+      let vars:functionVariable[]=[];
+      scene.worldInformation.getSceneObjects().forEach((object,_)=>{
+        if(object instanceof VariableObject){
+          let storable = (object as VariableObject).getStorable()
+          // TODO: add new fields to Variable GUI
+          vars.push({name:storable.getName(),type:object.getVariableType(),size:object.getVariableSize()});
+        }
+      });
+      functionMap.set(name,vars);
+    });
+
+    const memoryController = MemoryController.getInstance();
+    memoryController.addFunctions(functionMap);
+    
+
     SceneManager.callByName("Main");
+    memoryController.call("Main","");
+    console.log('Manager scenes: ',SceneManager.scenes);
     // try {
     //   SceneManager.callByName("Layer 1");
     // } catch (e){}
@@ -169,7 +191,9 @@ export default class AppManager {
     SceneManager.runTime = undefined;
     SceneManager.activeScene = SceneManager.scenes.entries().next().value[0];
     SceneManager.SceneSwitch(SceneManager.activeScene);
-    //TODO: place the robot at the start position, reset all the variables?
+    //TODO: place the robot at the start position?
+
+    MemoryController.reset();
     SceneManager.programState.setGameState('build');
   }
 

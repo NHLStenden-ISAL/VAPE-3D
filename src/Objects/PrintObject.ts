@@ -7,6 +7,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { PrintDataContainer } from "./DataContainers";
+import { MemoryController } from "../MemoryManagement/memoryController";
 
 //TODO: Strings are not quite working yet. When a variable has the same name or the string has spaces. Quotes are needed.
 
@@ -38,15 +39,9 @@ export default class PrintObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
+    const memoryController = MemoryController.getInstance();
     if (this.storable.getValue() === '') { return; }
-
-    if (robotObject.getVariables().has(this.storable.getValue())) {
-      console.log(robotObject.getVariables().get(this.storable.getValue()));
-    }
-    else {
-      console.log(this.storable.getValue());
-    }
-
+    console.log(memoryController.evaluate(this.storable.getValue()))
   }
 
   public restore(): void {

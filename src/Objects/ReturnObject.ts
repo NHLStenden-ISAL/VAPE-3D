@@ -7,21 +7,24 @@ import { createReturn } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import {ReturnDataContainer} from "./DataContainers";
 import {SceneManager} from "./SceneComponent";
+import { MemoryController } from "../MemoryManagement/memoryController";
 
 export default class ReturnObject extends BaseObject {
+  private statement: string;
 
-  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction, statement?: string) {
     const objectColor = Color3.Black();
 
     super(worldInfo, gridPos, dir, objectColor);
 
     this.mesh.rotation = this.transformable.rotateToward(dir);
+    this.statement = statement ?? '';
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
   }
 
   public copy(worldInfo: WorldInformation): ReturnObject {
-    return new ReturnObject(worldInfo, this.gridPosition, this.direction);
+    return new ReturnObject(worldInfo, this.gridPosition, this.direction, this.statement);
   }
 
   protected createMesh(): Mesh {
@@ -29,6 +32,8 @@ export default class ReturnObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
+    const memoryController = MemoryController.getInstance();
+    memoryController.returnFunction(this.statement);
     SceneManager.return();
   }
 
@@ -36,10 +41,19 @@ export default class ReturnObject extends BaseObject {
     super.restore();
   }
 
+  public getStatement(){
+    return this.statement;
+  }
+
+  public setStatement(statement: string){
+    this.statement = statement;
+  }
+
   public getDataContainer(): ReturnDataContainer {
     return new ReturnDataContainer(
       this.getPositionForGUI(),
-      this.getDirection()
+      this.getDirection(),
+      this.statement
     )
   }
 }

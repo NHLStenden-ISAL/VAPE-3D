@@ -13,6 +13,8 @@ import PrintObject from "../Objects/PrintObject";
 import ReturnObject from "../Objects/ReturnObject";
 import LayerObject from "../Objects/LayerObject";
 import CallObject from "../Objects/CallObject";
+import PointerWriteObject from "../Objects/Arithmetic/PointerWriteObject";
+import FreeObject from "../Objects/FreeObject";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -57,6 +59,12 @@ export default class CommandAddObject implements ICommand {
         break;
       case 'grid':
         this.object = new LayerObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'writeToPointer':
+        this.object = new PointerWriteObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'free':
+        this.object = new FreeObject(this.worldInfo, this.gridPosition, this.direction);
         break;
     }
   }
