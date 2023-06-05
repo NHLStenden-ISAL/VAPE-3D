@@ -4,9 +4,10 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@babylonjs/core": "^4.2.1",
-    "@babylonjs/gui": "^4.2.1",
-    "@babylonjs/materials": "^4.2.1",
+    "@babylonjs/core": "^5.22.0",
+    "@babylonjs/gui": "^5.22.0",
+    "@babylonjs/materials": "^5.22.0",
+    "@babylonjs/loaders": "^5.11.0",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.1",

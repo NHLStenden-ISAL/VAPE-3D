@@ -3,6 +3,7 @@ import SceneHelper from "./SceneHelper";
 import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 import { PointerEventTypes, Vector2 } from "@babylonjs/core";
+import { log } from "console";
 
 export default class MouseHandler {
   private worldInfo: WorldInformation;
@@ -31,13 +32,18 @@ export default class MouseHandler {
       if (this.programState.getGameState() !== 'build') { return; }
 
       switch (pointerInfo.type) {
-        case PointerEventTypes.POINTERTAP:
-          //Check which mouse button it was (0 == left mouse button, 2 == right mouse button)
+          case PointerEventTypes.POINTERTAP:
+              //Check which mouse button it was (0 == left mouse button, 2 == right mouse button)
+              if (pointerInfo.pickInfo?.hit === true) {
+                  this.clickedObject = this.worldInfo.getObjectByMesh(pointerInfo.pickInfo.pickedMesh);
+                  this.mouseStartpoint = this.getMouseGridPosition();
+              }
           if (pointerInfo.event.button === 0) {
-            this.onLeftPointerTap();
+              this.onLeftPointerTap();
           } else if (pointerInfo.event.button === 2) {
-            this.onRightPointerTap();
-          }
+              this.onRightPointerTap();
+              }
+              this.clickedObject = undefined;
           break;
         case PointerEventTypes.POINTERDOWN:
           this.resetSelection();
@@ -52,7 +58,8 @@ export default class MouseHandler {
             }
           }
           break;
-        case PointerEventTypes.POINTERUP:
+          case PointerEventTypes.POINTERUP:
+            
           if (pointerInfo.event.button === 0) {
             this.onLeftPointerUp();
           }
@@ -116,9 +123,10 @@ export default class MouseHandler {
     }
   }
 
-  private deleteOnTap() {
-    if (!this.clickedObject) { return; }
-    this.sceneHelper.deleteObject(this.clickedObject);
+    private deleteOnTap() {
+      if (!this.clickedObject) { return; }
+      
+        this.sceneHelper.deleteObject(this.clickedObject);
   }
 
   private rotateOnTap() {

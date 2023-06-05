@@ -18,7 +18,7 @@ export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
 }
 
 export function createGrid(scene: Scene, planeSize: number, gridRatio: number): Mesh {
-  const gridMaterial = new GridMaterial('grid', scene);
+  const gridMaterial = new GridMaterial('grid',scene);
   gridMaterial.gridRatio = gridRatio;
   gridMaterial.lineColor = Color3.Teal();
   gridMaterial.mainColor = new Color3(0.2, 0.2, 0.25);

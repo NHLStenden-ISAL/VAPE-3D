@@ -3,10 +3,11 @@ import CommandAddObject from "../Commands/CommandAddObject";
 import CommandDeleteObject from "../Commands/CommandDeleteObject";
 import GridObject from "../Objects/GridObject";
 import WorldInformation from "./WorldInformation";
-import { ArcRotateCamera, HemisphericLight, Vector2, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, HemisphericLight, Vector2, Vector3, SceneLoader } from "@babylonjs/core";
 import { BuildTypes } from "./ProgramState";
 import { createCamera } from "./ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
+import "@babylonjs/loaders";
 
 export default class SceneHelper {
   private worldInfo: WorldInformation;
@@ -26,6 +27,19 @@ export default class SceneHelper {
     light.intensity = 0.7;
 
     new GridObject(this.worldInfo.getScene(), 60);
+
+      SceneLoader.ImportMesh("", "3D-Objects/", "Robot-Object.obj", this.worldInfo.getScene(), (meshes) => {
+          const mesh = meshes[0];
+      //    // Further operations with the loaded mesh
+      //    // Position, rotate, or scale the mesh as needed
+          mesh.position = new Vector3(3, 0, 0);
+          mesh.rotation = new Vector3(0, Math.PI / 2, 0);
+          mesh.scaling = new Vector3(0.001, 0.001, 0.001);
+      //    mesh.material = new StandardMaterial('color', this.worldInfo.getScene());
+      //    mesh.overlayColor = Color3.White();
+
+      //    this.worldInfo.getScene().addMesh(mesh);
+      });
 
     this.addObject(new Vector2(2, 3), 'variable');
     this.addObject(new Vector2(10, 5), 'variable');
@@ -48,7 +62,7 @@ export default class SceneHelper {
   }
 
   public disableCameraControl() {
-    this.camera.detachControl(this.canvas);
+    this.camera.detachControl();
   }
 
   public enableCameraControl() {
