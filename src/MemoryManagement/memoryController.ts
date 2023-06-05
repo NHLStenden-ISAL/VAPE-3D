@@ -238,6 +238,7 @@ export class MemoryController{
             this._nexAddress+=getSize(variable.type,variable.size);
             
         });
+        this._nexAddress = size;
 
         //push stackframe
         this._stack.push({returnVariable,variables,id:++this._nextId,size,functionName});
