@@ -7,6 +7,13 @@ The VAPE-3D environment can be used directly from this GitHub repository. [Pleas
 ![VAPE-3D Example](https://raw.githubusercontent.com/NHLStenden-ISAL/VAPE-3D/main/tool-example-setting.png)
 
 ---
+## Publications
+
+Below, all publications written about VAPE-3D are listed.
+
+>Wouter Brinksma and Berber Bouma. 2022. VAPE-3D: A 3D Visual Avatar-based Programming Environment. In The 11th Computer Science Education Research Conference (CSERC ’22), November 21, 2022, Leiden, Netherlands. ACM, New York, NY, USA, 2 pages. https://doi.org/10.1145/3569173.3569181
+
+---
 
 ## Development environment
 
