@@ -1,5 +1,7 @@
 # Visual Avatar-based Programming Environment (VAPE-3D)
 
+[![Build and deploy](https://github.com/NHLStenden-ISAL/VAPE-3D/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/NHLStenden-ISAL/VAPE-3D/actions/workflows/main.yml)
+
 VAPE-3D is the product of a research project with the aim of creating a 3D visual programming environment which focusses on visualizing the step by step execution of a program. Currently, the environment supports creating a small program, which is done by inserting colored blocks into a grid.
 
 The VAPE-3D environment can be used directly from this GitHub repository. [Please use the following link](https://nhlstenden-isal.github.io/VAPE-3D/).
