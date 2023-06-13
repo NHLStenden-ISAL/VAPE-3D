@@ -1,8 +1,9 @@
+import { variableType } from "../memoryController";
 import { VAPE_Base_Typing } from "./VAPE_Typing";
 
 export class VAPE_int extends VAPE_Base_Typing{
     readonly DEFAULT = 0;
-    readonly TYPE = 'int';
+    readonly TYPE:variableType = 'int';
     private static MAX_INT_SIZE = 2147483647
     private static MIN_INT_SIZE = -2147483648
     public readonly BITSIZE = 32;

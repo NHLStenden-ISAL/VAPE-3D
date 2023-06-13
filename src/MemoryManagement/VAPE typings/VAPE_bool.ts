@@ -1,8 +1,9 @@
+import { variableType } from "../memoryController";
 import { VAPE_Base_Typing } from "./VAPE_Typing";
 
 export class VAPE_bool extends VAPE_Base_Typing{
     readonly DEFAULT= false;
-    readonly TYPE = 'bool';
+    readonly TYPE:variableType = 'boolean';
     public readonly BITSIZE = 8;
 
     private static instance: VAPE_Base_Typing

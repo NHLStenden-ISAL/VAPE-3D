@@ -101,6 +101,9 @@ interface stackFrame{
     returnVariable: string
 }
 
+const observerSubjects = ["onCall", "onReturn", "onActivate", "onAssignment", "onHeapChange"] as const;
+type observerSubject = typeof observerSubjects[number];
+
 export class MemoryController{
     private _nextId=0;
     private _heap:Heap;
@@ -112,6 +115,8 @@ export class MemoryController{
     private _addresses:Map<number, VariableContainer>;
     private debug:boolean;
     private _nexAddress=0;
+
+    private observers: Map<observerSubject,((...args:any[])=>void)[]> = new Map();
 
     private static _instance: MemoryController;
 
@@ -151,6 +156,16 @@ export class MemoryController{
             this._instance = new MemoryController(config);
         }
         return this._instance;
+    }
+
+    public addObserver(subject: observerSubject, func: (...args: any[])=>void){
+        if(!this.observers.has(subject)) this.observers.set(subject,[]);
+        this.observers.get(subject)!.push(func);
+    }
+    public removeObserver(subject: observerSubject, func: (...args: any[])=>void){
+        let arr = this.observers.get(subject)!;
+        arr = arr.filter((el)=>el!==func);
+        this.observers.set(subject, arr);
     }
 
     public static reset(){
@@ -207,6 +222,10 @@ export class MemoryController{
         let variable = this._stack.peek()?.variables.get(variableName)
         if(variable !== undefined) variable.activated = true;
 
+        this.observers.get('onActivate')?.forEach(func=>{
+            func(variable?.getType(), variableName, variable?.getByteSize(), this.getAddress(variable!));
+        });
+
         this.debug && console.log(`[${variableName}] succesfully activated`)
         this.debug && this.prettyPrint();
     }
@@ -243,6 +262,10 @@ export class MemoryController{
         //push stackframe
         this._stack.push({returnVariable,variables,id:++this._nextId,size,functionName});
 
+        this.observers.get('onCall')?.forEach(func => {
+            func(functionName, size);
+        });
+
         this.debug && console.log(`Succesfully called [${functionName}] with return variable '${returnVariable}' and params? {${JSON.stringify(params)}}`);
         this.debug && this.prettyPrint();
     }
@@ -276,6 +299,10 @@ export class MemoryController{
 
         this._nextId--;
 
+        this.observers.get('onReturn')?.forEach(func => {
+            func();
+        });
+
         this.debug && console.log(`Succesfully returned from [${top.functionName}] with value (${returnValue})`);
         this.debug && this.prettyPrint();
     }
@@ -307,6 +334,12 @@ export class MemoryController{
             (this._stack.peek()?.variables.get(variableName) as VariableContainer).value=val;
         }
 
+        // kan misschien wat mooier?
+        let varContainer = (this._stack.peek()?.variables.get(variableName) as VariableContainer);
+        this.observers.get('onAssignment')?.forEach(func => {
+            func(varContainer.getType(), variableName, this.getAddress(this.getVariableByName(variableName)), varContainer.value);
+        });
+
         
         this.debug && console.log(`[${variableName}] succesfully set to ${expression} (${val})`);
 
@@ -330,6 +363,9 @@ export class MemoryController{
     private malloc(size:number, type:variableType){
         let address = this._heap.allocate(size);
         let typenum = getTypeNumber(type);
+        this.observers.get('onHeapChange')?.forEach(func=>{
+            func(this._heap.hexdump());
+        });
         return this.addressToPointer(address, typenum);
     }
 
@@ -338,6 +374,10 @@ export class MemoryController{
         let pointerval = this.getVariableByName(pointer).value
         let {address} = this.pointerToAddress(pointerval);
         this._heap.free(address);
+
+        this.observers.get('onHeapChange')?.forEach(func=>{
+            func(this._heap.hexdump());
+        });
 
         this.debug && console.log(`Succesfully freed pointer ${pointer}`);
         this.debug && this.prettyPrint();
@@ -364,9 +404,28 @@ export class MemoryController{
                 val[indexFromVariable] = value[0];
                 variable.writeAs(typeInstance.toBinary(val,size));
             }
+
+            let varName = '';
+            this._stack.downwardsForEach(frame=>{
+                if(varName!=='') return;
+                frame.variables.forEach((v,name)=>{
+                    if(v===variable){
+                        varName = name;
+                        return;
+                    }
+                });
+            });
+
+            this.observers.get('onAssignment')?.forEach(func => {
+                func(variableType, varName, address, variable!.value);
+            });
+
             this.debug && console.log(`Succesfully wrote {${value}} to pointer [${pointer}] (ADDR: ${address+adjustedIndex})`);
         }else{
             this._heap.write(address-adjustedIndex,binary.length/8,binary);
+            this.observers.get('onHeapChange')?.forEach(func=>{
+                func(this._heap.hexdump());
+            });
             this.debug && console.log(`Succesfully wrote {${value}} to pointer [${pointer}] (ADDR: ${address-adjustedIndex})`);
         }
 

@@ -1,5 +1,6 @@
 import { GridMaterial } from "@babylonjs/materials";
-import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
+import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space, DynamicTexture } from "@babylonjs/core";
+import { config } from "../memoryConfig";
 
 export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
   const camera: ArcRotateCamera = new ArcRotateCamera(
@@ -13,6 +14,7 @@ export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
 
   camera.attachControl(canvas, true);
   camera.setPosition(new Vector3(50, 40, 20));
+  camera.panningSensibility = 200;
 
   return camera;
 }
@@ -27,6 +29,51 @@ export function createGrid(scene: Scene, planeSize: number, gridRatio: number): 
   gridObject.material = gridMaterial;
 
   return gridObject;
+}
+
+export function createStackFrame(size: number, layer: number, scene: Scene){
+  const width = config.bytesPerLine!;
+  const height = size/width;
+  const stackframe = MeshBuilder.CreatePlane("stackframe",{width,height},scene);
+  const stackframeMaterial = new GridMaterial('stackframeGrid',scene);
+  stackframe.rotation.x = Math.PI / 2;
+  stackframe.position.x = 31+stackframe.getBoundingInfo().boundingBox.extendSize.x;
+  stackframe.position.y = layer;
+  if(height%2===1) stackframeMaterial.gridOffset.y = 0.5;
+  stackframeMaterial.gridRatio = 1;
+  stackframeMaterial.lineColor = Color3.Teal();
+  stackframeMaterial.mainColor = new Color3(0.2, 0.2, 0.25);
+  stackframe.material = stackframeMaterial;
+  return stackframe;
+}
+
+export function createHeap(scene: Scene){
+  const width = config.bytesPerLine!;
+  const height = config.maxMemory!/width;
+  const heap = MeshBuilder.CreatePlane("heap",{width,height},scene);
+  const heapMaterial = new GridMaterial('heapGrid',scene);
+  heap.rotation.x = Math.PI / 2;
+  console.log('heap dimensions are', heap.getBoundingInfo().boundingBox.extendSize);
+  heap.position.z = 31+heap.getBoundingInfo().boundingBox.extendSize.y;
+  heapMaterial.gridRatio = 1;
+  heapMaterial.lineColor = Color3.Teal();
+  heapMaterial.mainColor = new Color3(0.2, 0.2, 0.25);
+  heap.material = heapMaterial;
+  return heap;
+}
+
+export function createVariableField(scene: Scene, width: number, layer: number){
+  const plane = MeshBuilder.CreatePlane("variableField",{width,height:1}, scene);
+  const planeMaterial = new StandardMaterial("flat",scene);
+  plane.rotation.x = Math.PI / 2;
+  plane.position.y = layer+0.01;
+  const canvasRatio = 60;
+  const cHeight = 1*canvasRatio;
+  const cWidth = width*canvasRatio;
+  const planeTexture = new DynamicTexture("planeTexture",{height:cHeight, width:cWidth},scene, false);
+  planeMaterial.diffuseTexture = planeTexture;
+  plane.material = planeMaterial;
+  return plane;
 }
 
 export function createLayer(scene: Scene, planeSize: number, gridRatio: number, layer: number): Mesh {

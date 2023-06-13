@@ -1,9 +1,10 @@
+import { variableType } from "../memoryController";
 import { VAPE_Base_Typing } from "./VAPE_Typing";
 
 export class VAPE_ptr extends VAPE_Base_Typing{
     private static instance: VAPE_Base_Typing;
     readonly DEFAULT= "0".repeat(8*9);
-    readonly TYPE = 'ptr';
+    readonly TYPE:variableType = 'pointer';
     public readonly BITSIZE = 32;
     private constructor(){super()}
     static getInstance(){

@@ -26,7 +26,8 @@ import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
 import CallObject from "../Objects/CallObject";
 import ReturnObject from "../Objects/ReturnObject";
-import { MemoryController, functionVariable } from "../MemoryManagement/memoryController";
+import { MemoryController, functionVariable, variableType } from "../MemoryManagement/memoryController";
+import { MemoryVisualizer } from "./MemoryVisualizer";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -145,27 +146,31 @@ export default class AppManager {
     console.log("Run the program");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
 
-    //parse al layers to a map for all variables with sizes
+    //parse all layers to a map for all variables with sizes
     let functionMap: Map<string, functionVariable[]> = new Map();
     SceneManager.scenes.forEach((scene,name)=>{
       let vars:functionVariable[]=[];
       scene.worldInformation.getSceneObjects().forEach((object,_)=>{
         if(object instanceof VariableObject){
           let storable = (object as VariableObject).getStorable()
-          // TODO: add new fields to Variable GUI
           vars.push({name:storable.getName(),type:object.getVariableType(),size:object.getVariableSize()});
         }
       });
       functionMap.set(name,vars);
     });
-
+    
     const memoryController = MemoryController.getInstance();
     memoryController.addFunctions(functionMap);
     
+    const memoryVisualizer = MemoryVisualizer.getInstance();
+    memoryController.addObserver('onCall', (functionName: string, size:number)=>{memoryVisualizer.renderCall(functionName,size)});
+    memoryController.addObserver('onReturn', ()=>{memoryVisualizer.renderReturn()});
+    memoryController.addObserver('onActivate', (type: variableType, name: string, size: number, address: number)=> {memoryVisualizer.renderVariable(type, name, size, address)});
+    memoryController.addObserver('onAssignment',(type: variableType, name: string, address: number, value: any)=> {memoryVisualizer.renderAssignment(type, name, address, value)});
+    memoryController.addObserver('onHeapChange', (heap: string[])=>{memoryVisualizer.renderHeap(heap)});
 
     SceneManager.callByName("Main");
     memoryController.call("Main","");
-    console.log('Manager scenes: ',SceneManager.scenes);
     // try {
     //   SceneManager.callByName("Layer 1");
     // } catch (e){}
@@ -194,6 +199,7 @@ export default class AppManager {
     //TODO: place the robot at the start position?
 
     MemoryController.reset();
+    MemoryVisualizer.reset();
     SceneManager.programState.setGameState('build');
   }
 

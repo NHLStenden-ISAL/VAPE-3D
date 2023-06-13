@@ -1,8 +1,9 @@
+import { variableType } from "../memoryController";
 import { VAPE_Base_Typing } from "./VAPE_Typing";
 
 export class VAPE_char extends VAPE_Base_Typing{
     readonly DEFAULT= '';
-    readonly TYPE = 'char';
+    readonly TYPE:variableType = 'char';
     public readonly BITSIZE = 8;
 
     private static instance: VAPE_Base_Typing
