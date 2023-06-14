@@ -1,5 +1,8 @@
 import { GridMaterial } from "@babylonjs/materials";
-import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space } from "@babylonjs/core";
+import { MeshBuilder, Scene, Mesh, Color3, StandardMaterial, ArcRotateCamera, Vector3, Space, SceneLoader } from "@babylonjs/core";
+import RobotObject from "../Objects/RobotObject";
+import { models3D } from '../Objects/SceneComponent';
+
 
 export function createCamera(scene: Scene, canvas: any): ArcRotateCamera {
   const camera: ArcRotateCamera = new ArcRotateCamera(
@@ -57,9 +60,28 @@ export function createDirection(scene: Scene, name: string, color: Color3, size:
 
 }
 
-export function createCustomMesh(scene: Scene, name: string, color: Color3, objAddress: string): Mesh {
+export function loadModel(scene: Scene, name: string, modelName: string) : Mesh {
+    const loadedModel = models3D[modelName];
+    if (loadedModel != undefined) {
+        const clonedModel = loadedModel.clone(name, null);
+        if (clonedModel != null) {
+            clonedModel.setEnabled(true);
+            clonedModel.getChildren().forEach((mesh) => {
+                mesh.name = name;
+            });
+            return clonedModel;
+        } else {
+            throw "Model clone error";
+        }
+    } else {
+        throw "Model name invalid";
+    }
+}
 
-  return createBox(scene, name, color);
+export function createCustomMesh(scene: Scene, name: string, color: Color3, objAddress?: string):Mesh { 
+
+    
+    return createBox(scene, name, color);
   //https://www.babylonjs-playground.com/#0SHBCK#13
   //alert("Missing functionality, can't create custom mesh");
 }

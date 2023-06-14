@@ -4,7 +4,7 @@ import RobotObject from "./RobotObject";
 import Storable from "../Compositions/Storable";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createDirection } from "../Helpers/ObjectCreator";
+import { createDirection, loadModel } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { DecisionDataContainer } from "./DataContainers";
 import { parse } from "mathjs";
@@ -30,7 +30,8 @@ export default class DecisionObject extends BaseObject {
   }
 
   protected createMesh(): Mesh {
-    return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Blue(), 0.8);
+    //return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Blue(), 0.8);
+    return loadModel(this.worldInfo.getScene(), this.getUUID(), "Decision-Object.obj");
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

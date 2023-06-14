@@ -20,8 +20,7 @@ import PrintObject from "../Objects/PrintObject";
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
 export default class AppManager {
-  private canvas: any;
-
+    private canvas: any;
   private sceneHelper: SceneHelper;
   private programState: ProgramState;
   private commandBroker: CommandBroker;

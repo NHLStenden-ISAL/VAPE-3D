@@ -1,26 +1,28 @@
 import BaseObject from "./BaseObject";
 import WorldInformation from "../Helpers/WorldInformation";
-import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createCustomMesh } from "../Helpers/ObjectCreator";
+import { Color3, Mesh, Vector2, SceneLoader } from "@babylonjs/core";
+import { createCustomMesh, loadModel } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
 import { RobotDataContainer } from "./DataContainers";
+import SceneHelper from "../Helpers/SceneHelper";
 
 
 export default class RobotObject extends BaseObject {
-  private scope: Map<string, string>;
-
+    private scope: Map<string, string>;
+  
   constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
     const objectColor = Color3.Green();
 
     super(worldInfo, gridPos, dir, objectColor);
     worldInfo.getRobotObjects().push(this);
-
-    this.scope = new Map<string, string>();
+      this.scope = new Map<string, string>();
   }
 
-  protected createMesh(): Mesh {
-    return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Green(), "");
+    protected createMesh(): Mesh {
+        //return this.scene.getRobotMesh();
+        //return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Green());
+        return loadModel(this.worldInfo.getScene(), this.getUUID(), "Robot-Object.obj");
   }
 
   public updateRobot() {

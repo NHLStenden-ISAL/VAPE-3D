@@ -3,7 +3,7 @@ import Interactable from "../Compositions/Interactable";
 import RobotObject from "./RobotObject";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createDirection } from "../Helpers/ObjectCreator";
+import { createDirection, loadModel } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { DirectionDataContainer } from "./DataContainers";
 
@@ -19,8 +19,10 @@ export default class DirectionObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
   }
 
-  protected createMesh(): Mesh {
-    return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Purple(), 0.8);
+    protected createMesh(): Mesh {
+        const model = loadModel(this.worldInfo.getScene(), this.getUUID(), "Direction-Object.obj");
+        return model;
+    //return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Purple(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

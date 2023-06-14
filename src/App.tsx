@@ -8,7 +8,7 @@ import DirectionObject from './Objects/DirectionObject';
 import MenuBar from './GUI/Components/MenuBar';
 import RobotGUI from './GUI/RobotGUI';
 import RobotObject from './Objects/RobotObject';
-import SceneComponent from './Objects/SceneComponent';
+import { models3D, SceneComponent } from './Objects/SceneComponent';
 import VariableGUI from './GUI/VariableGUI';
 import VariableObject from './Objects/VariableObject';
 import { Box } from '@mui/material';
@@ -18,6 +18,9 @@ import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
 import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
+import { AssetsManager, SceneLoader, AssetContainer, Vector3 } from "@babylonjs/core";
+import "@babylonjs/loaders";
+
 
 const observerContainer: ObserverContainer = new ObserverContainer();
 
@@ -30,9 +33,10 @@ const onSceneReady = (scene: any, setSelectedObject: SetSelectedObject) => {
 };
 
 export default function App() {
+    const [selectedObject, setSelectedObject] = useState<BaseObject | undefined>(undefined);
+  //Laad de objecten
+    //while(!all_loaded){}
 
-  const [selectedObject, setSelectedObject] = useState<BaseObject | undefined>(undefined);
-  
   //TODO: Fix input, so when you press a button right after reload, the program does listen instead of needing to focus on the scene first
   return (
     <Box>

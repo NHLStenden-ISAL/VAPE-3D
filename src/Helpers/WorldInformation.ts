@@ -1,7 +1,7 @@
 import BaseObject from "../Objects/BaseObject";
 import CommandBroker from "./CommandBroker";
 import RobotObject from "../Objects/RobotObject";
-import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene } from "@babylonjs/core";
+import { AbstractMesh, Color3, HighlightLayer, Mesh, Nullable, Scene, SetStateAction } from "@babylonjs/core";
 import { SetSelectedObject } from "./AppManager";
 import { BaseDataContainer } from "../Objects/DataContainers";
 
@@ -74,12 +74,12 @@ export default class WorldInformation {
     return this.commandBroker;
   }
 
-  public onSelect(object: BaseObject): void {
-    this.setSelectedObject(object);
+    public onSelect(object: BaseObject): void {       
+      this.setSelectedObject(object);
   }
 
-  public onDeselect(): void {
-    this.setSelectedObject(undefined);
+    public onDeselect(): void {
+      this.setSelectedObject(undefined);
   }
 
   public turnOnHighLight(mesh: Mesh, color: Color3): void {
