@@ -4,7 +4,7 @@ import RobotObject from "./RobotObject";
 import Storable from "../Compositions/Storable";
 import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createBox } from "../Helpers/ObjectCreator";
+import { createBox, loadModel } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { PrintDataContainer } from "./DataContainers";
 
@@ -25,8 +25,9 @@ export default class PrintObject extends BaseObject {
 
   }
 
-  protected createMesh(): Mesh {
-    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.White(), 0.8);
+    protected createMesh(): Mesh {
+        return loadModel(this.worldInfo.getScene(), this.getUUID(), "Print-Object.obj");
+    //return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.White(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
