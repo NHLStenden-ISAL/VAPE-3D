@@ -1,12 +1,12 @@
-import BaseObject from "./BaseObject";
-import Interactable from "../Compositions/Interactable";
-import RobotObject from "./RobotObject";
-import Storable from "../Compositions/Storable";
-import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createBox, createCustomMesh, loadModel } from "../Helpers/ObjectCreator";
+import Interactable from "../Compositions/Interactable";
+import Storable from "../Compositions/Storable";
 import { Direction } from "../Compositions/Transformable";
+import { loadModel } from "../Helpers/ObjectCreator";
+import WorldInformation from "../Helpers/WorldInformation";
+import BaseObject from "./BaseObject";
 import { VariableDataContainer } from "./DataContainers";
+import RobotObject from "./RobotObject";
 
 export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
@@ -25,7 +25,6 @@ export default class VariableObject extends BaseObject {
 
     protected createMesh(): Mesh {
         return loadModel(this.worldInfo.getScene(), this.getUUID(), "Variable-Object.obj");
-    //return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

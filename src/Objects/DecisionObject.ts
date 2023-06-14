@@ -1,13 +1,13 @@
-import Interactable from "../Compositions/Interactable";
-import BaseObject from "./BaseObject";
-import RobotObject from "./RobotObject";
-import Storable from "../Compositions/Storable";
-import WorldInformation from "../Helpers/WorldInformation";
 import { Color3, Mesh, Vector2 } from "@babylonjs/core";
-import { createDirection, loadModel } from "../Helpers/ObjectCreator";
-import { Direction } from "../Compositions/Transformable";
-import { DecisionDataContainer } from "./DataContainers";
 import { parse } from "mathjs";
+import Interactable from "../Compositions/Interactable";
+import Storable from "../Compositions/Storable";
+import { Direction } from "../Compositions/Transformable";
+import { loadModel } from "../Helpers/ObjectCreator";
+import WorldInformation from "../Helpers/WorldInformation";
+import BaseObject from "./BaseObject";
+import { DecisionDataContainer } from "./DataContainers";
+import RobotObject from "./RobotObject";
 
 //TODO: Strings are not quite working yet. When a variable has the same name or the string has spaces. Quotes are needed.
 
@@ -30,7 +30,6 @@ export default class DecisionObject extends BaseObject {
   }
 
   protected createMesh(): Mesh {
-    //return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Blue(), 0.8);
     return loadModel(this.worldInfo.getScene(), this.getUUID(), "Decision-Object.obj");
   }
 

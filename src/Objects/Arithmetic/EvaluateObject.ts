@@ -3,7 +3,7 @@ import Interactable from "../../Compositions/Interactable";
 import Storable from "../../Compositions/Storable";
 import { Direction } from "../../Compositions/Transformable";
 import { EvaluateDataContainer } from "../DataContainers";
-import { createBox, loadModel } from "../../Helpers/ObjectCreator";
+import { loadModel } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
@@ -28,7 +28,6 @@ export default class EvaluateObject extends BaseObject {
 
     protected createMesh(): Mesh {
         return loadModel(this.worldInfo.getScene(), this.getUUID(), "Eval-Object.obj");
-    //return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Red(), 0.8);
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

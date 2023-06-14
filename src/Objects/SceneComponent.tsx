@@ -1,4 +1,4 @@
-import { Engine, Mesh, MeshBuilder, Scene, SceneLoader, TransformNode, Vector3 } from "@babylonjs/core";
+import { Engine, Mesh, MeshBuilder, Scene, SceneLoader, Vector3 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { SetSelectedObject } from "../Helpers/AppManager";
 import "@babylonjs/loaders";
@@ -18,15 +18,12 @@ async function loadMesh(name: string, scale: number, position: Vector3, scene: S
     const root = MeshBuilder.CreateBox(name, { size: 1 }, scene);
     root.isVisible = false;
     root.setEnabled(false);
-    //var root = new TransformNode(name);
-    //root.setEnabled(false);
     for (let mesh of meshes) {
         mesh.parent = root;
         mesh.scaling = new Vector3(scale, scale, scale);
         mesh.position = position;
     }
     root.position = new Vector3(0.5, 0, 0.5);
-    //root.rotation = new Vector3(-Math.PI / 2, 0, Math.PI);
     
     models3D[name] = root;
     onReady();
@@ -65,15 +62,6 @@ export function SceneComponent({ antialias, onSceneReady, id, setSelectedObject 
             });
         });
 
-        //if (scene.isReady()) {
-        //    onSceneReady(scene, setSelectedObject);
-        //} else {
-        //    scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
-        //}
-
-      //engine.runRenderLoop(() => {
-      //  scene.render();
-      //});
 
       const resize = () => {
         scene.getEngine().resize();

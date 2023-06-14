@@ -1,11 +1,10 @@
 import BaseObject from "./BaseObject";
 import WorldInformation from "../Helpers/WorldInformation";
-import { Color3, Mesh, Vector2, SceneLoader } from "@babylonjs/core";
-import { createCustomMesh, loadModel } from "../Helpers/ObjectCreator";
+import { Color3, Mesh, Vector2 } from "@babylonjs/core";
+import { loadModel } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
-import { VariableContainer, VariableData } from "../VisualData/VariableContainer";
+import { VariableContainer } from "../VisualData/VariableContainer";
 import { RobotDataContainer } from "./DataContainers";
-import SceneHelper from "../Helpers/SceneHelper";
 
 
 export default class RobotObject extends BaseObject {
@@ -20,8 +19,6 @@ export default class RobotObject extends BaseObject {
   }
 
     protected createMesh(): Mesh {
-        //return this.scene.getRobotMesh();
-        //return createCustomMesh(this.worldInfo.getScene(), this.getUUID(), Color3.Green());
         return loadModel(this.worldInfo.getScene(), this.getUUID(), "Robot-Object.obj");
   }
 
