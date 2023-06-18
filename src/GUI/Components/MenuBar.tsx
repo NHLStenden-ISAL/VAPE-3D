@@ -14,102 +14,104 @@ import ObserverContainer from '../../Helpers/ObserverContainer';
 import { uploadTextFile } from '../../Helpers/DownloadHelper';
 
 type MenuBarProps = {
-  observerContainer: ObserverContainer,
+    observerContainer: ObserverContainer,
 }
 
 export default function MenuBar({ observerContainer }: MenuBarProps) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [consoleOpen, setConsoleOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [consoleOpen, setConsoleOpen] = useState(false);
 
-  const items = buildTypesArray;
+    const items = buildTypesArray;
 
-  const handleDrawerOpen = () => { setDrawerOpen(true); };
-  const handleDrawerClose = () => { setDrawerOpen(false); };
+    const handleDrawerOpen = () => { setDrawerOpen(true); };
+    const handleDrawerClose = () => { setDrawerOpen(false); };
 
-  const handleConsoleOpen = () => { setConsoleOpen(true); }
-  const handleConsoleClose = () => { setConsoleOpen(false); }
+    const handleConsoleOpen = () => { setConsoleOpen(true); }
+    const handleConsoleClose = () => { setConsoleOpen(false); }
 
-  // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
-  const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
-  const pauseClick = () => { observerContainer.executeStateGame('build'); };
-  const stopClick = () => { observerContainer.executeStateGame('reset'); };
+    // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
+    const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
+    const pauseClick = () => { observerContainer.executeStateGame('build'); };
+    const stopClick = () => { observerContainer.executeStateGame('reset'); };
 
-  const editorClick = (state: EditorState) => { observerContainer.executeStateEditor(state); };
+    const editorClick = (state: EditorState) => { observerContainer.executeStateEditor(state); };
 
-  const onButtonPress = (type: string) => {
-    console.log(type);
-    observerContainer.executeStateBuild(type as BuildTypes);
+    const onButtonPress = (type: string) => {
+        console.log(type);
+        observerContainer.executeStateBuild(type as BuildTypes);
 
-    setDrawerOpen(false);
-  };
+        setDrawerOpen(false);
+    };
 
-  return (
-    <Box>
-      <AppBar position="sticky">
-        <Toolbar>
-          <Grid container justifyContent="space-between" alignContent="center" direction='row'>
-            <Grid item>
-              <IconButtonLarge
-                onClick={handleDrawerOpen}
-                icon={<MenuIcon />}
-              />
-            </Grid>
-            <Grid item>
-              <IconButtonLarge
-                onClick={() => { uploadTextFile((contents: string) => {
-                  observerContainer.uploadProgram(contents);
-                }); }}
-                icon={<UploadFileIcon />}
-              />
-              <IconButtonLarge
-                onClick={() => { observerContainer.downloadProgram(); }}
-                icon={<SaveIcon />}
-              />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
-                onClick={() => { editorClick('transform'); }}
-                icon={<Transform />}
-              />
-              <IconButtonLarge
-                onClick={() => { editorClick('create'); }}
-                icon={<AddBox />}
-              />
-              <IconButtonLarge
-                onClick={() => { editorClick('delete'); }}
-                icon={<Delete />}
-              />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
-                onClick={startClick}
-                icon={<PlayArrow />}
-              />
-              <IconButtonLarge
-                onClick={pauseClick}
-                icon={<Pause />}
-              />
-              <IconButtonLarge
-                onClick={stopClick}
-                icon={<Stop />}
-              />
-            </Grid>
+    return (
+        <Box>
+            <AppBar position="sticky" sx={{ top: '9px', left: '9px', width: '600px', borderRadius: '29px', position: 'absolute' }}>
+                <Toolbar>
+                    <Grid container justifyContent="space-between" alignContent="center" direction='row'>
+                        <Grid item>
+                            <IconButtonLarge
+                                onClick={handleDrawerOpen}
+                                icon={<MenuIcon />}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <IconButtonLarge
+                                onClick={() => {
+                                    uploadTextFile((contents: string) => {
+                                        observerContainer.uploadProgram(contents);
+                                    });
+                                }}
+                                icon={<UploadFileIcon />}
+                            />
+                            <IconButtonLarge
+                                onClick={() => { observerContainer.downloadProgram(); }}
+                                icon={<SaveIcon />}
+                            />
+                        </Grid>
+                        <Grid item >
+                            <IconButtonLarge
+                                onClick={() => { editorClick('transform'); }}
+                                icon={<Transform />}
+                            />
+                            <IconButtonLarge
+                                onClick={() => { editorClick('create'); }}
+                                icon={<AddBox />}
+                            />
+                            <IconButtonLarge
+                                onClick={() => { editorClick('delete'); }}
+                                icon={<Delete />}
+                            />
+                        </Grid>
+                        <Grid item >
+                            <IconButtonLarge
+                                onClick={startClick}
+                                icon={<PlayArrow />}
+                            />
+                            <IconButtonLarge
+                                onClick={pauseClick}
+                                icon={<Pause />}
+                            />
+                            <IconButtonLarge
+                                onClick={stopClick}
+                                icon={<Stop />}
+                            />
+                        </Grid>
 
-            <Grid item>
-              <DropDown itemArray={editorTypesArray} observerContainer={observerContainer} />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
-                onClick={handleConsoleOpen}
-                icon={<MenuIcon />}
-              />
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+                        <Grid item>
+                            <DropDown itemArray={editorTypesArray} observerContainer={observerContainer} />
+                        </Grid>
+                        <Grid item >
+                            <IconButtonLarge
+                                onClick={handleConsoleOpen}
+                                icon={<MenuIcon />}
+                            />
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
 
-      <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
-      <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
-    </Box>
-  );
+            <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
+            <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
+        </Box>
+    );
 }

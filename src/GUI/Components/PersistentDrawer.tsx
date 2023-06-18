@@ -7,7 +7,8 @@ const DrawerHeader = styled('div')(({ }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: 1,
-  justifyContent: 'flex-end',
+  color:"white",
+  justifyContent: 'flex-end'
 }));
 
 type PersistentDrawerProps = {
@@ -35,37 +36,38 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
 
   function addItemIcon(text: string) {
     if (text === object) {
-      return <AddBox color="primary"/>
+        return <AddBox style={{color:"white"}}/>
     } else {
-      return <AddBox color="inherit"/>
+        return <AddBox style={{ color: "white" }}/>
     }
   }
 
-  return (
-    <Drawer
-      variant="persistent"
-      anchor={anchor}
-      open={open}
-    >
-      <DrawerHeader>
-      <b className="drawer-header">Toolbox</b>
-        <IconButtonLarge
-          onClick={closeFunc}
-          icon={iconMap.get(anchor)}
-        />
-      </DrawerHeader>
-      <Divider />
-      <List>
-        {itemArray.map((text) => (
-          <ListItem button onClick={() => onClick(text)} key={text}>
-            <ListItemIcon>
-              {addItemIcon(text)}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </Drawer>
-  )
+    return (
+        <Drawer
+            variant="persistent"
+            anchor={anchor}
+            open={open}
+            PaperProps={{ sx: { borderRadius: '27px', height: "308px", left: '9px', top: '100px', backgroundColor: 'brown' } }}
+        >
+            <DrawerHeader >
+                <b className="drawer-header">Toolbox</b>
+                <IconButtonLarge
+                    onClick={closeFunc}
+                    icon={iconMap.get(anchor)}
+                />
+            </DrawerHeader>
+            <Divider />
+            <List >
+                {itemArray.map((text) => (
+                    <ListItem button onClick={() => onClick(text)} key={text} sx={{ height: '40px', color:"white"}}>
+                        <ListItemIcon >
+                            {addItemIcon(text)}
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
+        </Drawer>
+    )
 }
