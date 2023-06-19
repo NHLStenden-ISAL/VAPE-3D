@@ -219,11 +219,15 @@ export class MemoryController{
     }
 
     public activateVariable(variableName:string){
-        let variable = this._stack.peek()?.variables.get(variableName)
+        let top = this._stack.peek();
+        let variable = top?.variables.get(variableName)
         if(variable !== undefined) variable.activated = true;
 
+        let address = this.getAddress(variable!);
+        let index = address! - (this._bytesUsed - top!.size);
+
         this.observers.get('onActivate')?.forEach(func=>{
-            func(variable?.getType(), variableName, variable?.getByteSize(), this.getAddress(variable!));
+            func(variable?.getType(), variableName, variable?.getByteSize(), address, index);
         });
 
         this.debug && console.log(`[${variableName}] succesfully activated`)
@@ -240,15 +244,19 @@ export class MemoryController{
         let size = func.size;
         if(this.getUsedSize()+size > this._maxMemory) throw new Error("Stack Overflow");
         this._bytesUsed+=size;
-
+        
+        let evaluatedParams:{address:number, value: any}[] = [];
         //create all variables needed
         let variables:Map<string,VariableContainer> = new Map();
         func.variables.forEach(variable=>{
             //set variables from parameters {type:variable.type,value:(params && params[variable.name] && evaluate(params[variable.name],this.getScope())) ?? 0}
             let varContainer: VariableContainer
             if(params && params[variable.name]){
-                varContainer = new VariableContainer(typeFactory(variable.type), variable.size, evaluate(params[variable.name],this.getScope()));
+                let value = evaluate(params[variable.name],this.getScope());
+                varContainer = new VariableContainer(typeFactory(variable.type), variable.size, value);
                 varContainer.activated = true;
+                
+                evaluatedParams.push({address: this._nexAddress, value: varContainer.value});
             }else{
                 varContainer = new VariableContainer(typeFactory(variable.type), variable.size);    
             }
@@ -257,13 +265,13 @@ export class MemoryController{
             this._nexAddress+=getSize(variable.type,variable.size);
             
         });
-        this._nexAddress = size;
+        this._nexAddress = this._bytesUsed;
 
         //push stackframe
         this._stack.push({returnVariable,variables,id:++this._nextId,size,functionName});
 
         this.observers.get('onCall')?.forEach(func => {
-            func(functionName, size);
+            func(functionName, size, evaluatedParams);
         });
 
         this.debug && console.log(`Succesfully called [${functionName}] with return variable '${returnVariable}' and params? {${JSON.stringify(params)}}`);
@@ -279,6 +287,7 @@ export class MemoryController{
         let top = this._stack.pop();
         if(top===undefined) throw new Error("Invalid return")
         this._bytesUsed-=top.size;
+        this._nexAddress = this._bytesUsed;
         //remove all variables from address map
         this._addresses.forEach((variable,key)=>{
             //check if a variable exists in popped stackframe
@@ -286,7 +295,6 @@ export class MemoryController{
             if(Array.from((top as stackFrame).variables.values()).includes(variable)){
                 //perhaps first store in temporary array and delete afterwards?
                 this._addresses.delete(key);
-                this._nexAddress-=variable.getByteSize();
             }
         });
         
@@ -301,6 +309,13 @@ export class MemoryController{
 
         this.observers.get('onReturn')?.forEach(func => {
             func();
+        });
+
+        let returnVar = this.getVariableByName(top.returnVariable);
+        let returnAddress = this.getAddress(returnVar);
+
+        this.observers.get("onAssignment")?.forEach(func=>{
+            func(returnVar.getType(), top!.returnVariable, returnAddress, returnValue);
         });
 
         this.debug && console.log(`Succesfully returned from [${top.functionName}] with value (${returnValue})`);
@@ -337,7 +352,7 @@ export class MemoryController{
         // kan misschien wat mooier?
         let varContainer = (this._stack.peek()?.variables.get(variableName) as VariableContainer);
         this.observers.get('onAssignment')?.forEach(func => {
-            func(varContainer.getType(), variableName, this.getAddress(this.getVariableByName(variableName)), varContainer.value);
+            func(varContainer.getType(), variableName, this.getAddress(varContainer), varContainer.value);
         });
 
         
@@ -459,10 +474,10 @@ export class MemoryController{
     // tries to get the top most container first because of scoping
     private getVariableByName(variableName:string):VariableContainer{
         let varContainer=null;
-        this._stack.downwardsForEach((frame)=>{
+        // iterate through stack from bottom to top, top most variable gets saved, cant early exit a forEach...
+        this._stack.forEach((frame)=>{
             if(frame.variables.has(variableName)){
                 varContainer=frame.variables.get(variableName);
-                return;
             }
         });
         if(varContainer===null){

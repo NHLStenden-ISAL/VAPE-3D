@@ -38,7 +38,7 @@ export function createStackFrame(size: number, layer: number, scene: Scene){
   const stackframeMaterial = new GridMaterial('stackframeGrid',scene);
   stackframe.rotation.x = Math.PI / 2;
   stackframe.position.x = 31+stackframe.getBoundingInfo().boundingBox.extendSize.x;
-  stackframe.position.y = layer;
+  stackframe.position.y = layer*5;
   if(height%2===1) stackframeMaterial.gridOffset.y = 0.5;
   stackframeMaterial.gridRatio = 1;
   stackframeMaterial.lineColor = Color3.Teal();
@@ -66,8 +66,8 @@ export function createVariableField(scene: Scene, width: number, layer: number){
   const plane = MeshBuilder.CreatePlane("variableField",{width,height:1}, scene);
   const planeMaterial = new StandardMaterial("flat",scene);
   plane.rotation.x = Math.PI / 2;
-  plane.position.y = layer+0.01;
-  const canvasRatio = 60;
+  plane.position.y = (layer*15)+0.01;
+  const canvasRatio = 200;
   const cHeight = 1*canvasRatio;
   const cWidth = width*canvasRatio;
   const planeTexture = new DynamicTexture("planeTexture",{height:cHeight, width:cWidth},scene, false);

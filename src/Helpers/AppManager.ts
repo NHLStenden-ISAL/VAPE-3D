@@ -163,9 +163,9 @@ export default class AppManager {
     memoryController.addFunctions(functionMap);
     
     const memoryVisualizer = MemoryVisualizer.getInstance();
-    memoryController.addObserver('onCall', (functionName: string, size:number)=>{memoryVisualizer.renderCall(functionName,size)});
+    memoryController.addObserver('onCall', (functionName: string, size:number, params:{address:number, value: any}[])=>{memoryVisualizer.renderCall(functionName,size, params)});
     memoryController.addObserver('onReturn', ()=>{memoryVisualizer.renderReturn()});
-    memoryController.addObserver('onActivate', (type: variableType, name: string, size: number, address: number)=> {memoryVisualizer.renderVariable(type, name, size, address)});
+    memoryController.addObserver('onActivate', (type: variableType, name: string, size: number, address: number, index: number, layer: number)=> {memoryVisualizer.renderVariable(type, name, size, address, index, layer)});
     memoryController.addObserver('onAssignment',(type: variableType, name: string, address: number, value: any)=> {memoryVisualizer.renderAssignment(type, name, address, value)});
     memoryController.addObserver('onHeapChange', (heap: string[])=>{memoryVisualizer.renderHeap(heap)});
 

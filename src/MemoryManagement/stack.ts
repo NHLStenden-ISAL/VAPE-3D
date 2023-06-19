@@ -21,6 +21,10 @@ export class Stack<T>{
         return this._stack;
     }
 
+    public get length(){
+        return this._stack.length;
+    }
+
     //Iterates over stack from bottom to top
     public forEach(callback:(value:T,index?:number)=>void){
         this._stack.forEach(callback);
