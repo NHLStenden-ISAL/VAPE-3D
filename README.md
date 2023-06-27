@@ -1,8 +1,27 @@
-# Getting Started with Create React App
+# Visual Avatar-based Programming Environment (VAPE-3D)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Build and deploy](https://github.com/NHLStenden-ISAL/VAPE-3D/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/NHLStenden-ISAL/VAPE-3D/actions/workflows/main.yml)
 
-## Available Scripts
+VAPE-3D is the product of a research project with the aim of creating a 3D visual programming environment which focusses on visualizing the step by step execution of a program. Currently, the environment supports creating a small program, which is done by inserting colored blocks into a grid.
+
+The VAPE-3D environment can be used directly from this GitHub repository. [Please use the following link](https://nhlstenden-isal.github.io/VAPE-3D/).
+
+![VAPE-3D Example](https://raw.githubusercontent.com/NHLStenden-ISAL/VAPE-3D/main/tool-example-setting.png)
+
+---
+## Publications
+
+Below, all publications written about VAPE-3D are listed.
+
+>Wouter Brinksma and Berber Bouma. 2022. VAPE-3D: A 3D Visual Avatar-based Programming Environment. In The 11th Computer Science Education Research Conference (CSERC ’22), November 21, 2022, Leiden, Netherlands. ACM, New York, NY, USA, 2 pages. https://doi.org/10.1145/3569173.3569181
+
+---
+
+## Development environment
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). If you want to run the project locally, you can use the scripts listed below.
+
+### Available Scripts
 
 In the project directory, you can run:
 
