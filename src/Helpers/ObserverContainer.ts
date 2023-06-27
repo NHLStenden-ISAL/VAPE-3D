@@ -1,4 +1,4 @@
-import { Observable } from "@babylonjs/core";
+import {Observable} from "@babylonjs/core";
 import { BuildTypes, EditorState, GameState } from "./ProgramState";
 
 //TODO: a command pattern needs to be inserted between these observers and their actions
@@ -10,6 +10,7 @@ export default class ObserverContainer {
 
   private downloadProgramFunc: () => void;
   private uploadProgramFunc: (program: string) => void;
+  private sceneFunc: () => void;
 
   constructor() {
     this.stateGameObservable = new Observable();
@@ -18,6 +19,7 @@ export default class ObserverContainer {
 
     this.downloadProgramFunc = () => {};
     this.uploadProgramFunc = () => {};
+    this.sceneFunc = () => {};
   }
 
   public executeStateGame(objType: GameState) {
@@ -55,5 +57,13 @@ export default class ObserverContainer {
 
   public uploadProgram(program: string) : void {
     this.uploadProgramFunc(program);
+  }
+
+  public manageScenes() : void {
+    console.log('clcik');
+    // let sceneCount = SceneManager.scenes.size;
+    // SceneManager.SceneAddClean("Layer " + sceneCount);
+    // SceneManager.SceneSwitch("Layer " + sceneCount);
+    this.sceneFunc();
   }
 }

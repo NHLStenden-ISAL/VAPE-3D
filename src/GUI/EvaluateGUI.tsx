@@ -1,10 +1,8 @@
 import { useState } from "react";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
-import { Grid, TextField, Typography } from "@mui/material";
+import { Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { KeyGroup } from "./InputFilter";
-import DisabledInputField from "./Components/DisabledInputField";
 import InputField from "./Components/InputField";
-import CheckBox from "./Components/CheckBox";
 import PositionArea from "./Components/PositionArea";
 
 export default function EvaluateGUI({ selectedObject }: { selectedObject: EvaluateObject }) {
@@ -12,17 +10,27 @@ export default function EvaluateGUI({ selectedObject }: { selectedObject: Evalua
 
   const [statement, setStatement] = useState(guiBox.statement);
   const [name, setName] = useState(guiBox.name);
+  const [index, setIndex] = useState(guiBox.index);
   const position = guiBox.location;
 
   const onBlur = (target: EventTarget & (HTMLTextAreaElement | HTMLInputElement)) => {
-    if (target.value.length <= 0) { return; }
-
     if (target.id === 'Evaluate') {
       selectedObject.getStorable().changeName(target.value);
     }
     else if (target.id === 'Statement') {
       selectedObject.changeStatement(target.value);
     }
+    else if (target.id === 'Index') {
+      const pattern = /[0-9]*/;
+      if(!pattern.test(target.value)) throw new Error("Invalid character in index field");
+      selectedObject.setIndex(target.value)
+    }
+  }
+
+  function handleNumber(value: string): void {
+    const pattern = /[0-9]*/;
+    if(!pattern.test(value)) throw new Error("Invalid character in index field");
+    setIndex(value)
   }
 
   return (
@@ -32,10 +40,7 @@ export default function EvaluateGUI({ selectedObject }: { selectedObject: Evalua
       </Grid>
       <Grid item container direction='column'>
         <Grid item>
-          {guiBox.isKnown
-            ? <DisabledInputField name="Evaluate" value={name} />
-            : <InputField name="Evaluate" value={name} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setName} onBlur={onBlur} />
-          }
+          <InputField name="Evaluate" value={name} keyGroup={KeyGroup.ALPHANUMERIC} setValue={setName} onBlur={onBlur} />
         </Grid>
         <Grid item>
           <Typography variant='body1'>Which equals</Typography>
@@ -49,10 +54,13 @@ export default function EvaluateGUI({ selectedObject }: { selectedObject: Evalua
           />
         </Grid>
         <Grid item>
-          <PositionArea position={position} />
+        <Grid>
+          <Tooltip title="leave empty when you want to reassign the entire variable"><Typography variant="body1">Index</Typography></Tooltip>
         </Grid>
-        <Grid item xs={12}>
-          <CheckBox name="IsKnown" value={false} />
+        <TextField name="Index" id="Index" value={index} type="number" onChange={(e)=>handleNumber(e.target.value)} onBlur={(e)=>{onBlur(e.target)}}/>
+        </Grid>
+        <Grid item>
+          <PositionArea position={position} />
         </Grid>
       </Grid>
     </Grid>

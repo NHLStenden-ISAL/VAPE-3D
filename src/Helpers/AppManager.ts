@@ -1,45 +1,60 @@
 import BaseObject from "../Objects/BaseObject";
 import CommandBroker from "./CommandBroker";
-import KeyboardHandler from "./KeyboardHandler";
-import MouseHandler from "./MouseHandler";
 import SceneHelper from "./SceneHelper";
 import ProgramState, { BuildTypes, GameState } from "./ProgramState";
 import WorldInformation, { VAPLProgram } from "./WorldInformation";
 import { Dispatch, SetStateAction } from "react";
-import { Scene } from "@babylonjs/core";
 import ObserverContainer from "./ObserverContainer";
 import downloadTextFile from "./DownloadHelper";
 import VariableObject from "../Objects/VariableObject";
-import { EvaluateDataContainer, DecisionDataContainer, DirectionDataContainer, PrintDataContainer, RobotDataContainer, VariableDataContainer } from "../Objects/DataContainers";
+import {
+  EvaluateDataContainer,
+  DecisionDataContainer,
+  DirectionDataContainer,
+  PrintDataContainer,
+  RobotDataContainer,
+  VariableDataContainer,
+  CallDataContainer, ReturnDataContainer
+} from "../Objects/DataContainers";
 import RobotObject from "../Objects/RobotObject";
 import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
+import { SceneManager } from "../Objects/SceneComponent";
+import VapeScene from "../VapeScene";
+import RunTimeVapeScene from "../RunTimeVapeScene";
+import CallObject from "../Objects/CallObject";
+import ReturnObject from "../Objects/ReturnObject";
+import { MemoryController, functionVariable, variableType } from "../MemoryManagement/memoryController";
+import { MemoryVisualizer } from "./MemoryVisualizer";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
 export default class AppManager {
-  private canvas: any;
+  public canvas: any;
 
   private sceneHelper: SceneHelper;
   private programState: ProgramState;
   private commandBroker: CommandBroker;
   private worldInformation: WorldInformation;
   private observerContainer: ObserverContainer;
+  private setSelectedObject: SetSelectedObject;
 
   private updateTimeout: any;
 
-  constructor(scene: Scene, canvas: any, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject) {
-    this.canvas = canvas;
+  constructor(vapeScene: VapeScene, observerContainer: ObserverContainer, setSelectedObject: SetSelectedObject) {
+    this.canvas = vapeScene.canvas;
     this.observerContainer = observerContainer;
-
-    this.programState = new ProgramState();
-    this.commandBroker = new CommandBroker();
-    this.worldInformation = new WorldInformation(scene, this.commandBroker, setSelectedObject);
-    this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-
+    this.setSelectedObject = setSelectedObject;
+    this.setSelectedObject = vapeScene.setSelectedObject;
+    this.programState = SceneManager.programState;
+    // this.programState = new ProgramState();
+    this.commandBroker = vapeScene.commandBroker;
+    this.worldInformation = vapeScene.worldInformation;
+    this.sceneHelper = vapeScene.sceneHelper;
     const worldInfo = this.worldInformation;
+    SceneManager.setSelectedObject = setSelectedObject;
     this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); });
     this.observerContainer.setUploadProgram((program: string) => {
       let pProgram = JSON.parse(program) as VAPLProgram;
@@ -47,6 +62,17 @@ export default class AppManager {
         worldInfo.removeAllSceneObjects();
         pProgram.units.forEach(unit => {
           switch (unit.type) {
+            case 'call': {
+              const cUnit = unit as CallDataContainer;
+              const cObject = new CallObject(worldInfo, cUnit.location, cUnit.direction);
+              cObject.getStorable().changeValue(cUnit.call);
+              break;
+            }
+            case 'return': {
+              const dUnit = unit as ReturnDataContainer;
+              new ReturnObject(worldInfo, dUnit.location, dUnit.direction);
+              break;
+            }
             case 'variable': {
               const vUnit = unit as VariableDataContainer;
               const vObject = new VariableObject(worldInfo, vUnit.location, vUnit.direction);
@@ -91,19 +117,13 @@ export default class AppManager {
   }
 
   public runApp() {
-    this.sceneHelper.createScene();
-
-    const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, this.programState);
-    mouseHandler.onMouseInteraction();
-
-    const keyboardHandler = new KeyboardHandler(this.worldInformation, this, this.programState);
-    keyboardHandler.onKeyboardInteraction();
+    console.log('runApp');
   }
 
   public setupObservers() {
     this.observerContainer.subscribeStateGame((state) => this.changeGameState(state));
     this.observerContainer.subscribeStateBuild((type) => this.changeBuildType(type));
-    this.observerContainer.subscribeStateEditor((state) => this.programState.setEditorState(state));
+    this.observerContainer.subscribeStateEditor((state) => SceneManager.programState.setEditorState(state));
   }
 
   public changeGameState(state: GameState): void {
@@ -121,24 +141,66 @@ export default class AppManager {
   }
 
   public startProgram() {
-    if (this.programState.getGameState() === 'run') { return; }
-    this.programState.setGameState('run');
+    if (SceneManager.programState.getGameState() === 'run') { return; }
+    SceneManager.programState.setGameState('run');
+    console.log("Run the program");
+    SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
 
-    console.log("Start the program");
+    //parse all layers to a map for all variables with sizes
+    let functionMap: Map<string, functionVariable[]> = new Map();
+    SceneManager.scenes.forEach((scene,name)=>{
+      let vars:functionVariable[]=[];
+      scene.worldInformation.getSceneObjects().forEach((object,_)=>{
+        if(object instanceof VariableObject){
+          let storable = (object as VariableObject).getStorable()
+          vars.push({name:storable.getName(),type:object.getVariableType(),size:object.getVariableSize()});
+        }
+      });
+      functionMap.set(name,vars);
+    });
+    
+    const memoryController = MemoryController.getInstance();
+    memoryController.addFunctions(functionMap);
+    
+    const memoryVisualizer = MemoryVisualizer.getInstance();
+    memoryController.addObserver('onCall', (functionName: string, size:number, params:{address:number, value: any}[])=>{memoryVisualizer.renderCall(functionName,size, params)});
+    memoryController.addObserver('onReturn', ()=>{memoryVisualizer.renderReturn()});
+    memoryController.addObserver('onActivate', (type: variableType, name: string, size: number, address: number, index: number, layer: number)=> {memoryVisualizer.renderVariable(type, name, size, address, index, layer)});
+    memoryController.addObserver('onAssignment',(type: variableType, name: string, address: number, value: any)=> {memoryVisualizer.renderAssignment(type, name, address, value)});
+    memoryController.addObserver('onHeapChange', (heap: string[])=>{memoryVisualizer.renderHeap(heap)});
+
+    SceneManager.callByName("Main");
+    memoryController.call("Main","");
+    // try {
+    //   SceneManager.callByName("Layer 1");
+    // } catch (e){}
+    // try {
+    //   SceneManager.callByName("Layer 2");
+    // } catch (e){}
     this.updateLoop(500);
   }
 
   public pauseProgram() {
-    if (this.programState.getGameState() === 'build') { return; }
-    this.programState.setGameState('build');
-
+    if (SceneManager.programState.getGameState() === 'build') { return; }
+    SceneManager.programState.setGameState('build');
     console.log("Pause the program");
     this.cancelUpdateLoop();
-
   }
 
   public stopProgram() {
-    //TODO: place the robot at the start position, reset all the variables?
+    if (SceneManager.programState.getGameState() === 'reset') { return; }
+    SceneManager.programState.setGameState('reset');
+    console.log("Stop the program");
+    this.cancelUpdateLoop();
+
+    SceneManager.runTime = undefined;
+    SceneManager.activeScene = SceneManager.scenes.entries().next().value[0];
+    SceneManager.SceneSwitch(SceneManager.activeScene);
+    //TODO: place the robot at the start position?
+
+    MemoryController.reset();
+    MemoryVisualizer.reset();
+    SceneManager.programState.setGameState('build');
   }
 
   public getObserverContainer(): ObserverContainer {
@@ -146,15 +208,18 @@ export default class AppManager {
   }
 
   private changeBuildType(type: BuildTypes) {
-    this.programState.setBuildState(type);
+    SceneManager.programState.setBuildState(type);
   }
 
   private updateLoop(delta: number) {
     this.updateTimeout = setTimeout(() => {
-      if (this.programState.getGameState() === 'run') {
-        this.sceneHelper.updateRobots();
-
-        this.updateLoop(delta);
+      if (SceneManager.programState.getGameState() === 'run') {
+        if(SceneManager.runTime !== undefined) {
+          SceneManager.runTime.sceneHelper.updateRobots();
+          this.updateLoop(delta);
+        } else {
+          this.stopProgram();
+        }
       }
     }, delta);
   }

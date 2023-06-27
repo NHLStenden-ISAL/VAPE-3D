@@ -5,13 +5,15 @@ import PersistentDrawer from "./PersistentDrawer";
 import PersistentConsole from "./PersistentConsole"
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import { AddBox, Delete, Pause, PlayArrow, Stop, Transform } from "@mui/icons-material";
+import {AddBox, Delete, IndeterminateCheckBox, Layers, Pause, PlayArrow, Stop, Transform, Cameraswitch } from "@mui/icons-material";
 import { useState } from "react";
 import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
 import ObserverContainer from '../../Helpers/ObserverContainer';
 import { uploadTextFile } from '../../Helpers/DownloadHelper';
+import PersistentLayer from "./PersistantLayers";
+import {SceneManager} from "../../Objects/SceneComponent";
 
 type MenuBarProps = {
   observerContainer: ObserverContainer,
@@ -19,6 +21,7 @@ type MenuBarProps = {
 
 export default function MenuBar({ observerContainer }: MenuBarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(false);
   const [consoleOpen, setConsoleOpen] = useState(false);
 
   const items = buildTypesArray;
@@ -26,10 +29,12 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
   const handleDrawerOpen = () => { setDrawerOpen(true); };
   const handleDrawerClose = () => { setDrawerOpen(false); };
 
+  const handleLayersOpen = () => { setLayersOpen(true); };
+  const handleLayersClose = () => { setLayersOpen(false); };
+
   const handleConsoleOpen = () => { setConsoleOpen(true); }
   const handleConsoleClose = () => { setConsoleOpen(false); }
 
-  // const gameClick = (state: GameState) => { observerContainer.executeStateGame(state); };
   const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
   const stopClick = () => { observerContainer.executeStateGame('reset'); };
@@ -41,6 +46,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
     observerContainer.executeStateBuild(type as BuildTypes);
 
     setDrawerOpen(false);
+    setLayersOpen(false);
   };
 
   return (
@@ -56,6 +62,20 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
             </Grid>
             <Grid item>
               <IconButtonLarge
+                onClick={handleLayersOpen}
+                icon={<Layers />}
+              />
+              <IconButtonLarge
+                  onClick={() => { SceneManager.SceneAddClean(); }}
+                  icon={<AddBox />}
+              />
+              <IconButtonLarge
+                  onClick={() => { SceneManager.SceneRemoveCurrent(); }}
+                  icon={<IndeterminateCheckBox />}
+              />
+            </Grid>
+            <Grid item>
+              <IconButtonLarge
                 onClick={() => { uploadTextFile((contents: string) => {
                   observerContainer.uploadProgram(contents);
                 }); }}
@@ -64,6 +84,10 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
               <IconButtonLarge
                 onClick={() => { observerContainer.downloadProgram(); }}
                 icon={<SaveIcon />}
+              />
+              <IconButtonLarge
+                  onClick={() => { SceneManager.ResetCamCurrentScene(); }}
+                  icon={<Cameraswitch  />}
               />
             </Grid>
             <Grid item >
@@ -109,6 +133,7 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
       </AppBar>
 
       <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
+      <PersistentLayer anchor="bottom" open={layersOpen} closeFunc={handleLayersClose} />
       <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
     </Box>
   );

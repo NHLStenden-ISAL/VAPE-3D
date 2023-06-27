@@ -10,6 +10,11 @@ import { Direction } from "../Compositions/Transformable";
 import { Vector2 } from "@babylonjs/core";
 import { BuildTypes } from "../Helpers/ProgramState";
 import PrintObject from "../Objects/PrintObject";
+import ReturnObject from "../Objects/ReturnObject";
+import LayerObject from "../Objects/LayerObject";
+import CallObject from "../Objects/CallObject";
+import PointerWriteObject from "../Objects/Arithmetic/PointerWriteObject";
+import FreeObject from "../Objects/FreeObject";
 
 export default class CommandAddObject implements ICommand {
   private worldInfo: WorldInformation;
@@ -28,6 +33,12 @@ export default class CommandAddObject implements ICommand {
 
   execute(): void {
     switch (this.objectType) {
+      case 'call':
+        this.object = new CallObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'return':
+        this.object = new ReturnObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
       case 'variable':
         this.object = new VariableObject(this.worldInfo, this.gridPosition, this.direction);
         break;
@@ -45,6 +56,15 @@ export default class CommandAddObject implements ICommand {
         break;
       case 'print':
         this.object = new PrintObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'grid':
+        this.object = new LayerObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'writeToPointer':
+        this.object = new PointerWriteObject(this.worldInfo, this.gridPosition, this.direction);
+        break;
+      case 'free':
+        this.object = new FreeObject(this.worldInfo, this.gridPosition, this.direction);
         break;
     }
   }

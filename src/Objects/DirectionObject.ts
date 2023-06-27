@@ -19,6 +19,10 @@ export default class DirectionObject extends BaseObject {
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
   }
 
+  public copy(worldInfo: WorldInformation): DirectionObject {
+    return new DirectionObject(worldInfo, this.gridPosition, this.direction);
+  }
+
   protected createMesh(): Mesh {
     return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Purple(), 0.8);
   }

@@ -7,7 +7,6 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
   const guiBox = selectedObject.getDataContainer();
 
   const position = guiBox.location;
-  const variables = selectedObject.getVariables();
 
   const variableIntro = (name: string, value: string) => {
     return <Grid container direction='row' justifyContent="space-between" alignItems="center">
@@ -24,14 +23,6 @@ export default function RobotGUI({ selectedObject }: { selectedObject: RobotObje
     <Grid container spacing={1} direction='column'>
       <Grid item alignSelf='center'>
         <Typography variant="h6" p={2}> Robot Object</Typography>
-      </Grid>
-      <Grid item p={2}>
-        {variableIntro('Name', 'Value')}
-        { Array.from(variables.keys()).map((key) => {
-          const value = variables.get(key) || "";
-          return <DisabledInputField key={key} name={key} value={value}/>
-          })
-        }
       </Grid>
       <Grid item>
         <PositionArea position={position} />

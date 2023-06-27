@@ -7,23 +7,28 @@ import { createBox } from "../../Helpers/ObjectCreator";
 import WorldInformation from "../../Helpers/WorldInformation";
 import BaseObject from "../BaseObject";
 import RobotObject from "../RobotObject";
-import { parse } from "mathjs";
+import { MemoryController } from "../../MemoryManagement/memoryController";
 
 export default class EvaluateObject extends BaseObject {
   private interactedRobots: RobotObject[];
   private storable: Storable;
-  
+  private index: string;
   private statement: string;
 
-  constructor(worldInfo: WorldInformation, gridpos: Vector2, dir: Direction) {
+  constructor(worldInfo: WorldInformation, gridpos: Vector2, dir: Direction, stored?:Storable, statement?:string, index?:string) {
     const objectColor = Color3.Red();
     super(worldInfo, gridpos, dir, objectColor);
 
-    this.statement = '';
-
+    this.statement = statement ?? '';
+    this.index = index ?? '';
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
-    this.storable = new Storable(this.worldInfo);
+    this.storable = stored ?? new Storable(this.worldInfo);
+
     this.interactedRobots = [];
+  }
+
+  public copy(worldInfo: WorldInformation): EvaluateObject {
+    return new EvaluateObject(worldInfo, this.gridPosition, this.direction, this.storable, this.statement, this.index);
   }
 
   protected createMesh(): Mesh {
@@ -31,12 +36,17 @@ export default class EvaluateObject extends BaseObject {
   }
 
   private onIntersectExecute(robotObject: RobotObject) {
+    const memoryController = MemoryController.getInstance();
     if (this.storable.getName() === "") { return; }
+    
+    let index
+    if(this.index===''){
+      index = undefined;
+    }else{
+      index = parseInt(this.index);
+    }
 
-    this.executeStatement(robotObject, this.statement);
-
-    this.storable.changeIsKnown(true);
-    robotObject.addVariable(this.storable.getContainer());
+    memoryController.assign(this.storable.getName(), this.statement, index);
 
     this.interactedRobots.push(robotObject);
   }
@@ -47,16 +57,9 @@ export default class EvaluateObject extends BaseObject {
       this.getDirection(),
       this.storable.getName(),
       this.storable.getValue(),
-      this.storable.getIsKnown(),
       this.statement,
+      this.index
     );
-  }
-
-  private executeStatement(robotObject: RobotObject, statement: string) {
-    const parsedStatement = parse(statement);
-    const compiledStatement = parsedStatement.compile();
-
-    this.storable.changeValue(compiledStatement.evaluate(robotObject.getScope()));
   }
 
   public getStorable(): Storable {
@@ -67,19 +70,12 @@ export default class EvaluateObject extends BaseObject {
     this.statement = statement;
   }
 
-  public delete(): void {
-    this.interactedRobots.forEach(robot => {
-      robot.removeVariable(this.storable.getContainer());
-    });
-
-    super.delete();
+  public getIndex(){
+    return this.index;
   }
 
-  public restore(): void {
-    this.interactedRobots.forEach(robot => {
-      robot.addVariable(this.storable.getContainer());
-    });
-
-    super.restore();
+  public setIndex(index: string){
+    this.index = index;
   }
+
 }

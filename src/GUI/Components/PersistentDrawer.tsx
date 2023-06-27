@@ -1,9 +1,9 @@
-import { AddBox, ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled } from "@mui/material";
 import { useState } from "react";
 import IconButtonLarge from "./IconButtonLarge";
 
-const DrawerHeader = styled('div')(({ }) => ({
+const DrawerHeader = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: 1,
@@ -35,9 +35,9 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
 
   function addItemIcon(text: string) {
     if (text === object) {
-      return <AddBox color="primary"/>
+      return <RadioButtonChecked color="primary"/>
     } else {
-      return <AddBox color="inherit"/>
+      return <RadioButtonUnchecked color="inherit"/>
     }
   }
 
@@ -47,7 +47,8 @@ export default function PersistentDrawer({ anchor, open, itemArray, closeFunc, o
       anchor={anchor}
       open={open}
     >
-      <DrawerHeader>
+      <DrawerHeader
+          onClick={closeFunc}>
       <b className="drawer-header">Toolbox</b>
         <IconButtonLarge
           onClick={closeFunc}

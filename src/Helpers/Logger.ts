@@ -15,6 +15,6 @@ const oldConsoleLog = console.log;
 console.log = function(message?: any, ...optionalParams: any[]) {
     oldConsoleLog(message, optionalParams);
     Object.keys(consoleListeners).forEach( key => {
-        consoleListeners[key](message);
+        consoleListeners[key]('' + message);
     });
 }

@@ -18,7 +18,7 @@ export default function DropDown({ itemArray, observerContainer }: DropDownProps
   
   useEffect(() => {
     observerContainer.subscribeStateEditor((state) => changeState(state));
-  }, [])
+  }, [observerContainer])
 
   const changeState = (state: EditorState) => {
     console.log(state);

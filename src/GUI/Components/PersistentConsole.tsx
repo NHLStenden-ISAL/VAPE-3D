@@ -4,7 +4,7 @@ import IconButtonLarge from "./IconButtonLarge";
 import { addConsoleListener, removeConsoleListener } from "./../../Helpers/Logger"
 import React from "react";
 
-const DrawerHeader = styled('div')(({ }) => ({
+const DrawerHeader = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: 1,
@@ -63,7 +63,8 @@ export default class PersistentConsole extends React.Component<PersistentConsole
         open={this.props.open}
         PaperProps={{ sx: {width:"400px"} }}
       >
-        <DrawerHeader>
+        <DrawerHeader
+            onClick={this.props.closeFunc}>
           <IconButtonLarge
             onClick={this.props.closeFunc}
             icon={iconMap.get(this.props.anchor)}

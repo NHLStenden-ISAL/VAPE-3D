@@ -8,6 +8,7 @@ import { createDirection } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { DecisionDataContainer } from "./DataContainers";
 import { parse } from "mathjs";
+import { MemoryController } from "../MemoryManagement/memoryController";
 
 //TODO: Strings are not quite working yet. When a variable has the same name or the string has spaces. Quotes are needed.
 
@@ -16,7 +17,7 @@ export default class DecisionObject extends BaseObject {
 
   private condition: boolean;
 
-  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction) {
+  constructor(worldInfo: WorldInformation, gridPos: Vector2, dir: Direction, stored?: Storable) {
     const objectColor = Color3.Blue();
 
     super(worldInfo, gridPos, dir, objectColor);
@@ -24,10 +25,20 @@ export default class DecisionObject extends BaseObject {
     this.mesh.rotation = this.transformable.rotateToward(dir);
 
     this.interactable = new Interactable(this, (robotObject: RobotObject) => this.onIntersectExecute(robotObject));
-    this.storable = new Storable(this.worldInfo);
+
+
+    if(typeof stored == 'undefined')
+      this.storable = new Storable(this.worldInfo);
+    else
+      this.storable = stored;
 
     this.condition = false;
   }
+
+  public copy(worldInfo: WorldInformation): DecisionObject {
+    return new DecisionObject(worldInfo, this.gridPosition, this.direction, this.storable);
+  }
+
 
   protected createMesh(): Mesh {
     return createDirection(this.worldInfo.getScene(), this.getUUID(), Color3.Blue(), 0.8);
@@ -37,18 +48,17 @@ export default class DecisionObject extends BaseObject {
     if (this.storable.getValue() === '') { return; }
     this.executeStatement(robotObject, this.storable.getValue());
 
-    if (this.checkCondition() === true) {
+    if (this.checkCondition()) {
       console.log(this.storable.getValue());
       robotObject.rotateToward(this.transformable.getDirection());
     }
   }
 
   private executeStatement(robot: RobotObject, statement: string) {
-    const parsedStatement = parse(statement);
-    const compiledStatement = parsedStatement.compile();
+    const memoryController = MemoryController.getInstance();
 
     try{
-      this.condition = compiledStatement.evaluate(robot.getScope());
+      this.condition = memoryController.evaluate(statement);
     } catch (e) {
       this.condition = false;
     }
