@@ -66,7 +66,7 @@ export function createVariableField(scene: Scene, width: number, layer: number){
   const plane = MeshBuilder.CreatePlane("variableField",{width,height:1}, scene);
   const planeMaterial = new StandardMaterial("flat",scene);
   plane.rotation.x = Math.PI / 2;
-  plane.position.y = (layer*15)+0.01;
+  plane.position.y = (layer*5)+0.01;
   const canvasRatio = 200;
   const cHeight = 1*canvasRatio;
   const cWidth = width*canvasRatio;

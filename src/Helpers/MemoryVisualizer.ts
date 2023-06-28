@@ -49,7 +49,8 @@ export class MemoryVisualizer{
         ctx.font = '22'+fontType;
         const textWidth = ctx.measureText(msg).width;
         const ratio = textWidth / 22;
-        const fontSize = Math.floor(texture.getSize().width / (ratio*1.1));
+        let fontSize = Math.floor(texture.getSize().width / (ratio*1.1));
+        fontSize = Math.min(200,fontSize);
         texture.drawText(msg,null,null,fontSize+fontType,'white',color);
     }
 
