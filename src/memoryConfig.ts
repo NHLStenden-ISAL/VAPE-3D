@@ -10,5 +10,6 @@ export const config:memoryConfig = {
     bytesPerLine:16,
 
     // Enable if you want to print the memory model with additional debug information in console with nearly every intersection.
-    debug:true
+    // debug:true
+    debug: false
 }

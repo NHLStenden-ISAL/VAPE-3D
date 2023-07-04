@@ -20,7 +20,6 @@ export default class SceneHelper {
 
     this.canvas = canvas;
 
-    console.log('createCamera');
     this.camera = createCamera(this.worldInfo.getScene(), this.canvas);
   }
 
@@ -63,7 +62,7 @@ export default class SceneHelper {
   }
 
   public disableCameraControl() {
-    this.camera.detachControl(this.canvas);
+    this.camera.detachControl();
   }
 
   public enableCameraControl() {

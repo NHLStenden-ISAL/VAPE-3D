@@ -114,6 +114,17 @@ export default class WorldInformation {
     this.highLightLayer.removeMesh(mesh);
   }
 
+  public getDataContainerArray(): Array<BaseDataContainer> {
+    let ar: Array<BaseDataContainer> = [];
+    this.sceneObjects.forEach(object => {
+      ar.push(object.getDataContainer());
+    });
+    return ar;
+  }
+
+  /**
+   * @deprecated
+   */
   public programAsJSONObject() : VAPLProgram {
     let jsonArray : any[] = [];
     this.sceneObjects.forEach(object => {

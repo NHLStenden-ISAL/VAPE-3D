@@ -37,12 +37,11 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
 
   const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
-  const stopClick = () => { observerContainer.executeStateGame('reset'); };
+  const stopClick = () => { setConsoleOpen(false); observerContainer.executeStateGame('reset'); };
 
   const editorClick = (state: EditorState) => { observerContainer.executeStateEditor(state); };
 
   const onButtonPress = (type: string) => {
-    console.log(type);
     observerContainer.executeStateBuild(type as BuildTypes);
 
     setDrawerOpen(false);

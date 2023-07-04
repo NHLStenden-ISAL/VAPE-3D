@@ -22,17 +22,14 @@ export default class KeyboardHandler {
             case 'c':
             case 'C':
               this.appManager.getObserverContainer().executeStateEditor('create');
-              console.log("Enter create state");
               break;
             case 't':
             case 'T':
               this.appManager.getObserverContainer().executeStateEditor('transform');
-              console.log("Enter transform state");
               break;
             case 'd':
             case 'D':
               this.appManager.getObserverContainer().executeStateEditor('delete');
-              console.log("Enter delete state");
               break;
             case 'z':
               if (kbInfo.event.ctrlKey) {

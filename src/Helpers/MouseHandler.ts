@@ -3,7 +3,6 @@ import SceneHelper from "./SceneHelper";
 import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
 import { PointerEventTypes, Vector2 } from "@babylonjs/core";
-import {SceneManager} from "../Objects/SceneComponent";
 
 export default class MouseHandler {
   private worldInfo: WorldInformation;
@@ -29,16 +28,21 @@ export default class MouseHandler {
 
   public onMouseInteraction() {
     this.worldInfo.getScene().onPointerObservable.add((pointerInfo) => {
-      if (SceneManager.programState.getGameState() !== 'build') { return; }
+      if (this.programState.getGameState() !== 'build') { return; }
 
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERTAP:
           //Check which mouse button it was (0 == left mouse button, 2 == right mouse button)
+          if (pointerInfo.pickInfo?.hit === true) {
+            this.clickedObject = this.worldInfo.getObjectByMesh(pointerInfo.pickInfo.pickedMesh);
+            this.mouseStartpoint = this.getMouseGridPosition();
+          }
           if (pointerInfo.event.button === 0) {
             this.onLeftPointerTap();
           } else if (pointerInfo.event.button === 2) {
             this.onRightPointerTap();
           }
+          this.clickedObject = undefined;
           break;
         case PointerEventTypes.POINTERDOWN:
           this.resetSelection();
@@ -54,6 +58,7 @@ export default class MouseHandler {
           }
           break;
         case PointerEventTypes.POINTERUP:
+
           if (pointerInfo.event.button === 0) {
             this.onLeftPointerUp();
           }
@@ -88,7 +93,7 @@ export default class MouseHandler {
   }
 
   private onLeftPointerTap() {
-    switch (SceneManager.programState.getEditorState()) {
+    switch (this.programState.getEditorState()) {
       case 'transform':
         this.rotateOnTap();
         break;
@@ -113,12 +118,13 @@ export default class MouseHandler {
     if (this.clickedObject) { return; }
 
     if (this.mouseStartpoint) {
-      this.sceneHelper.addObject(this.mouseStartpoint, SceneManager.programState.getBuildState());
+      this.sceneHelper.addObject(this.mouseStartpoint, this.programState.getBuildState());
     }
   }
 
   private deleteOnTap() {
     if (!this.clickedObject) { return; }
+
     this.sceneHelper.deleteObject(this.clickedObject);
   }
 
@@ -131,7 +137,7 @@ export default class MouseHandler {
   private onLeftPointerDrag() {
     if (!this.mouseStartpoint || !this.clickedObject) { return; }
 
-    if (SceneManager.programState.getEditorState() === 'transform') {
+    if (this.programState.getEditorState() === 'transform') {
       let mouseLocation = this.getMouseGridPosition();
 
       if (mouseLocation) {

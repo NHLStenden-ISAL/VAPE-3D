@@ -34,7 +34,8 @@ const onSceneReady = (scene: VapeScene, setSelectedObject: SetSelectedObject) =>
   const appManager = new AppManager(scene, observerContainer, setSelectedObject);
 
   appManager.setupObservers();
-  appManager.runApp();
+
+  observerContainer.uploadProgram(String.raw`{"name":"base_program","layers":[{"name":"Main","contents":[{"type":"robot","location":{"x":7,"y":0},"direction":0},{"type":"variable","location":{"x":7,"y":3},"direction":0,"name":"i","value":"","variableType":"int","variableSize":0},{"type":"evaluate","location":{"x":7,"y":4},"direction":0,"name":"i","value":"","statement":"0","index":""},{"type":"evaluate","location":{"x":4,"y":4},"direction":0,"name":"i","value":"","statement":"i + 1","index":""},{"type":"print","location":{"x":1,"y":4},"direction":0,"statement":"concat(\"Loop round, i = \", string(i))"},{"type":"print","location":{"x":-2,"y":6},"direction":0,"statement":"concat(\"Loop finished, i = \", string(i))"},{"type":"decision","location":{"x":1,"y":6},"direction":2,"statement":"i < 3"},{"type":"direction","location":{"x":7,"y":6},"direction":3},{"type":"direction","location":{"x":1,"y":2},"direction":1},{"type":"direction","location":{"x":4,"y":2},"direction":0},{"type":"direction","location":{"x":4,"y":6},"direction":3}]}]}`);
 };
 
 export default function App() {

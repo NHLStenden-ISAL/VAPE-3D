@@ -19,7 +19,10 @@ export default class VapeScene extends Scene {
     programState: ProgramState;
     setSelectedObject: SetSelectedObject;
 
-    constructor(engine: Engine, setSelectedObject: SetSelectedObject) {
+    constructor(engine: Engine, setSelectedObject: SetSelectedObject, full?: boolean) {
+        if(full == undefined) {
+            full = true;
+        }
         super(engine);
         this.scene = new Scene(engine);
         this.setSelectedObject = setSelectedObject;
@@ -28,7 +31,7 @@ export default class VapeScene extends Scene {
         this.commandBroker = new CommandBroker();
         this.worldInformation = new WorldInformation(this.scene, this.commandBroker, this.setSelectedObject);
         this.sceneHelper = new SceneHelper(this.worldInformation, this.canvas);
-        this.sceneHelper.createScene(false);
+        this.sceneHelper.createScene(!full);
         const mouseHandler = new MouseHandler(this.worldInformation, this.sceneHelper, SceneManager.programState);
         mouseHandler.onMouseInteraction();
          const keyboardHandler = new KeyboardHandler(this.worldInformation, SceneManager.appMan, SceneManager.programState);

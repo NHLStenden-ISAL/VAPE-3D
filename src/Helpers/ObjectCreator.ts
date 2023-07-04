@@ -53,7 +53,7 @@ export function createHeap(scene: Scene){
   const heap = MeshBuilder.CreatePlane("heap",{width,height},scene);
   const heapMaterial = new GridMaterial('heapGrid',scene);
   heap.rotation.x = Math.PI / 2;
-  console.log('heap dimensions are', heap.getBoundingInfo().boundingBox.extendSize);
+  // console.log('heap dimensions are', heap.getBoundingInfo().boundingBox.extendSize);
   heap.position.z = 31+heap.getBoundingInfo().boundingBox.extendSize.y;
   heapMaterial.gridRatio = 1;
   heapMaterial.lineColor = Color3.Teal();

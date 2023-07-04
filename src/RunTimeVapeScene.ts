@@ -57,7 +57,7 @@ export default class RunTimeVapeScene extends Scene {
         const grid = createGrid(this.scene, 60, 1);
         const height = this.gridStack.count() * 5;
         grid.position.y = height;
-        console.log(worldInfo);
+        
         worldInfo.getSceneObjects().forEach((val: BaseObject, key: string) => {
             // @ts-ignore
             val.setHeight(height + val.getMesh().getBoundingInfo().boundingBox.extendSize.y);

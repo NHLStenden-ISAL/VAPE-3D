@@ -28,6 +28,7 @@ import CallObject from "../Objects/CallObject";
 import ReturnObject from "../Objects/ReturnObject";
 import { MemoryController, functionVariable, variableType } from "../MemoryManagement/memoryController";
 import { MemoryVisualizer } from "./MemoryVisualizer";
+import { VapeSave } from "./VapeSave";
 
 export type SetSelectedObject = Dispatch<SetStateAction<BaseObject | undefined>>;
 
@@ -55,69 +56,10 @@ export default class AppManager {
     this.sceneHelper = vapeScene.sceneHelper;
     const worldInfo = this.worldInformation;
     SceneManager.setSelectedObject = setSelectedObject;
-    this.observerContainer.setDownloadProgram(() => { downloadTextFile(JSON.stringify(this.worldInformation.programAsJSONObject()), "program.vapl"); });
+    this.observerContainer.setDownloadProgram(() => { downloadTextFile(SceneManager.saveProgram("testProgram").toString(),"program.vapl"); });
     this.observerContainer.setUploadProgram((program: string) => {
-      let pProgram = JSON.parse(program) as VAPLProgram;
-      if (pProgram.units) {
-        worldInfo.removeAllSceneObjects();
-        pProgram.units.forEach(unit => {
-          switch (unit.type) {
-            case 'call': {
-              const cUnit = unit as CallDataContainer;
-              const cObject = new CallObject(worldInfo, cUnit.location, cUnit.direction);
-              cObject.getStorable().changeValue(cUnit.call);
-              break;
-            }
-            case 'return': {
-              const dUnit = unit as ReturnDataContainer;
-              new ReturnObject(worldInfo, dUnit.location, dUnit.direction);
-              break;
-            }
-            case 'variable': {
-              const vUnit = unit as VariableDataContainer;
-              const vObject = new VariableObject(worldInfo, vUnit.location, vUnit.direction);
-              vObject.getStorable().changeName(vUnit.name);
-              vObject.getStorable().changeValue(vUnit.value);
-              break;
-            }
-            case 'robot': {
-              const rUnit = unit as RobotDataContainer;
-              new RobotObject(worldInfo, rUnit.location, rUnit.direction);
-              break;
-            }
-            case 'decision': {
-              const dUnit = unit as DecisionDataContainer;
-              const dObject = new DecisionObject(worldInfo, dUnit.location, dUnit.direction);
-              dObject.getStorable().changeValue(dUnit.statement);
-              break;
-            }
-            case 'direction': {
-              const dUnit = unit as DirectionDataContainer;
-              new DirectionObject(worldInfo, dUnit.location, dUnit.direction);
-              break;
-            }
-            case 'evaluate': {
-              const cUnit = unit as EvaluateDataContainer;
-              const cObject = new EvaluateObject(worldInfo, cUnit.location, cUnit.direction);
-              cObject.getStorable().changeName(cUnit.name);
-              cObject.getStorable().changeValue(cUnit.value);
-              cObject.changeStatement(cUnit.statement);
-              break;
-            }
-            case 'print': {
-              const pUnit = unit as PrintDataContainer;
-              const pObject = new PrintObject(worldInfo, pUnit.location, pUnit.direction);
-              pObject.getStorable().changeValue(pUnit.statement);
-              break;
-            }
-          }
-        });
-      }
+      SceneManager.loadProgram(VapeSave.fromString(program));
     });
-  }
-
-  public runApp() {
-    console.log('runApp');
   }
 
   public setupObservers() {
@@ -143,7 +85,7 @@ export default class AppManager {
   public startProgram() {
     if (SceneManager.programState.getGameState() === 'run') { return; }
     SceneManager.programState.setGameState('run');
-    console.log("Run the program");
+    console.log("Running program...");
     SceneManager.runTime = new RunTimeVapeScene(SceneManager.engine, this.setSelectedObject);
 
     //parse all layers to a map for all variables with sizes
@@ -183,14 +125,14 @@ export default class AppManager {
   public pauseProgram() {
     if (SceneManager.programState.getGameState() === 'build') { return; }
     SceneManager.programState.setGameState('build');
-    console.log("Pause the program");
+    console.log("Pausing program...");
     this.cancelUpdateLoop();
   }
 
   public stopProgram() {
     if (SceneManager.programState.getGameState() === 'reset') { return; }
     SceneManager.programState.setGameState('reset');
-    console.log("Stop the program");
+    console.log("Stopping program...");
     this.cancelUpdateLoop();
 
     SceneManager.runTime = undefined;

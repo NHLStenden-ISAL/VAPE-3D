@@ -22,7 +22,6 @@ export default function VariableGUI({ selectedObject }: { selectedObject: Variab
     }
     else if (target.id === "Size") {
       let sizeValue = parseInt(target.value);
-      console.log(sizeValue);
       selectedObject.setVariableSize(sizeValue);
     }
   }

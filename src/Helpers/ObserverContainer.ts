@@ -60,7 +60,6 @@ export default class ObserverContainer {
   }
 
   public manageScenes() : void {
-    console.log('clcik');
     // let sceneCount = SceneManager.scenes.size;
     // SceneManager.SceneAddClean("Layer " + sceneCount);
     // SceneManager.SceneSwitch("Layer " + sceneCount);

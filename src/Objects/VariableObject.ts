@@ -8,6 +8,8 @@ import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import { VariableDataContainer } from "./DataContainers";
 import { MemoryController, variableType } from "../MemoryManagement/memoryController";
+import { Ellipse, Line, Rectangle, TextBlock } from "@babylonjs/gui";
+import { SceneManager } from "./SceneComponent";
 
 export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];
@@ -33,7 +35,43 @@ export default class VariableObject extends BaseObject {
   }
 
   protected createMesh(): Mesh {
-    return createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), 0.8);
+    const box = createBox(this.worldInfo.getScene(), this.getUUID(), Color3.Magenta(), 0.8);
+
+    // var rect1 = new Rectangle();
+    // rect1.width = 0.05;
+    // rect1.height = "30px";
+    // rect1.cornerRadius = 20;
+    // rect1.color = "white";
+    // rect1.thickness = 2;
+    // rect1.background = "magenta";
+    // SceneManager.overlayUI.addControl(rect1);
+    // rect1.linkWithMesh(box);   
+    // rect1.linkOffsetY = -100;
+
+    // var label = new TextBlock();
+    //// label.text = this.variableType + (this.variableSize == 0 ? " " : "["+this.variableSize+"] ") + this.storable.getName();
+    // label.text = "int i";
+    // rect1.addControl(label);
+
+    // var target = new Ellipse();
+    // target.width = "10px";
+    // target.height = "10px";
+    // target.color = "red";
+    // target.thickness = 4;
+    // target.background = "red";
+    // SceneManager.overlayUI.addControl(target);
+    // target.linkWithMesh(box);   
+
+    // var line = new Line();
+    // line.lineWidth = 2;
+    // line.color = "magenta";
+    // line.y2 = 15;
+    // line.linkOffsetY = -5;
+    // SceneManager.overlayUI.addControl(line);
+    // line.linkWithMesh(box); 
+    // line.connectedControl = rect1;
+
+    return box;
   }
 
   private onIntersectExecute(robotObject: RobotObject) {

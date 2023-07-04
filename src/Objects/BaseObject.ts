@@ -113,7 +113,7 @@ export default abstract class BaseObject {
   }
 
   protected getPositionForGUI(): Vector2 {
-    return new Vector2(this.gridPosition.x + 0.5, this.gridPosition.y + 0.5);
+    return new Vector2(this.gridPosition.x - 0.5, this.gridPosition.y - 0.5);
   }
 
   public getDirection(): Direction {

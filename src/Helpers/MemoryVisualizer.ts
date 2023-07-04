@@ -59,7 +59,6 @@ export class MemoryVisualizer{
         params.forEach(param=>{
             this.parameters.set(param.address,param.value);
         });
-        console.log(this.parameters)
         this.callStackGrids.push(frame);
     }
 

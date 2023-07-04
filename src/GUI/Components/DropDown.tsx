@@ -21,7 +21,6 @@ export default function DropDown({ itemArray, observerContainer }: DropDownProps
   }, [observerContainer])
 
   const changeState = (state: EditorState) => {
-    console.log(state);
     setEditor(state);
   }
 
