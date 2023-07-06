@@ -1,13 +1,13 @@
 import { Vector2, Color3, Mesh } from "@babylonjs/core";
-import Interactable from "../../Compositions/Interactable";
-import Storable from "../../Compositions/Storable";
-import { Direction } from "../../Compositions/Transformable";
-import { EvaluateDataContainer } from "../DataContainers";
-import { createBox } from "../../Helpers/ObjectCreator";
-import WorldInformation from "../../Helpers/WorldInformation";
-import BaseObject from "../BaseObject";
-import RobotObject from "../RobotObject";
-import { MemoryController } from "../../MemoryManagement/memoryController";
+import Interactable from "../Compositions/Interactable";
+import Storable from "../Compositions/Storable";
+import { Direction } from "../Compositions/Transformable";
+import { EvaluateDataContainer } from "./DataContainers";
+import { createBox } from "../Helpers/ObjectCreator";
+import WorldInformation from "../Helpers/WorldInformation";
+import BaseObject from "./BaseObject";
+import RobotObject from "./RobotObject";
+import { MemoryController } from "../MemoryManagement/memoryController";
 
 export default class EvaluateObject extends BaseObject {
   private interactedRobots: RobotObject[];

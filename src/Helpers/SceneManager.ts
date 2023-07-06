@@ -12,7 +12,7 @@ import VariableObject from "../Objects/VariableObject";
 import RobotObject from "../Objects/RobotObject";
 import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
-import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
+import EvaluateObject from "../Objects/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
 
 export class SceneManager {
@@ -154,11 +154,14 @@ export class SceneManager {
             const cUnit = container as CallDataContainer;
             const cObject = new CallObject(worldInfo, cUnit.location, cUnit.direction);
             cObject.getStorable().changeValue(cUnit.call);
+            cObject.setReturnVariable(cUnit.returnVar);
+            cObject.setArguments(cUnit.args);
             break;
           }
           case 'return': {
             const dUnit = container as ReturnDataContainer;
-            new ReturnObject(worldInfo, dUnit.location, dUnit.direction);
+            const dObject = new ReturnObject(worldInfo, dUnit.location, dUnit.direction);
+            dObject.setStatement(dUnit.statement);
             break;
           }
           case 'variable': {
@@ -192,6 +195,7 @@ export class SceneManager {
             cObject.getStorable().changeName(cUnit.name);
             cObject.getStorable().changeValue(cUnit.value);
             cObject.changeStatement(cUnit.statement);
+            cObject.setIndex(cUnit.index);
             break;
           }
           case 'print': {

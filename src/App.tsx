@@ -14,7 +14,7 @@ import VariableObject from './Objects/VariableObject';
 import { Box } from '@mui/material';
 import { useState } from "react";
 import ObserverContainer from './Helpers/ObserverContainer';
-import EvaluateObject from './Objects/Arithmetic/EvaluateObject';
+import EvaluateObject from './Objects/EvaluateObject';
 import EvaluateGUI from './GUI/EvaluateGUI';
 import PrintObject from './Objects/PrintObject';
 import PrintGUI from './GUI/PrintGUI';
@@ -24,7 +24,7 @@ import CallObject from "./Objects/CallObject";
 import ReturnObject from './Objects/ReturnObject';
 import ReturnGUI from './GUI/ReturnGUI';
 import PointerWriteGUI from './GUI/PointerWriteGUI';
-import PointerWriteObject from './Objects/Arithmetic/PointerWriteObject';
+import PointerWriteObject from './Objects/PointerWriteObject';
 import FreeObject from './Objects/FreeObject';
 import FreeGUI from './GUI/FreeGUI';
 

@@ -3,7 +3,7 @@ import { Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { KeyGroup } from "./InputFilter";
 import InputField from "./Components/InputField";
 import PositionArea from "./Components/PositionArea";
-import PointerWriteObject from "../Objects/Arithmetic/PointerWriteObject";
+import PointerWriteObject from "../Objects/PointerWriteObject";
 
 export default function PointerWriteGUI({ selectedObject }: { selectedObject: PointerWriteObject }) {
   const guiBox = selectedObject.getDataContainer();

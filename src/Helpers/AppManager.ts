@@ -19,7 +19,7 @@ import {
 import RobotObject from "../Objects/RobotObject";
 import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
-import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
+import EvaluateObject from "../Objects/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
 import { SceneManager } from "./SceneManager";
 import VapeScene from "../VapeScene";

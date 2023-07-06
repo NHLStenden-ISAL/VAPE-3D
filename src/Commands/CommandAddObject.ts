@@ -2,7 +2,7 @@ import BaseObject from "../Objects/BaseObject";
 import DirectionObject from "../Objects/DirectionObject";
 import ICommand from "./ICommand";
 import RobotObject from "../Objects/RobotObject";
-import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
+import EvaluateObject from "../Objects/EvaluateObject";
 import VariableObject from "../Objects/VariableObject";
 import WorldInformation from "../Helpers/WorldInformation";
 import DecisionObject from "../Objects/DecisionObject";
@@ -13,7 +13,7 @@ import PrintObject from "../Objects/PrintObject";
 import ReturnObject from "../Objects/ReturnObject";
 import LayerObject from "../Objects/LayerObject";
 import CallObject from "../Objects/CallObject";
-import PointerWriteObject from "../Objects/Arithmetic/PointerWriteObject";
+import PointerWriteObject from "../Objects/PointerWriteObject";
 import FreeObject from "../Objects/FreeObject";
 
 export default class CommandAddObject implements ICommand {

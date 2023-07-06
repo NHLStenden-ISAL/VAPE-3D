@@ -1,5 +1,5 @@
 import { useState } from "react";
-import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
+import EvaluateObject from "../Objects/EvaluateObject";
 import { Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { KeyGroup } from "./InputFilter";
 import InputField from "./Components/InputField";
