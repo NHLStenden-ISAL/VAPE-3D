@@ -1,33 +1,19 @@
 import { Engine } from "@babylonjs/core";
-import { useEffect, useRef } from "react";
-import AppManager, { SetSelectedObject } from "../Helpers/AppManager";
-// import ObserverContainer from "../Helpers/ObserverContainer";
-import ProgramState from "../Helpers/ProgramState";
-// import CommandBroker from "../Helpers/CommandBroker";
-import WorldInformation from "../Helpers/WorldInformation";
-// import SceneHelper from "../Helpers/SceneHelper";
-// import MouseHandler from "../Helpers/MouseHandler";
-// import KeyboardHandler from "../Helpers/KeyboardHandler";
+import AppManager, { SetSelectedObject } from "./AppManager";
+import ProgramState from "./ProgramState";
+import WorldInformation from "./WorldInformation";
 import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
-import { VapeSave, VapeSaveLayer } from "../Helpers/VapeSave";
-import { CallDataContainer, DecisionDataContainer, DirectionDataContainer, EvaluateDataContainer, PrintDataContainer, ReturnDataContainer, RobotDataContainer, VariableDataContainer } from "./DataContainers";
-import CallObject from "./CallObject";
-import ReturnObject from "./ReturnObject";
-import VariableObject from "./VariableObject";
-import RobotObject from "./RobotObject";
-import DecisionObject from "./DecisionObject";
-import DirectionObject from "./DirectionObject";
-import EvaluateObject from "./Arithmetic/EvaluateObject";
-import PrintObject from "./PrintObject";
-import { AdvancedDynamicTexture } from "@babylonjs/gui";
-
-type CanvasProps = {
-  antialias: boolean,
-  onSceneReady: any,
-  id: string,
-  setSelectedObject: SetSelectedObject,
-}
+import { VapeSave, VapeSaveLayer } from "./VapeSave";
+import { CallDataContainer, DecisionDataContainer, DirectionDataContainer, EvaluateDataContainer, PrintDataContainer, ReturnDataContainer, RobotDataContainer, VariableDataContainer } from "../Objects/DataContainers";
+import CallObject from "../Objects/CallObject";
+import ReturnObject from "../Objects/ReturnObject";
+import VariableObject from "../Objects/VariableObject";
+import RobotObject from "../Objects/RobotObject";
+import DecisionObject from "../Objects/DecisionObject";
+import DirectionObject from "../Objects/DirectionObject";
+import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
+import PrintObject from "../Objects/PrintObject";
 
 export class SceneManager {
   static engine: Engine;
@@ -35,12 +21,11 @@ export class SceneManager {
   static scenes = new Map<string, VapeScene>();
   static activeScene = "";
   static sceneListenerCount = 0;
-  static sceneListeners : any = {};
+  static sceneListeners: any = {};
   static canvas: any;
   static appMan: AppManager;
   static programState = new ProgramState();
   // static overlayUI: AdvancedDynamicTexture;
-
   static runTime: RunTimeVapeScene | undefined;
 
   constructor(engine: Engine) {
@@ -48,7 +33,7 @@ export class SceneManager {
 
     engine.runRenderLoop(() => {
       let currentScene = SceneManager.CurrentScene();
-      if(currentScene !== undefined) {
+      if (currentScene !== undefined) {
         currentScene.render();
       }
     });
@@ -58,9 +43,9 @@ export class SceneManager {
     });
   }
 
-  public static callByName(name: string){
+  public static callByName(name: string) {
     const foundScene = SceneManager.scenes.get(name);
-    if(SceneManager.runTime?.scene === undefined)
+    if (SceneManager.runTime?.scene === undefined)
       return;
     const newWorldInfo = new WorldInformation(SceneManager.runTime?.scene, SceneManager.runTime?.commandBroker, SceneManager.runTime?.setSelectedObject);
     foundScene?.worldInformation.copy(newWorldInfo);
@@ -71,16 +56,16 @@ export class SceneManager {
     //TODO: check if this was the last layer. If so stop runtime
     try {
       this.runTime?.popGrid();
-    } catch (e){}
+    } catch (e) { }
   }
 
-  public static addSceneListener(listener : any) {
+  public static addSceneListener(listener: any) {
     let id = SceneManager.sceneListenerCount++;
     SceneManager.sceneListeners[id] = listener;
     return id;
   }
 
-  public static removeConsoleListener(id : number) {
+  public static removeConsoleListener(id: number) {
     delete SceneManager.sceneListeners[id];
   }
 
@@ -89,7 +74,7 @@ export class SceneManager {
   }
 
   public static CurrentScene() {
-    if(SceneManager.runTime !== undefined) {
+    if (SceneManager.runTime !== undefined) {
       return SceneManager.runTime.scene;
     }
 
@@ -119,7 +104,7 @@ export class SceneManager {
   }
 
   private static updateListeners(message: string) {
-    Object.keys(SceneManager.sceneListeners).forEach( key => {
+    Object.keys(SceneManager.sceneListeners).forEach(key => {
       SceneManager.sceneListeners[key](message);
     });
   }
@@ -133,20 +118,20 @@ export class SceneManager {
 
   public static ResetCamCurrentScene() {
     let vScene = SceneManager.CurrentVapeScene();
-    if(vScene !== undefined)
+    if (vScene !== undefined)
       vScene.sceneHelper.resetCam();
   }
 
   private static attachControl() {
     let curScene = this.CurrentScene();
-    if(curScene !== undefined) {
+    if (curScene !== undefined) {
       curScene.detachControl();
     }
   }
 
   private static detachControl() {
     let curScene = this.CurrentScene();
-    if(curScene !== undefined) {
+    if (curScene !== undefined) {
       curScene.attachControl(true, true, true);
     }
   }
@@ -222,39 +207,3 @@ export class SceneManager {
     this.updateListeners("");
   }
 }
-
-export default function CreateCanvas({ antialias, onSceneReady, id, setSelectedObject }: CanvasProps) {
-  const rectCanvas = useRef(null);
-
-  useEffect(() => {
-    if (rectCanvas.current) {
-      let engine = new Engine(rectCanvas.current, antialias);
-      new SceneManager(engine);
-      SceneManager.engine = engine;
-
-      let scene = new VapeScene(SceneManager.engine, setSelectedObject, false);
-
-      // SceneManager.overlayUI = AdvancedDynamicTexture.CreateFullscreenUI("UI-Overlay");
-      // SceneManager.overlayUI.idealWidth = 2000;
-
-      // console.log("overlayUI is " + (SceneManager.overlayUI != undefined));
-
-      SceneManager.SceneAdd("Main", scene);
-      SceneManager.SceneSwitch("Main");
-      if (scene.isReady()) {
-        onSceneReady(scene, setSelectedObject);
-      } else {
-        scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
-      }
-
-      return () => {
-        // scene.getEngine().dispose();
-
-        // if (window) {
-        //   window.removeEventListener("resize", resize);
-        // }
-      };
-    }
-  }, [antialias, onSceneReady, rectCanvas, setSelectedObject]);
-  return <canvas ref={rectCanvas} id={id} />;
-};

@@ -9,7 +9,7 @@ import { Direction } from "../Compositions/Transformable";
 import { VariableDataContainer } from "./DataContainers";
 import { MemoryController, variableType } from "../MemoryManagement/memoryController";
 import { Ellipse, Line, Rectangle, TextBlock } from "@babylonjs/gui";
-import { SceneManager } from "./SceneComponent";
+import { SceneManager } from "../Helpers/SceneManager";
 
 export default class VariableObject extends BaseObject {
   private interactedRobots: RobotObject[];

@@ -1,7 +1,7 @@
 import AppManager from "./AppManager";
 import ProgramState from "./ProgramState";
 import WorldInformation from "./WorldInformation";
-import {SceneManager} from "../Objects/SceneComponent";
+import { SceneManager } from "./SceneManager";
 
 export default class KeyboardHandler {
   private worldInfo: WorldInformation;

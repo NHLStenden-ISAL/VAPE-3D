@@ -12,7 +12,7 @@ import ProgramState from "./Helpers/ProgramState";
 import Stack from "./Stack";
 import {createGrid} from "./Helpers/ObjectCreator";
 import BaseObject from "./Objects/BaseObject";
-import {SceneManager} from "./Objects/SceneComponent";
+import { SceneManager } from "./Helpers/SceneManager";
 // import BaseObject from "./Objects/BaseObject";
 
 type GridCombo = {

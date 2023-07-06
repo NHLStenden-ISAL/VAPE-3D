@@ -5,7 +5,7 @@ import SceneHelper from "./Helpers/SceneHelper";
 import {SetSelectedObject} from "./Helpers/AppManager";
 import {Engine} from "@babylonjs/core/Engines/engine";
 import {Nullable} from "@babylonjs/core/types";
-import {SceneManager} from "./Objects/SceneComponent";
+import { SceneManager } from "./Helpers/SceneManager";
 import MouseHandler from "./Helpers/MouseHandler";
 import KeyboardHandler from "./Helpers/KeyboardHandler";
 import ProgramState from "./Helpers/ProgramState";

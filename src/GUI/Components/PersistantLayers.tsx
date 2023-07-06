@@ -2,7 +2,7 @@ import {ChevronLeft, ChevronRight, ExpandLess, ExpandMore, RadioButtonChecked, R
 import {Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, styled} from "@mui/material";
 import IconButtonLarge from "./IconButtonLarge";
 import React from "react";
-import {SceneManager} from "../../Objects/SceneComponent";
+import { SceneManager } from "../../Helpers/SceneManager";
 
 const DrawerHeader = styled('div')(() => ({
     display: 'flex',

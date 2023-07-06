@@ -4,7 +4,7 @@ import {Grid, List, ListItem, ListItemText, TextField, Tooltip, Typography} from
 import { KeyGroup } from "./InputFilter";
 import React, { useState } from "react";
 import PositionArea from "./Components/PositionArea";
-import {SceneManager} from "../Objects/SceneComponent";
+import { SceneManager } from "../Helpers/SceneManager";
 import {RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
 
 export default function CallGUI({ selectedObject }: { selectedObject: CallObject }) {

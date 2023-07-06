@@ -13,7 +13,7 @@ import DropDown from './DropDown';
 import ObserverContainer from '../../Helpers/ObserverContainer';
 import { uploadTextFile } from '../../Helpers/DownloadHelper';
 import PersistentLayer from "./PersistantLayers";
-import {SceneManager} from "../../Objects/SceneComponent";
+import { SceneManager } from "../../Helpers/SceneManager";
 
 type MenuBarProps = {
   observerContainer: ObserverContainer,

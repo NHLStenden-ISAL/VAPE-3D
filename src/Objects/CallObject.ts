@@ -7,7 +7,7 @@ import { Color3, Mesh, Vector2 } from "@babylonjs/core";
 import { createBox } from "../Helpers/ObjectCreator";
 import { Direction } from "../Compositions/Transformable";
 import {CallDataContainer} from "./DataContainers";
-import {SceneManager} from "./SceneComponent";
+import { SceneManager } from "../Helpers/SceneManager";
 import { MemoryController } from "../MemoryManagement/memoryController";
 
 export default class CallObject extends BaseObject {

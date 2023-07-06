@@ -8,7 +8,7 @@ import DirectionObject from './Objects/DirectionObject';
 import MenuBar from './GUI/Components/MenuBar';
 import RobotGUI from './GUI/RobotGUI';
 import RobotObject from './Objects/RobotObject';
-import SceneComponent from './Objects/SceneComponent';
+import SceneComponent from './SceneComponent';
 import VariableGUI from './GUI/VariableGUI';
 import VariableObject from './Objects/VariableObject';
 import { Box } from '@mui/material';

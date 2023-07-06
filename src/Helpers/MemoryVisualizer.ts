@@ -2,7 +2,7 @@ import { DynamicTexture, Mesh, StandardMaterial } from "@babylonjs/core";
 import { createHeap, createStackFrame, createVariableField } from "./ObjectCreator";
 import { variableType } from "../MemoryManagement/memoryController";
 import { config } from "../memoryConfig";
-import { SceneManager } from "../Objects/SceneComponent";
+import { SceneManager } from "./SceneManager";
 
 export class MemoryVisualizer{
     private heapGrid: Mesh;

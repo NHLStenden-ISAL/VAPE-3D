@@ -21,7 +21,7 @@ import DecisionObject from "../Objects/DecisionObject";
 import DirectionObject from "../Objects/DirectionObject";
 import EvaluateObject from "../Objects/Arithmetic/EvaluateObject";
 import PrintObject from "../Objects/PrintObject";
-import { SceneManager } from "../Objects/SceneComponent";
+import { SceneManager } from "./SceneManager";
 import VapeScene from "../VapeScene";
 import RunTimeVapeScene from "../RunTimeVapeScene";
 import CallObject from "../Objects/CallObject";
