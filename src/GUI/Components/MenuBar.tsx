@@ -3,10 +3,10 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SaveIcon from '@mui/icons-material/Save';
 import PersistentDrawer from "./PersistentDrawer";
 import PersistentConsole from "./PersistentConsole"
-import { AppBar, Grid, Toolbar } from "@mui/material";
+import { AppBar, Divider, Grid, IconButton, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
-import {AddBox, Delete, IndeterminateCheckBox, Layers, Pause, PlayArrow, Stop, Transform, Cameraswitch } from "@mui/icons-material";
-import { useState } from "react";
+import { AddBox, Delete, IndeterminateCheckBox, Layers, Pause, PlayArrow, Stop, Transform, Cameraswitch, Terminal, Start, Widgets, Settings } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { BuildTypes, buildTypesArray, EditorState, editorTypesArray } from '../../Helpers/ProgramState';
 import IconButtonLarge from './IconButtonLarge';
 import DropDown from './DropDown';
@@ -20,20 +20,47 @@ type MenuBarProps = {
 }
 
 export default function MenuBar({ observerContainer }: MenuBarProps) {
+  const [editorState, setEditorState] = useState("");
+  const selectedColor = "orange";
+  const unselectedColor = "white";
+
+  function editorStateToColor(state: string) {
+    return editorState == state ? selectedColor : unselectedColor
+  }
+
+  function drawerOpenColor(open: boolean) {
+    return open ? selectedColor : unselectedColor;
+  }
+
+  const [transformColor, setTransformColor] = useState("white");
+  const [addColor, setAddColor] = useState("white");
+  const [deleteColor, setDeleteColor] = useState("white");
+
+  useEffect(() => {
+    observerContainer.subscribeStateEditor((state) => setEditorState(state));
+    setEditorState(editorTypesArray[0]);
+  }, [observerContainer])
+
+  const changeState = (state: EditorState) => {
+    setTransformColor(state == "transform" ? selectedColor : unselectedColor);
+    setAddColor(state == "create" ? selectedColor : unselectedColor);
+    setDeleteColor(state == "delete" ? selectedColor : unselectedColor);
+  }
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
   const [consoleOpen, setConsoleOpen] = useState(false);
 
   const items = buildTypesArray;
 
-  const handleDrawerOpen = () => { setDrawerOpen(true); };
-  const handleDrawerClose = () => { setDrawerOpen(false); };
+  const handleDrawerOpen = () => { setDrawerOpen(!drawerOpen); };
+  const handleDrawerClose = () => { setDrawerOpen(!drawerOpen); };
 
-  const handleLayersOpen = () => { setLayersOpen(true); };
-  const handleLayersClose = () => { setLayersOpen(false); };
+  const handleLayersOpen = () => { setLayersOpen(!layersOpen); };
+  const handleLayersClose = () => { setLayersOpen(!layersOpen); };
 
-  const handleConsoleOpen = () => { setConsoleOpen(true); }
-  const handleConsoleClose = () => { setConsoleOpen(false); }
+  const handleConsoleOpen = () => { setConsoleOpen(!consoleOpen); }
+  const handleConsoleClose = () => { setConsoleOpen(!consoleOpen); }
 
   const startClick = () => { setConsoleOpen(true); observerContainer.executeStateGame('run'); };
   const pauseClick = () => { observerContainer.executeStateGame('build'); };
@@ -50,90 +77,160 @@ export default function MenuBar({ observerContainer }: MenuBarProps) {
 
   return (
     <Box>
-      <AppBar position="sticky">
-        <Toolbar>
-          <Grid container justifyContent="space-between" alignContent="center" direction='row'>
-            <Grid item>
-              <IconButtonLarge
+      <Box sx={{
+        position: "absolute",
+        left: "10px",
+        top: "10px",
+        height: "50px",
+        width: "509px"
+      }}>
+        <AppBar position="absolute" sx={{ borderRadius: "10px" }}>
+          <Toolbar>
+            <Grid container justifyContent="space-between" alignContent="center" direction='row'>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
                 onClick={handleDrawerOpen}
-                icon={<MenuIcon />}
-              />
-            </Grid>
-            <Grid item>
-              <IconButtonLarge
+                style={{ color: drawerOpenColor(drawerOpen) }}
+              >
+                {<Widgets />}
+              </IconButton>
+
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                size="large"
+                // edge="start"
+                color="inherit"
                 onClick={handleLayersOpen}
-                icon={<Layers />}
-              />
-              <IconButtonLarge
-                  onClick={() => { SceneManager.SceneAddClean(); }}
-                  icon={<AddBox />}
-              />
-              <IconButtonLarge
-                  onClick={() => { SceneManager.SceneRemoveCurrent(); }}
-                  icon={<IndeterminateCheckBox />}
-              />
-            </Grid>
-            <Grid item>
-              <IconButtonLarge
-                onClick={() => { uploadTextFile((contents: string) => {
-                  observerContainer.uploadProgram(contents);
-                }); }}
-                icon={<UploadFileIcon />}
-              />
-              <IconButtonLarge
+                style={{ color: drawerOpenColor(layersOpen) }}
+              >
+                {<Layers />}
+              </IconButton>
+
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                size="large"
+                // edge="start"
+                color="inherit"
+                onClick={() => {
+                  uploadTextFile((contents: string) => {
+                    observerContainer.uploadProgram(contents);
+                  });
+                }}
+              >
+                {<UploadFileIcon />}
+              </IconButton>
+
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
                 onClick={() => { observerContainer.downloadProgram(); }}
-                icon={<SaveIcon />}
-              />
-              <IconButtonLarge
-                  onClick={() => { SceneManager.ResetCamCurrentScene(); }}
-                  icon={<Cameraswitch  />}
-              />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
+              >
+                {<SaveIcon />}
+              </IconButton>
+
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                size="large"
+                // edge="start"
                 onClick={() => { editorClick('transform'); }}
-                icon={<Transform />}
-              />
-              <IconButtonLarge
+                style={{ color: editorStateToColor("transform") }}
+              >
+                {<Transform />}
+              </IconButton>
+
+              <IconButton
+                size="large"
+                edge="start"
                 onClick={() => { editorClick('create'); }}
-                icon={<AddBox />}
-              />
-              <IconButtonLarge
+                style={{ color: editorStateToColor("create") }}
+              >
+                {<AddBox />}
+              </IconButton>
+
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
                 onClick={() => { editorClick('delete'); }}
-                icon={<Delete />}
-              />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
+                style={{ color: editorStateToColor("delete") }}
+              >
+                {<Delete />}
+              </IconButton>
+
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                size="large"
+                // edge="start"
+                color="inherit"
                 onClick={startClick}
-                icon={<PlayArrow />}
-              />
-              <IconButtonLarge
+              >
+                {<PlayArrow />}
+              </IconButton>
+
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
                 onClick={pauseClick}
-                icon={<Pause />}
-              />
-              <IconButtonLarge
+              >
+                {<Pause />}
+              </IconButton>
+
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
                 onClick={stopClick}
-                icon={<Stop />}
-              />
-            </Grid>
+              >
+                {<Stop />}
+              </IconButton>
 
-            <Grid item>
-              <DropDown itemArray={editorTypesArray} observerContainer={observerContainer} />
-            </Grid>
-            <Grid item >
-              <IconButtonLarge
+              <Divider orientation="vertical" flexItem />
+
+              <IconButton
+                size="large"
+                // edge="start"
+                color="inherit"
                 onClick={handleConsoleOpen}
-                icon={<MenuIcon />}
-              />
+                style={{ color: drawerOpenColor(consoleOpen) }}
+              >
+                {<Terminal />}
+              </IconButton>
             </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
 
-      <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
-      <PersistentLayer anchor="bottom" open={layersOpen} closeFunc={handleLayersClose} />
-      <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
+        <PersistentDrawer anchor="left" open={drawerOpen} itemArray={items} closeFunc={handleDrawerClose} onButtonPress={onButtonPress} />
+        <PersistentLayer anchor="bottom" open={layersOpen} closeFunc={handleLayersClose} />
+        <PersistentConsole anchor="right" open={consoleOpen} closeFunc={handleConsoleClose} />
+      </Box>
+      <Box sx={{
+        position: "absolute",
+        right: "10px",
+        top: "10px",
+        height: "50px",
+        width: "100px"
+      }}>
+        <AppBar position="absolute" sx={{ borderRadius: "10px" }}>
+          <Toolbar>
+            <IconButton
+              size="large"
+              color="inherit"
+            // onClick={handleConsoleOpen}
+            // style={{ color: drawerOpenColor(consoleOpen) }}
+            >
+              {<Settings />}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Box>
     </Box>
   );
 }
